@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -23,12 +24,12 @@ import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private FloatingActionButton bt_close;
+
     private TextView tv_title;
     private EditText et_email, et_password, et_password_confirm, et_username;
-    private CardView cardView_register;
-    private Button bt_signUp;
+    private Button bt_signUp, bt_close;
     private int mode;
+    private TextInputLayout til_email;
 
 
 
@@ -37,7 +38,6 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        showEnterAnimation();
         initView();
         modeCheck();
         setListener();
@@ -51,15 +51,17 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void initView(){
 
-
-        cardView_register= findViewById(R.id.cardView_legister);
-        bt_close= findViewById(R.id.bt_close);
+        tv_title = findViewById(R.id.tv_title);
         et_email= findViewById(R.id.et_email);
-        tv_title= findViewById(R.id.title_register);
         et_username= findViewById(R.id.et_username);
         et_password= findViewById(R.id.et_password);
         et_password_confirm= findViewById(R.id.et_password_confirm);
-        bt_signUp= findViewById(R.id.bt_signUp);
+        bt_signUp = findViewById(R.id.bt_next);
+        bt_close = findViewById(R.id.bt_cancel);
+        til_email = (TextInputLayout) et_email.getParent();
+
+        til_email.setError("you need to enter name");
+        et_email.setError(null);
 
 
     }//init
@@ -68,14 +70,13 @@ public class RegisterActivity extends AppCompatActivity {
     private void modeCheck(){
         Intent data= getIntent();
         mode= data.getIntExtra("mode",0);
-        LinearLayout layout= findViewById(R.id.linear_register);
+
 
 
         if(mode==2){
 
-            layout.setVisibility(View.GONE);
             tv_title.setText("비밀번호 찾기");
-            bt_signUp.setText("비밀번호 전송");
+            bt_signUp.setText("전송");
 
         }
 
@@ -85,12 +86,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void setListener(){
 
-        bt_close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                animateRevealClose();
-            }
-        });
 
         bt_signUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,98 +196,11 @@ public class RegisterActivity extends AppCompatActivity {
 
     //------------------------------------------------------
 
-    private void showEnterAnimation(){
-        Transition transition= TransitionInflater.from(this).inflateTransition(R.transition.fabtransition);
-        getWindow().setSharedElementEnterTransition(transition);
-
-        transition.addListener(new Transition.TransitionListener() {
-            @Override
-            public void onTransitionStart(Transition transition) {
-                cardView_register.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onTransitionEnd(Transition transition) {
-
-                transition.removeListener(this);
-                animateRevealShow();
-
-            }
-
-            @Override
-            public void onTransitionCancel(Transition transition) {
-
-            }
-
-            @Override
-            public void onTransitionPause(Transition transition) {
-
-            }
-
-            @Override
-            public void onTransitionResume(Transition transition) {
-
-            }
-        });
-
-
-    }//showEnter
-
-
-    private void animateRevealShow(){
-        Animator animator= ViewAnimationUtils.createCircularReveal(
-                cardView_register, cardView_register.getWidth()/2, 0, bt_close.getWidth()/2, cardView_register.getHeight());
-
-        animator.setDuration(500);
-        animator.setInterpolator(new AccelerateDecelerateInterpolator());
-        animator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-            }
-
-            @Override
-            public void onAnimationStart(Animator animation) {
-               cardView_register.setVisibility(View.VISIBLE);
-                super.onAnimationStart(animation);
-            }
-        });
-
-        animator.start();
-
-    }//revealshow
 
 
 
-    private void animateRevealClose(){
-        Animator animator= ViewAnimationUtils.createCircularReveal(
-                cardView_register, cardView_register.getWidth()/2, 0, cardView_register.getHeight(), bt_close.getHeight()/2);
-        animator.setDuration(500);
-        animator.setInterpolator(new AccelerateDecelerateInterpolator());
-        animator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                cardView_register.setVisibility(View.INVISIBLE);
-                RegisterActivity.super.onBackPressed();
-            }
-
-            @Override
-            public void onAnimationStart(Animator animation) {
-                super.onAnimationStart(animation);
-            }
-        });
-
-        animator.start();
-
-    }//revealclose
 
 
-
-    @Override
-    public void onBackPressed() {
-        animateRevealClose();
-    }
 
 
 }//class

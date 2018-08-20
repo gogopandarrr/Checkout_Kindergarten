@@ -3,7 +3,7 @@
     <string name="login_title">로그인</string>
     <string name="register_title">사용자 등록</string>
     <string name="find_title">비밀번호 찾기</string>
-    <string name="forgot_password">비밀번호가 기억나지 않으세요?</string>
+    <string name="forgot_password">비밀번호 찾기</string>
     <string name="login_button">로그인</string>
     <string name="register_button">가입하기</string>
     <string name="error_void">이 칸을 입력하세요.</string>

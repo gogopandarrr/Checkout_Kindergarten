@@ -29,18 +29,16 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class MainActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private EditText et_email, et_password;
     private Button bt_go;
-    private FloatingActionButton bt_register;
-    private TextView bt_forgot;
-    CheckBox emailCheck;
+    private TextView bt_forgot, bt_register;
     CheckBox autoCheck;
 
     //자동로그인
     SharedPreferences autoUser;
-    Boolean autoChecked = false, emailChecked = false;
+    Boolean autoChecked = false;
     private String loginEmail, loginPwd;
     String name = "";
 
@@ -49,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
 
 
         initView();
@@ -61,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
     private void initView(){
 
         autoCheck = findViewById(R.id.autoCheck);
-        emailCheck = findViewById(R.id.emailCheckBox);
         et_email = findViewById(R.id.et_username);
         et_password = findViewById(R.id.et_password);
         bt_go = findViewById(R.id.bt_go);
@@ -87,18 +84,8 @@ public class MainActivity extends AppCompatActivity {
         if (autoChecked){
             et_email.setText(loginEmail);
             et_password.setText(loginPwd);
-            emailCheck.setChecked(true);
             autoCheck.setChecked(true);
 
-        }
-
-        //이메일 저장 확인
-        emailChecked = autoUser.getBoolean("EMAIL_CHECK", false);
-        if (emailChecked){
-            et_email.setText(loginEmail);
-            et_password.setText("");
-            emailCheck.setChecked(true);
-            autoCheck.setChecked(false);
         }
 
 
@@ -135,13 +122,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void emailCheck(){
-        if (emailCheck.isChecked()){
-            Log.d("버튼","클릭 + emailCheck.isChecked");
-            autoSave(1);
-        }
-
-    }
 
 
 
@@ -177,8 +157,9 @@ public class MainActivity extends AppCompatActivity {
 
                         userEditor.commit();
                         Intent intent = new Intent(getApplicationContext(), PeopleListActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         startActivity(intent);
+                        finish();
+
                     } else {
                         name = response.body().getName();
                         Log.d("통신","성공" + response.body().getStatus_code());
@@ -194,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call<User> call, Throwable t) {
 
                 Log.i("통신","실패 : " + t.toString());
-                Toast.makeText(MainActivity.this, "서버와 통신 연결에 실패하였습니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "서버와 통신 연결에 실패하였습니다.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -216,23 +197,16 @@ public class MainActivity extends AppCompatActivity {
                 getWindow().setEnterTransition(explode);
 
 
-                emailCheck(); //이메일 저장 확인
                 autoLoginCheck(); //자동로그인확인
                 loginService(); //서버 요청
 
 
-                startActivity(new Intent(MainActivity.this, PeopleListActivity.class));
+                startActivity(new Intent(LoginActivity.this, PeopleListActivity.class));
 
 
             }
         });
 
-        emailCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-            }
-        });
 
 
 
@@ -241,12 +215,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 getWindow().setEnterTransition(null);
                 getWindow().setExitTransition(null);
-                ActivityOptions options= ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, bt_register, bt_register.getTransitionName());
-                Intent intent= new Intent(MainActivity.this, RegisterActivity.class);
+                Intent intent= new Intent(LoginActivity.this, RegisterActivity.class);
                 int register= 1;
                 intent.putExtra("mode", register);
 
-                startActivity(intent,options.toBundle());
+                startActivity(intent);
             }
         });
 
@@ -256,8 +229,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 getWindow().setEnterTransition(null);
                 getWindow().setExitTransition(null);
-                ActivityOptions options= ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, bt_register, bt_register.getTransitionName());
-                Intent intent= new Intent(MainActivity.this, RegisterActivity.class);
+                ActivityOptions options= ActivityOptions.makeSceneTransitionAnimation(LoginActivity.this, bt_register, bt_register.getTransitionName());
+                Intent intent= new Intent(LoginActivity.this, RegisterActivity.class);
                 int find= 2;
                 intent.putExtra("mode", find);
 
@@ -279,7 +252,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        bt_register.show();
 
     }
 

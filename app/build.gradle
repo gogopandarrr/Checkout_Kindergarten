@@ -49,6 +49,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'com.google.android.gms:play-services-vision:15.0.0'
+    implementation "com.github.skydoves:powermenu:2.0.5"
 
 
 }

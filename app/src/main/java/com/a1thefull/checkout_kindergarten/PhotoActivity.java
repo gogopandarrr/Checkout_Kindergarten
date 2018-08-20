@@ -9,28 +9,41 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Surface;
 import android.view.View;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.annotation.Target;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 
 public class PhotoActivity extends AppCompatActivity {
 
     CameraView cameraView;
+    Bitmap bmp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +75,11 @@ public class PhotoActivity extends AppCompatActivity {
             @Override
             public void onPictureTaken(byte[] bytes, Camera camera) {
 
+
+
                 if (bytes != null){
-                    int screenWidth =  getResources().getDisplayMetrics().widthPixels;
-                    int screenHeigh = getResources().getDisplayMetrics().heightPixels;
+                    int screenWidth = 480;
+                    int screenHeigh = 640;
 
                     Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 
@@ -86,7 +101,8 @@ public class PhotoActivity extends AppCompatActivity {
                     try {
                         String filename = "bitmap.jpeg";
                         FileOutputStream stream = PhotoActivity.this.openFileOutput(filename, Context.MODE_PRIVATE);
-                        bm.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                        bm.compress(Bitmap.CompressFormat.JPEG, 85, stream);
+
 
                         stream.close();
                         bm.recycle();
@@ -107,47 +123,8 @@ public class PhotoActivity extends AppCompatActivity {
             }
         });
 
-    }//
-
-    public  static  void setCameraDisplayOrientation(Activity activity, int cameraId, Camera camera){
-
-        Camera.CameraInfo info = new Camera.CameraInfo();
-        Camera.getCameraInfo(cameraId, info);
-        int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
-        int degreses = 0;
-        switch (rotation){
-
-            case Surface.ROTATION_0:
-                degreses = 0;
-                break;
-
-                case Surface.ROTATION_90:
-                    degreses = 90;
-                    break;
-
-                    case Surface.ROTATION_180:
-                        degreses = 180;
-                        break;
-
-                        case Surface.ROTATION_270:
-                            degreses = 270;
-                            break;
-
-        }
-
-        int result;
-        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT){
-            result = (info.orientation + degreses) % 360;
-            result = (360 - result) % 360;
-        } else {
-            result = (info.orientation - degreses + 360) % 360;
-        }
-
-        camera.setDisplayOrientation(result);
-
 
     }//
-
 
 
 
