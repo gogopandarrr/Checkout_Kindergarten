@@ -31,18 +31,13 @@
 
 
         <LinearLayout
+            android:visibility="invisible"
             android:id="@+id/layout_register"
             android:layout_below="@+id/tv_title"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_email"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                app:errorTextAppearance="@string/app_name"
-                >
             <EditText
                 android:id="@+id/et_email"
                 android:layout_width="240dp"
@@ -54,14 +49,7 @@
                 android:inputType="textEmailAddress"
                 android:textSize="14sp"
                 android:singleLine="true"/>
-            </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_name"
-                app:errorEnabled="true"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                >
         <EditText
             android:id="@+id/et_username"
             android:layout_width="240dp"
@@ -74,14 +62,7 @@
             android:textSize="14sp"
             android:privateImeOptions="defaultInputmode=korean"
             android:singleLine="true"/>
-            </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_password"
-                app:errorEnabled="true"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                >
         <EditText
             android:id="@+id/et_password"
             android:layout_width="240dp"
@@ -93,16 +74,7 @@
             android:inputType="textPassword"
             android:textSize="14sp"
             android:singleLine="true"/>
-            </android.support.design.widget.TextInputLayout>
 
-
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_password_confirm"
-                app:errorEnabled="true"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                >
         <EditText
             android:id="@+id/et_password_confirm"
             android:layout_width="240dp"
@@ -114,7 +86,6 @@
             android:inputType="textPassword"
             android:textSize="14sp"
             android:singleLine="true"/>
-            </android.support.design.widget.TextInputLayout>
 
 
         </LinearLayout>
@@ -141,6 +112,37 @@
         </LinearLayout>
 
 
+        <LinearLayout
+            android:visibility="visible"
+            android:id="@+id/layout_forgot"
+            android:layout_below="@+id/tv_title"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/et_email_find"
+            android:layout_width="240dp"
+            android:layout_height="37dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="35dp"
+            android:layout_marginEnd="15dp"
+            android:hint="이메일 주소를 입력해주세요."
+            android:inputType="textEmailAddress"
+            android:textSize="14sp"
+            android:singleLine="true"/>
+
+            <TextView
+                android:id="@+id/tv_forgot"
+                android:textColor="#00b0ff"
+                android:textSize="11dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginStart="35dp"
+                android:text="@string/finding_email"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
 
 
     </RelativeLayout>

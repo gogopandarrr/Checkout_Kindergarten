@@ -213,12 +213,10 @@ public class LoginActivity extends AppCompatActivity {
         bt_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getWindow().setEnterTransition(null);
-                getWindow().setExitTransition(null);
-                Intent intent= new Intent(LoginActivity.this, RegisterActivity.class);
-                int register= 1;
-                intent.putExtra("mode", register);
 
+                Intent intent= new Intent(LoginActivity.this, RegisterActivity.class);
+                int register = 1;
+                intent.putExtra("mode", register);
                 startActivity(intent);
             }
         });
@@ -227,14 +225,10 @@ public class LoginActivity extends AppCompatActivity {
         bt_forgot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getWindow().setEnterTransition(null);
-                getWindow().setExitTransition(null);
-                ActivityOptions options= ActivityOptions.makeSceneTransitionAnimation(LoginActivity.this, bt_register, bt_register.getTransitionName());
                 Intent intent= new Intent(LoginActivity.this, RegisterActivity.class);
-                int find= 2;
-                intent.putExtra("mode", find);
-
-                startActivity(intent,options.toBundle());
+                int forgot = 2;
+                intent.putExtra("mode", forgot);
+                startActivity(intent);
             }
         });
 

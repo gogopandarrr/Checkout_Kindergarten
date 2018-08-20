@@ -3,6 +3,7 @@ package com.a1thefull.checkout_kindergarten;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -24,12 +25,11 @@ import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
 
-
-    private TextView tv_title;
-    private EditText et_email, et_password, et_password_confirm, et_username;
+    private LinearLayout layout_register, layout_forgot;
+    private TextView tv_title, tv_forgot;
+    private EditText et_email, et_password, et_password_confirm, et_username, et_email_find;
     private Button bt_signUp, bt_close;
-    private int mode;
-    private TextInputLayout til_email;
+    int mode;
 
 
 
@@ -51,17 +51,18 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void initView(){
 
+        layout_forgot = findViewById(R.id.layout_forgot);
+        layout_register = findViewById(R.id.layout_register);
         tv_title = findViewById(R.id.tv_title);
+        tv_forgot = findViewById(R.id.tv_forgot);
         et_email= findViewById(R.id.et_email);
+        et_email_find = findViewById(R.id.et_email_find);
         et_username= findViewById(R.id.et_username);
         et_password= findViewById(R.id.et_password);
         et_password_confirm= findViewById(R.id.et_password_confirm);
         bt_signUp = findViewById(R.id.bt_next);
         bt_close = findViewById(R.id.bt_cancel);
-        til_email = (TextInputLayout) et_email.getParent();
 
-        til_email.setError("you need to enter name");
-        et_email.setError(null);
 
 
     }//init
@@ -72,13 +73,28 @@ public class RegisterActivity extends AppCompatActivity {
         mode= data.getIntExtra("mode",0);
 
 
+        switch (mode){
 
-        if(mode==2){
+            case 1:
+                tv_title.setText("회원가입");
+                layout_register.setVisibility(View.VISIBLE);
+                layout_forgot.setVisibility(View.GONE);
+                break;
 
-            tv_title.setText("비밀번호 찾기");
-            bt_signUp.setText("전송");
+
+            case 2:
+
+                tv_title.setText("비밀번호 찾기");
+                layout_register.setVisibility(View.GONE);
+                layout_forgot.setVisibility(View.VISIBLE);
+
+                break;
 
         }
+
+
+
+
 
     }//modecheck
 
@@ -92,6 +108,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 String email= et_email.getText().toString();
+                String email_find = et_email_find.getText().toString();
                 String username= et_username.getText().toString();
                 String password= et_password.getText().toString();
                 String password_confirm= et_password_confirm.getText().toString();
@@ -101,40 +118,54 @@ public class RegisterActivity extends AppCompatActivity {
 
 
                    case 1:
-                        if (validateForm(email,password,password_confirm, username))
+                        if (validateForm(email,password,password_confirm, username)){
                             Toast.makeText(RegisterActivity.this, getResources().getText(R.string.success_registeration), Toast.LENGTH_SHORT).show();
-                        else
-//                            Toast.makeText(RegisterActivity.this, getResources().getText(R.string.error_registration), Toast.LENGTH_SHORT).show();
+                            Intent intent =  new Intent(RegisterActivity.this, LoginActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                        }
+                        else{
+
+                            Toast.makeText(RegisterActivity.this, getResources().getText(R.string.error_registration), Toast.LENGTH_SHORT).show();
+                        }
+
                        break;
 
 
                    case 2:
 
-                       if(checkEmail(email))
-                            Toast.makeText(RegisterActivity.this, getResources().getText(R.string.success_find_password), Toast.LENGTH_SHORT).show();
-                       else
-                           Toast.makeText(RegisterActivity.this, getResources().getText(R.string.error_email), Toast.LENGTH_SHORT).show();
+                       if(checkEmail(email_find)){
+                           Toast.makeText(RegisterActivity.this, getResources().getText(R.string.success_find_password), Toast.LENGTH_SHORT).show();
+                           Intent intent =  new Intent(RegisterActivity.this, LoginActivity.class);
+                           intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                           startActivity(intent);
+                       }
+                       else{
+                           tv_forgot.setText(R.string.error_email);
+                           tv_forgot.setTextColor(Color.RED);
+                       }
 
                        break;
 
 
                }//switch
-
-
-            }//onclick
+            }
         });
 
 
+
+        bt_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                onBackPressed();
+
+            }
+        });
+
     }//listener
 
-    //todo
-    private void signUp(){
 
-
-
-
-
-    }//signUP
 
 
     //-------------------------- 검증 ----------------------------
