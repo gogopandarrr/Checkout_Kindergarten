@@ -24,14 +24,24 @@
         <RelativeLayout
             android:layout_marginTop="35dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="350dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_profile"
                 android:layout_centerHorizontal="true"
                 android:elevation="3dp"
                 android:src="@drawable/defalt_b"
                 android:layout_width="122dp"
                 android:layout_height="122dp" />
+
+            <ImageView
+                android:id="@+id/bt_takePhoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="20dp"
+                android:layout_alignBottom="@+id/iv_profile"
+                android:layout_alignEnd="@+id/iv_profile"
+                android:src="@drawable/edit_photo" />
 
 
             <LinearLayout
@@ -41,19 +51,17 @@
                 android:layout_marginBottom="10dp"
                 android:layout_centerHorizontal="true"
                 android:layout_width="320dp"
-                android:layout_height="300dp">
+                android:layout_height="350dp">
 
-                <View
-                    android:layout_marginTop="100dp"
-                    android:layout_marginStart="75dp"
-                    android:background="@color/main_blue"
-                    android:layout_width="1dp"
-                    android:layout_height="130dp"/>
+
 
 
                 <LinearLayout
-                    android:layout_marginTop="100dp"
-                    android:layout_marginStart="12dp"
+                    android:visibility="gone"
+                    android:id="@+id/layout_profile"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginTop="95dp"
+                    android:layout_marginStart="85dp"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -62,6 +70,7 @@
                         android:id="@+id/tv_name"
                         android:text="홍길동"
                         android:textSize="17sp"
+                        android:textColor="@color/text_color"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
@@ -70,31 +79,90 @@
                         android:id="@+id/tv_tel"
                         android:text="000-0000-0000"
                         android:textSize="17sp"
+                        android:textColor="@color/text_color"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
+                    <TextView
+                        android:layout_marginTop="25dp"
+                        android:id="@+id/tv_email"
+                        android:text="wonderful@1thefull.com"
+                        android:textSize="17sp"
+                        android:textColor="@color/text_color"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
 
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_editable"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="95dp"
+                    android:layout_marginStart="85dp"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+
+                    <EditText
+                        android:paddingStart="10dp"
+                        android:background="@drawable/edit_box"
+                        android:id="@+id/et_name"
+                        android:text="홍길동"
+                        android:textColor="@color/text_color"
+                        android:textSize="13sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:privateImeOptions="defaultInputmode=korean"
+                        android:singleLine="true"/>
+
+                    <EditText
+                        android:paddingStart="10dp"
+                        android:background="@drawable/edit_box"
+                        android:layout_marginTop="22dp"
+                        android:textColor="@color/text_color"
+                        android:id="@+id/et_telNum"
+                        android:text="000-0000-0000"
+                        android:textSize="13sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:privateImeOptions="defaultInputmode=korean"
+                        android:singleLine="true" />
+
+                    <EditText
+                        android:paddingStart="10dp"
+                        android:background="@drawable/edit_box"
+                        android:layout_marginTop="22dp"
+                        android:textColor="@color/text_color"
+                        android:id="@+id/et_email"
+                        android:text="wonderful@1thefull.com"
+                        android:textSize="13sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress"
+                        android:privateImeOptions="defaultInputmode=korean"
+                        android:singleLine="true"/>
 
 
                 </LinearLayout>
 
 
-
-
-
-
             </LinearLayout>
 
 
+            <Button
+                android:elevation="4dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/btn_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
         </RelativeLayout>
-
-
-
-
-
-
-
 
 
 
@@ -104,139 +172,6 @@
 
     </FrameLayout>
 
-    <ImageView
-        android:layout_margin="10dp"
-        android:src="@drawable/beanq_hat"
-        android:id="@+id/iv_facePic"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="10"
-        />
 
-
-    <LinearLayout
-        android:id="@+id/layout_edit"
-        android:orientation="vertical"
-        android:layout_above="@+id/layout_buttons"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="4">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:paddingEnd="30dp"
-            android:paddingStart="50dp">
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColorHint="#c5c5c5">
-
-                <EditText
-                    android:id="@+id/et_studentname"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:background="@drawable/selector_bg_edit"
-                    android:hint="Name"
-                    android:inputType="textPersonName"
-                    android:paddingBottom="2dp"
-                    android:textColor="#2fa881"
-                    android:textCursorDrawable="@drawable/bg_input_cursor"
-                    android:textSize="13sp"
-                    android:singleLine="true"
-                    />
-            </android.support.design.widget.TextInputLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:paddingEnd="30dp"
-            android:paddingStart="50dp">
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColorHint="#c5c5c5">
-
-                <EditText
-                    android:id="@+id/et_tel"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:background="@drawable/selector_bg_edit"
-                    android:hint="Tel"
-                    android:inputType="phone"
-                    android:paddingBottom="2dp"
-                    android:textColor="#2fa881"
-                    android:textCursorDrawable="@drawable/bg_input_cursor"
-                    android:textSize="13sp"
-                    android:singleLine="true"
-                    />
-            </android.support.design.widget.TextInputLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:paddingEnd="30dp"
-            android:paddingStart="50dp">
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColorHint="#c5c5c5">
-
-                <EditText
-                    android:id="@+id/et_parentsEmail"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:background="@drawable/selector_bg_edit"
-                    android:hint="E-mail"
-                    android:inputType="textEmailAddress"
-                    android:paddingBottom="2dp"
-                    android:textColor="#2fa881"
-                    android:textCursorDrawable="@drawable/bg_input_cursor"
-                    android:textSize="13sp"
-                    android:singleLine="true"
-                    />
-            </android.support.design.widget.TextInputLayout>
-        </LinearLayout>
-
-    </LinearLayout>
-
-
-
-    <LinearLayout
-        android:gravity="center_vertical"
-        android:layout_marginTop="25dp"
-        android:layout_weight="1"
-        android:id="@+id/layout_buttons"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/bt_cancel"
-            android:text="취소"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
-        <Button
-            android:id="@+id/bt_edit"
-            android:text="편집"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
-        <Button
-            android:id="@+id/bt_next"
-            android:layout_weight="1"
-            android:text="저장"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
 
 </LinearLayout>

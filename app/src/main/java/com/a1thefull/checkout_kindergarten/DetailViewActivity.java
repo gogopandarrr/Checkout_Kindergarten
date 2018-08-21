@@ -21,10 +21,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class DetailViewActivity extends AppCompatActivity {
 
     Toolbar toolbar;
-    ImageView iv_facePic;
+    CircleImageView iv_profile;
     Button bt_cancel, bt_next;
     EditText edit_username, edit_tel, edit_email;
     Bitmap bmp = null;
@@ -45,7 +47,7 @@ public class DetailViewActivity extends AppCompatActivity {
     private void initView(){
 
         toolbar = findViewById(R.id.toolbar);
-        iv_facePic= findViewById(R.id.iv_facePic);
+        iv_profile = findViewById(R.id.iv_profile);
         bt_cancel= findViewById(R.id.bt_cancel);
         bt_next= findViewById(R.id.bt_next);
         edit_username = findViewById(R.id.et_studentname);
@@ -54,6 +56,7 @@ public class DetailViewActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setTitle("원생정보");
 
 
 
