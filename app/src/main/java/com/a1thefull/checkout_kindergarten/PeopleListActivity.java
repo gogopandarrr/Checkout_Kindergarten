@@ -1,14 +1,17 @@
 package com.a1thefull.checkout_kindergarten;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -16,8 +19,11 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.TextView;
 
 import com.a1thefull.checkout_kindergarten.lists.Lists_Student;
 
@@ -33,6 +39,8 @@ public class PeopleListActivity extends AppCompatActivity {
     private MyAdapter_PeopleList adapter_peopleList;
     private FloatingActionButton fab_add;
     private ArrayList<Lists_Student> studentArrayList = new ArrayList<>();
+    private TextView tv_kindergarten;
+    private Button btn_close_drawer;
     Lists_Student listsStudent;
     private Bitmap bmp;
 
@@ -45,6 +53,7 @@ public class PeopleListActivity extends AppCompatActivity {
 
         initView();
         toolbar_Navi();
+        setNavigationView();
         setListener();
 
 
@@ -65,6 +74,69 @@ public class PeopleListActivity extends AppCompatActivity {
 
 
     }//init
+
+
+    private void setNavigationView(){
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+                switch (menuItem.getItemId()){
+
+                    case R.id.navigation_logout:
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(PeopleListActivity.this);
+
+                        builder.setTitle("로그아웃 하시겠습니까?");
+
+                        builder.setPositiveButton("로그아웃", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+
+                            }
+                        });
+
+                        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        });
+
+                        AlertDialog dialog = builder.create();
+                        dialog.setCanceledOnTouchOutside(false);
+                        dialog.show();
+
+                        break;
+
+
+
+                }
+
+
+                drawerLayout.closeDrawer(navigationView);
+
+
+                return false;
+            }
+        });
+
+
+
+        btn_close_drawer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               drawerLayout.closeDrawer(navigationView);
+            }
+        });
+
+
+
+
+
+    }//setNavi
 
 
 
@@ -103,9 +175,15 @@ public class PeopleListActivity extends AppCompatActivity {
 
                 adapter_peopleList.notifyDataSetChanged();
 
+        }
 
+        if (mode == 3){
+            int position = intent.getIntExtra("position",-1);
+            studentArrayList.remove(position);
+            adapter_peopleList.notifyDataSetChanged();
 
         }
+
 
 
     }//
@@ -118,7 +196,6 @@ public class PeopleListActivity extends AppCompatActivity {
 
                 Intent intent= new Intent(PeopleListActivity.this, PhotoActivity.class);
                 startActivity(intent);
-
             }
         });
 
@@ -142,6 +219,14 @@ public class PeopleListActivity extends AppCompatActivity {
         drawerToggle= new ActionBarDrawerToggle(this, drawerLayout, toolbar,R.string.people_list, R.string.people_list);
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
+
+
+        View headerview = navigationView.getHeaderView(0);
+        btn_close_drawer = headerview.findViewById(R.id.btn_close_drawer);
+
+
+
+
     }
 
 

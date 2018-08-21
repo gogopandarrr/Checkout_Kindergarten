@@ -1,8 +1,10 @@
 package com.a1thefull.checkout_kindergarten;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -29,7 +31,7 @@ public class DetailViewActivity extends AppCompatActivity {
 
     Toolbar toolbar;
     CircleImageView iv_profile;
-    ImageView bt_takePhoto;
+    ImageView bt_takePhoto, bt_delete;
     Button bt_edit, bt_finish;
     TextView tv_name, tv_tel, tv_email;
     EditText et_name, et_tel, et_email;
@@ -63,6 +65,7 @@ public class DetailViewActivity extends AppCompatActivity {
         et_email = findViewById(R.id.et_stuEmail);
         bt_edit = findViewById(R.id.btn_edit);
         bt_finish = findViewById(R.id.btn_finish);
+        bt_delete = findViewById(R.id.btn_delete);
         layout_edit = findViewById(R.id.layout_profile_edit);
         layout_text = findViewById(R.id.layout_profile);
         bt_takePhoto = findViewById(R.id.bt_takePhoto);
@@ -83,23 +86,25 @@ public class DetailViewActivity extends AppCompatActivity {
 
             switch (mode){
 
-                case 1 :
+                case 1 : //등록 모드
 
                     layout_text.setVisibility(View.GONE);
                     bt_edit.setVisibility(View.GONE);
                     bt_takePhoto.setVisibility(View.GONE);
+                    bt_delete.setVisibility(View.GONE);
 
                     image = getIntent().getByteArrayExtra("image");
                     Glide.with(this).load(image).into(iv_profile);
 
                     break;
 
-                case 2 :
-
+                case 2 : //보기모드
 
                     layout_edit.setVisibility(View.GONE);
                     bt_takePhoto.setVisibility(View.GONE);
                     bt_finish.setVisibility(View.GONE);
+                    bt_delete.setVisibility(View.GONE);
+
 
                     position = getIntent().getIntExtra("position",-1);
                     listsStudent = getIntent().getParcelableExtra("listsStudent");
@@ -113,11 +118,12 @@ public class DetailViewActivity extends AppCompatActivity {
                     break;
 
 
-                case 4 :
+                case 4 : //카메라 재촬영후 수정모드
 
                     layout_text.setVisibility(View.GONE);
                     bt_edit.setVisibility(View.GONE);
                     bt_takePhoto.setVisibility(View.VISIBLE);
+                    bt_delete.setVisibility(View.VISIBLE);
 
 
                     image = getIntent().getByteArrayExtra("image");
@@ -175,6 +181,7 @@ public class DetailViewActivity extends AppCompatActivity {
                 layout_edit.setVisibility(View.VISIBLE);
                 bt_finish.setVisibility(View.VISIBLE);
                 bt_takePhoto.setVisibility(View.VISIBLE);
+                bt_delete.setVisibility(View.VISIBLE);
 
 
                 et_name.setText(listsStudent.getName_student());
@@ -199,6 +206,48 @@ public class DetailViewActivity extends AppCompatActivity {
 
 
                 startActivity(intent);
+            }
+        });
+
+
+
+        bt_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(DetailViewActivity.this);
+
+                builder.setTitle("원생 정보를 삭제하시겠습니까?");
+
+                builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        Intent intent = new Intent(DetailViewActivity.this, PeopleListActivity.class);
+                        mode = 3;
+                        intent.putExtra("position", position);
+                        intent.putExtra("mode", mode);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                        startActivity(intent);
+
+                        finish();
+
+                    }
+                });
+
+                builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.show();
+
             }
         });
 
