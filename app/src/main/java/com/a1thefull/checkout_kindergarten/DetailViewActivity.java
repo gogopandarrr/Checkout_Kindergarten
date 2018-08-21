@@ -5,7 +5,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,6 +23,7 @@ import java.util.ArrayList;
 
 public class DetailViewActivity extends AppCompatActivity {
 
+    Toolbar toolbar;
     ImageView iv_facePic;
     Button bt_cancel, bt_next;
     EditText edit_username, edit_tel, edit_email;
@@ -41,12 +44,16 @@ public class DetailViewActivity extends AppCompatActivity {
 
     private void initView(){
 
+        toolbar = findViewById(R.id.toolbar);
         iv_facePic= findViewById(R.id.iv_facePic);
         bt_cancel= findViewById(R.id.bt_cancel);
         bt_next= findViewById(R.id.bt_next);
         edit_username = findViewById(R.id.et_studentname);
         edit_email = findViewById(R.id.et_parentsEmail);
         edit_tel = findViewById(R.id.et_tel);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
 
@@ -112,5 +119,20 @@ public class DetailViewActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+
+            case android.R.id.home:{
+                onBackPressed();
+                return true;
+            }
+
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
 }//class
 

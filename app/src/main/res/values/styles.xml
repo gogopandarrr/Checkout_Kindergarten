@@ -13,11 +13,18 @@
         <item name="colorControlActivated">#FFCC00</item>
     </style>
 
+    <style name="detailActionbar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/main_blue</item>
 
-    <style name="Actionbar" parent="Theme.AppCompat.Light">
+    </style>
+
+
+    <style name="Actionbar" parent="Theme.AppCompat.Light.NoActionBar">
     <!-- Customize your theme here. -->
-    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimary">@color/white</item>
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-    <item name="colorAccent">@color/colorAccent</item>
+    <item name="colorAccent">@color/main_blue</item>
     </style>
 </resources>

@@ -5,7 +5,6 @@
     android:id="@+id/layout_drawable"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/main_login01"
     tools:context=".PeopleListActivity">
 
    <LinearLayout
@@ -15,37 +14,52 @@
 
        <android.support.v7.widget.Toolbar
            android:id="@+id/toolbar"
-           android:theme="@style/Actionbar"
+           android:elevation="4dp"
+           app:titleTextColor="@color/main_blue"
            android:layout_width="match_parent"
            android:layout_height="?attr/actionBarSize"></android.support.v7.widget.Toolbar>
 
-       <RelativeLayout
-           android:padding="16dp"
-           android:layout_width="match_parent"
+       <FrameLayout android:layout_width="match_parent"
            android:layout_height="match_parent">
 
-           <android.support.v7.widget.RecyclerView
-               android:id="@+id/people_recycleView"
+           <RelativeLayout
+               android:padding="16dp"
+               android:background="@color/bg_list"
                android:layout_width="match_parent"
-               android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+               android:layout_height="match_parent">
 
 
-           <android.support.design.widget.FloatingActionButton
-               android:id="@+id/fab_add"
-               android:layout_margin="10dp"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_alignParentBottom="true"
-               android:layout_alignParentEnd="true"
-               android:src="@drawable/ic_registration"
-               app:fabSize="normal" />
+               <android.support.v7.widget.RecyclerView
+                   android:id="@+id/people_recycleView"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
 
-       </RelativeLayout>
+
+               <android.support.design.widget.FloatingActionButton
+                   android:id="@+id/fab_add"
+                   android:background="@color/main_blue"
+                   android:layout_marginBottom="48dp"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_alignParentBottom="true"
+                   android:layout_centerInParent="true"
+                   android:src="@drawable/ic_registration"
+                   app:fabSize="normal" />
+
+           </RelativeLayout>
+
+           <View android:layout_width="match_parent"
+               android:layout_height="5dp"
+               android:background="@drawable/toolbar_dropshadow"/>
+
+       </FrameLayout>
+
+
 
       </LinearLayout>
 
     <android.support.design.widget.NavigationView
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:id="@+id/navi"
         android:layout_gravity="start"

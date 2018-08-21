@@ -84,7 +84,7 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter {
 
         CardView cardView;
         CheckBox checkBox;
-        ImageView iv_pic;
+        CircleImageView iv_pic;
         TextView tv_name;
 
 
