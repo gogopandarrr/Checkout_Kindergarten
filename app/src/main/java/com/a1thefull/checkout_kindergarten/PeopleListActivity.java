@@ -30,12 +30,11 @@ public class PeopleListActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private ActionBarDrawerToggle drawerToggle;
     private RecyclerView peopleList_recycleView;
-    private CheckBox checkBox;
     private MyAdapter_PeopleList adapter_peopleList;
     private FloatingActionButton fab_add;
     private ArrayList<Lists_Student> studentArrayList = new ArrayList<>();
+    Lists_Student listsStudent;
     private Bitmap bmp;
-    Boolean isChecked = false;
 
 
     @Override
@@ -76,16 +75,33 @@ public class PeopleListActivity extends AppCompatActivity {
         int mode = intent.getIntExtra("mode",-1);
 
 
-        if (mode == 1){
+        if (mode == 1) {
+//            String name = intent.getStringExtra("name");
+//            String tel = intent.getStringExtra("tel");
+//            String email = intent.getStringExtra("email");
+//            byte[] image = intent.getByteArrayExtra("byteImage");
+//            bmp = BitmapFactory.decodeByteArray(
+//                    intent.getByteArrayExtra("byteImage"),0, intent.getByteArrayExtra("byteImage").length);
 
-            String name = intent.getStringExtra("name");
-            String tel = intent.getStringExtra("tel");
-            String email = intent.getStringExtra("email");
-            bmp = BitmapFactory.decodeByteArray(
-                    intent.getByteArrayExtra("byteImage"),0, intent.getByteArrayExtra("byteImage").length);
+            listsStudent = intent.getParcelableExtra("listsStudent");
+            studentArrayList.add(listsStudent);
+
+        }
 
 
-            studentArrayList.add(new Lists_Student(bmp, name, tel, email));
+        if (mode == 2 || mode == 4){
+
+                int position = intent.getIntExtra("position",-1);
+                listsStudent = intent.getParcelableExtra("listsStudent");
+
+                if (position == -1){
+                    studentArrayList.add(listsStudent);
+                }else{
+                    studentArrayList.set(position, listsStudent);
+                }
+
+
+                adapter_peopleList.notifyDataSetChanged();
 
 
 
@@ -100,12 +116,13 @@ public class PeopleListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                hideCheckbox();
                 Intent intent= new Intent(PeopleListActivity.this, PhotoActivity.class);
                 startActivity(intent);
 
             }
         });
+
+
 
 
 
@@ -193,12 +210,8 @@ public class PeopleListActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (adapter_peopleList.isChecked){
 
-            hideCheckbox();
-
-        }
-        else super.onBackPressed();
+        super.onBackPressed();
 
 
     }

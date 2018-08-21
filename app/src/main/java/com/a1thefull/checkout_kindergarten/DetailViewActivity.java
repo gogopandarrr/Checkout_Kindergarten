@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.a1thefull.checkout_kindergarten.lists.Lists_Student;
 import com.bumptech.glide.Glide;
@@ -27,9 +29,14 @@ public class DetailViewActivity extends AppCompatActivity {
 
     Toolbar toolbar;
     CircleImageView iv_profile;
-    Button bt_cancel, bt_next;
-    EditText edit_username, edit_tel, edit_email;
-    Bitmap bmp = null;
+    ImageView bt_takePhoto;
+    Button bt_edit, bt_finish;
+    TextView tv_name, tv_tel, tv_email;
+    EditText et_name, et_tel, et_email;
+    LinearLayout layout_text, layout_edit;
+    Lists_Student listsStudent;
+    static byte[] image;
+    int mode, position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +44,8 @@ public class DetailViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail_view);
 
         initView();
-        setImg();
         setListener();
+        modeCheck();
 
 
 
@@ -48,76 +55,153 @@ public class DetailViewActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar);
         iv_profile = findViewById(R.id.iv_profile);
-        bt_cancel= findViewById(R.id.bt_cancel);
-        bt_next= findViewById(R.id.bt_next);
-        edit_username = findViewById(R.id.et_studentname);
-        edit_email = findViewById(R.id.et_parentsEmail);
-        edit_tel = findViewById(R.id.et_tel);
+        tv_name = findViewById(R.id.tv_stuName);
+        tv_tel = findViewById(R.id.tv_stuTel);
+        tv_email = findViewById(R.id.tv_stuEmail);
+        et_name = findViewById(R.id.et_stuName);
+        et_tel = findViewById(R.id.et_stuTel);
+        et_email = findViewById(R.id.et_stuEmail);
+        bt_edit = findViewById(R.id.btn_edit);
+        bt_finish = findViewById(R.id.btn_finish);
+        layout_edit = findViewById(R.id.layout_profile_edit);
+        layout_text = findViewById(R.id.layout_profile);
+        bt_takePhoto = findViewById(R.id.bt_takePhoto);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setTitle("원생정보");
-
-
+        getSupportActionBar().setTitle("원생정보");
 
     }//init
 
 
+    private void modeCheck(){
 
-    private void setImg(){
+        Intent intent = getIntent();
+
+        mode = intent.getIntExtra("mode",-1);
 
 
-        String filename = getIntent().getStringExtra("image");
+            switch (mode){
 
-        try {
+                case 1 :
 
-            FileInputStream is = DetailViewActivity.this.openFileInput(filename);
-            bmp = BitmapFactory.decodeStream(is);
-            is.close();
+                    layout_text.setVisibility(View.GONE);
+                    bt_edit.setVisibility(View.GONE);
+                    bt_takePhoto.setVisibility(View.GONE);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+                    image = getIntent().getByteArrayExtra("image");
+                    Glide.with(this).load(image).into(iv_profile);
 
-        Glide.with(this).load(bmp).into(iv_facePic);
+                    break;
 
-    }//setImg
+                case 2 :
+
+
+                    layout_edit.setVisibility(View.GONE);
+                    bt_takePhoto.setVisibility(View.GONE);
+                    bt_finish.setVisibility(View.GONE);
+
+                    position = getIntent().getIntExtra("position",-1);
+                    listsStudent = getIntent().getParcelableExtra("listsStudent");
+
+                    Glide.with(this).load(listsStudent.getImage()).into(iv_profile);
+
+                    tv_name.setText(listsStudent.getName_student());
+                    tv_tel.setText(listsStudent.getTel_parents());
+                    tv_email.setText(listsStudent.getEmail_parents());
+
+                    break;
+
+
+                case 4 :
+
+                    layout_text.setVisibility(View.GONE);
+                    bt_edit.setVisibility(View.GONE);
+                    bt_takePhoto.setVisibility(View.VISIBLE);
+
+
+                    image = getIntent().getByteArrayExtra("image");
+                    Glide.with(this).load(image).into(iv_profile);
+
+                    et_name.setText(intent.getStringExtra("name"));
+                    et_tel.setText(intent.getStringExtra("tel"));
+                    et_email.setText(intent.getStringExtra("email"));
+
+
+                    break;
+
+            }
+
+
+
+    }//
+
+
 
 
     private void setListener(){
-        bt_next.setOnClickListener(new View.OnClickListener() {
+        bt_finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                String name = edit_username.getText().toString();
-                String tel = edit_tel.getText().toString();
-                String email = edit_email.getText().toString();
-                int mode =  1;
+                String name = et_name.getText().toString();
+                String tel = et_tel.getText().toString();
+                String email = et_email.getText().toString();
 
+                listsStudent = new Lists_Student(image, name, tel, email);
                 Intent intent =  new Intent(DetailViewActivity.this, PeopleListActivity.class);
 
-                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.putExtra("position", position);
+                    intent.putExtra("mode", mode);
+                    intent.putExtra("listsStudent", listsStudent);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-                intent.putExtra("mode", mode);
-                intent.putExtra("name",name);
-                intent.putExtra("tel",tel);
-                intent.putExtra("email",email);
+                    startActivity(intent);
 
-                ByteArrayOutputStream bs = new ByteArrayOutputStream();
-                bmp.compress(Bitmap.CompressFormat.JPEG, 85, bs);
-                intent.putExtra("byteImage",bs.toByteArray());
+                    finish();
 
-                startActivity(intent);
+                }
 
-            }
+
         });
 
-        bt_cancel.setOnClickListener(new View.OnClickListener() {
+
+        bt_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
+
+                layout_text.setVisibility(View.GONE);
+                bt_edit.setVisibility(View.GONE);
+                layout_edit.setVisibility(View.VISIBLE);
+                bt_finish.setVisibility(View.VISIBLE);
+                bt_takePhoto.setVisibility(View.VISIBLE);
+
+
+                et_name.setText(listsStudent.getName_student());
+                et_tel.setText(listsStudent.getTel_parents());
+                et_email.setText(listsStudent.getEmail_parents());
+
+
             }
         });
+
+
+        bt_takePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int mode = 4;
+                Intent intent = new Intent(DetailViewActivity.this, PhotoActivity.class);
+
+                intent.putExtra("name",et_name.getText().toString());
+                intent.putExtra("tel",et_tel.getText().toString());
+                intent.putExtra("email",et_email.getText().toString());
+                intent.putExtra("mode", mode);
+
+
+                startActivity(intent);
+            }
+        });
+
 
 
     }

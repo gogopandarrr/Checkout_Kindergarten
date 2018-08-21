@@ -63,6 +63,9 @@
         android:layout_height="match_parent"
         android:id="@+id/navi"
         android:layout_gravity="start"
+        app:headerLayout="@layout/drawer_header"
+        android:background="@drawable/menubar"
+        app:menu="@menu/drawer"
         ></android.support.design.widget.NavigationView>
 
 

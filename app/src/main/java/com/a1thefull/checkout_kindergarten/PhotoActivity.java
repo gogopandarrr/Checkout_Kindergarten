@@ -43,20 +43,28 @@ import java.util.concurrent.ExecutionException;
 public class PhotoActivity extends AppCompatActivity {
 
     CameraView cameraView;
-    Bitmap bmp;
+    int mode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
 
-
         cameraView = findViewById(R.id.cameraView);
+
+        modeCheck();
 
         permissionCheck();
 
+
     }//oc
 
+
+    private void modeCheck(){
+
+       mode = getIntent().getIntExtra("mode", -1);
+
+    }
 
     private void permissionCheck(){
         if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
@@ -99,17 +107,34 @@ public class PhotoActivity extends AppCompatActivity {
                     }
 
                     try {
-                        String filename = "bitmap.jpeg";
-                        FileOutputStream stream = PhotoActivity.this.openFileOutput(filename, Context.MODE_PRIVATE);
-                        bm.compress(Bitmap.CompressFormat.JPEG, 85, stream);
 
+                        ByteArrayOutputStream bs = new ByteArrayOutputStream();
+                        bm.compress(Bitmap.CompressFormat.JPEG, 85, bs);
 
-                        stream.close();
+                        bs.close();
                         bm.recycle();
 
+
                         Intent intent = new Intent(PhotoActivity.this, DetailViewActivity.class);
-                        intent.putExtra("image", filename);
+                        intent.putExtra("image",bs.toByteArray());
+
+
+                        if(mode == 4){
+                            mode = 4;
+                            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.putExtra("name", getIntent().getStringExtra("name"));
+                            intent.putExtra("tel", getIntent().getStringExtra("tel"));
+                            intent.putExtra("email", getIntent().getStringExtra("email"));
+
+                        }
+                        else mode = 1; //처음시작
+
+                        intent.putExtra("mode", mode);
                         startActivity(intent);
+
+
+                        finish();
+
 
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
@@ -146,4 +171,8 @@ public class PhotoActivity extends AppCompatActivity {
         }
 
     }//
+
+
+
+
 }//class

@@ -1,6 +1,7 @@
 package com.a1thefull.checkout_kindergarten;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +26,7 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter {
 
     Context context;
     ArrayList<Lists_Student> studentArrayList;
+    Lists_Student listsStudent;
     Boolean isChecked = false;
     RecyclerView recyclerView;
 
@@ -45,7 +47,26 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter {
         View itemView;
         itemView= inflater.inflate(R.layout.list_people, viewGroup, false);
 
-        VH holder = new VH(itemView);
+        final VH holder = new VH(itemView);
+
+
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                int position = holder.getAdapterPosition();
+                int mode = 2; // 보기모드
+
+                listsStudent = studentArrayList.get(position);
+                Intent intent = new Intent(context, DetailViewActivity.class);
+                intent.putExtra("listsStudent", listsStudent);
+                intent.putExtra("position", position);
+                intent.putExtra("mode", mode);
+
+                context.startActivity(intent);
+
+            }
+        });
 
 
 
@@ -63,7 +84,7 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter {
 
         vh.tv_name.setText(lists_student.getName_student());
 
-        Glide.with(context).load(lists_student.getFacePhoto()).into(vh.iv_pic);
+        Glide.with(context).load(lists_student.getImage()).into(vh.iv_pic);
 
 
 
@@ -96,28 +117,6 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter {
             iv_pic = itemView.findViewById(R.id.iv_pic);
             tv_name = itemView.findViewById(R.id.tv_name);
 
-            cardView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    isChecked = true;
-                    checkBox.setVisibility(View.VISIBLE);
-                    checkBox.setChecked(isChecked);
-
-                    return isChecked;
-                }
-            });
-
-
-            cardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    if (checkBox.isChecked()){
-                        checkBox.setChecked(!isChecked);
-                    }
-                    else checkBox.setChecked(isChecked);
-                }
-            });
 
         }
 

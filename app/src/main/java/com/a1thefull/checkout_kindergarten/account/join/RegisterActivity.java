@@ -1,4 +1,4 @@
-package com.a1thefull.checkout_kindergarten.account;
+package com.a1thefull.checkout_kindergarten.account.join;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -17,12 +17,13 @@ import com.a1thefull.checkout_kindergarten.account.login.LoginActivity;
 
 import java.util.regex.Pattern;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements JoinView{
 
     private LinearLayout layout_register, layout_forgot;
     private TextView tv_title, tv_forgot;
     private EditText et_email, et_password, et_password_confirm, et_username, et_email_find;
     private Button bt_signUp, bt_close;
+    JoinPresenter mJoinPresenter;
     int mode;
 
 
@@ -57,6 +58,8 @@ public class RegisterActivity extends AppCompatActivity {
         bt_signUp = findViewById(R.id.bt_next);
         bt_close = findViewById(R.id.bt_cancel);
 
+
+        mJoinPresenter = new JoinPresenterImpl(RegisterActivity.this, getApplicationContext());
 
 
     }//init
@@ -113,10 +116,13 @@ public class RegisterActivity extends AppCompatActivity {
 
                    case 1:
                         if (validateForm(email,password,password_confirm, username)){
-                            Toast.makeText(RegisterActivity.this, getResources().getText(R.string.success_registeration), Toast.LENGTH_SHORT).show();
-                            Intent intent =  new Intent(RegisterActivity.this, LoginActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
+
+                            mJoinPresenter.performJoin(email, password, username);
+
+//                            Toast.makeText(RegisterActivity.this, getResources().getText(R.string.success_registeration), Toast.LENGTH_SHORT).show();
+//                            Intent intent =  new Intent(RegisterActivity.this, LoginActivity.class);
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                            startActivity(intent);
                         }
                         else{
 
@@ -216,6 +222,29 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         return valid;
+    }
+
+    @Override
+    public void validation(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void success() {
+        Toast.makeText(this, "회원가입 성공", Toast.LENGTH_SHORT).show();
+        launch(LoginActivity.class);
+    }
+
+    @Override
+    public void error() {
+        Toast.makeText(this, "회원가입 실패", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void launch(Class cls) {
+        Intent intent = new Intent(getApplicationContext(), cls);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
 

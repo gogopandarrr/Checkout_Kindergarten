@@ -6,22 +6,36 @@ import android.os.Parcelable;
 
 public class Lists_Student implements Parcelable {
 
-    Bitmap facePhoto;
+    byte[] image;
     String name_student, tel_parents, email_parents;
 
 
-    public Lists_Student(Bitmap facePhoto, String name_student, String tel_parents, String email_parents) {
-        this.facePhoto = facePhoto;
+    public Lists_Student(byte[] image, String name_student, String tel_parents, String email_parents) {
+        this.image = image;
         this.name_student = name_student;
         this.tel_parents = tel_parents;
         this.email_parents = email_parents;
     }
 
+
     protected Lists_Student(Parcel in) {
-        facePhoto = in.readParcelable(Bitmap.class.getClassLoader());
+        image = in.createByteArray();
         name_student = in.readString();
         tel_parents = in.readString();
         email_parents = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeByteArray(image);
+        dest.writeString(name_student);
+        dest.writeString(tel_parents);
+        dest.writeString(email_parents);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<Lists_Student> CREATOR = new Creator<Lists_Student>() {
@@ -36,12 +50,12 @@ public class Lists_Student implements Parcelable {
         }
     };
 
-    public Bitmap getFacePhoto() {
-        return facePhoto;
+    public byte[] getImage() {
+        return image;
     }
 
-    public void setFacePhoto(Bitmap facePhoto) {
-        this.facePhoto = facePhoto;
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     public String getName_student() {
@@ -68,16 +82,7 @@ public class Lists_Student implements Parcelable {
         this.email_parents = email_parents;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeParcelable(facePhoto, i);
-        parcel.writeString(name_student);
-        parcel.writeString(tel_parents);
-        parcel.writeString(email_parents);
+    public static Creator<Lists_Student> getCREATOR() {
+        return CREATOR;
     }
 }

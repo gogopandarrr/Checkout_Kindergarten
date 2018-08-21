@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.transition.Explode;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,17 +14,7 @@ import android.widget.Toast;
 
 import com.a1thefull.checkout_kindergarten.PeopleListActivity;
 import com.a1thefull.checkout_kindergarten.R;
-import com.a1thefull.checkout_kindergarten.account.RegisterActivity;
-import com.a1thefull.checkout_kindergarten.api.ApiService;
-import com.a1thefull.checkout_kindergarten.api.SaveSharedPreference;
-import com.a1thefull.checkout_kindergarten.api.ServiceGenerator;
-import com.a1thefull.checkout_kindergarten.api.User;
-
-import java.util.HashMap;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.a1thefull.checkout_kindergarten.account.join.RegisterActivity;
 
 
 public class LoginActivity extends AppCompatActivity implements LoginView {
@@ -133,8 +121,8 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
             @Override
             public void onClick(View view) {
                 autoLoginCheck(); //자동로그인확인
-//                login();
-                loginSuccess();
+                login();
+//                loginSuccess();
 
 
             }
