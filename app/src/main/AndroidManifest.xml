@@ -43,7 +43,7 @@
         </activity>
         <activity android:name="com.onethefull.attendmobile.account.join.RegisterActivity"/>
         <activity android:name="com.onethefull.attendmobile.PeopleListActivity" android:theme="@style/Actionbar"/>
-        <activity android:name="com.onethefull.attendmobile.DetailViewActivity"/>
+        <activity android:name="com.onethefull.attendmobile.account.setchildren.DetailViewActivity"/>
         <activity android:name="com.onethefull.attendmobile.PhotoActivity" />
 
     </application>

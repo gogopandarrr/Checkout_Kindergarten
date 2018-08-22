@@ -21,7 +21,7 @@ public class RegisterActivity extends AppCompatActivity implements JoinView{
 
     private LinearLayout layout_register, layout_forgot;
     private TextView tv_title, tv_forgot;
-    private EditText et_email, et_password, et_password_confirm, et_username, et_email_find;
+    private EditText et_email, et_password, et_password_confirm, et_kindergarten, et_email_find;
     private Button bt_signUp, bt_close;
     JoinPresenter mJoinPresenter;
     int mode;
@@ -52,7 +52,7 @@ public class RegisterActivity extends AppCompatActivity implements JoinView{
         tv_forgot = findViewById(R.id.tv_forgot);
         et_email= findViewById(R.id.et_email);
         et_email_find = findViewById(R.id.et_email_find);
-        et_username= findViewById(R.id.et_username);
+        et_kindergarten = findViewById(R.id.et_kindergarten);
         et_password= findViewById(R.id.et_password);
         et_password_confirm= findViewById(R.id.et_password_confirm);
         bt_signUp = findViewById(R.id.bt_next);
@@ -104,20 +104,20 @@ public class RegisterActivity extends AppCompatActivity implements JoinView{
             @Override
             public void onClick(View view) {
 
-                String email= et_email.getText().toString();
+                String email = et_email.getText().toString();
                 String email_find = et_email_find.getText().toString();
-                String username= et_username.getText().toString();
-                String password= et_password.getText().toString();
-                String password_confirm= et_password_confirm.getText().toString();
+                String kindergarten = et_kindergarten.getText().toString();
+                String password = et_password.getText().toString();
+                String password_confirm = et_password_confirm.getText().toString();
 
 
                switch (mode){
 
 
                    case 1:
-                        if (validateForm(email,password,password_confirm, username)){
+                        if (validateForm(email,password,password_confirm, kindergarten)){
 
-                            mJoinPresenter.performJoin(email, password, username);
+                            mJoinPresenter.performJoin(email, password, kindergarten);
 
 //                            Toast.makeText(RegisterActivity.this, getResources().getText(R.string.success_registeration), Toast.LENGTH_SHORT).show();
 //                            Intent intent =  new Intent(RegisterActivity.this, LoginActivity.class);
@@ -219,10 +219,10 @@ public class RegisterActivity extends AppCompatActivity implements JoinView{
 
 
         if(TextUtils.isEmpty(username)){
-            et_username.setError(getResources().getString(R.string.error_void));
+            et_kindergarten.setError(getResources().getString(R.string.error_void));
             valid= false;
         }else{
-            et_username.setError(null);
+            et_kindergarten.setError(null);
         }
 
         return valid;

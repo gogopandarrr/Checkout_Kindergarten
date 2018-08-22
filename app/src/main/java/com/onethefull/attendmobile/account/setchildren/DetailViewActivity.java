@@ -1,4 +1,4 @@
-package com.onethefull.attendmobile;
+package com.onethefull.attendmobile.account.setchildren;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -6,6 +6,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,25 +15,34 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.onethefull.attendmobile.PeopleListActivity;
+import com.onethefull.attendmobile.PhotoActivity;
 import com.onethefull.attendmobile.R;
 import com.onethefull.attendmobile.lists.Lists_Student;
 import com.bumptech.glide.Glide;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class DetailViewActivity extends AppCompatActivity {
+public class DetailViewActivity extends AppCompatActivity implements SetChildrenView{
 
-    Toolbar toolbar;
-    CircleImageView iv_profile;
-    ImageView bt_takePhoto, bt_delete;
-    Button bt_edit, bt_finish;
-    TextView tv_name, tv_tel, tv_email;
-    EditText et_name, et_tel, et_email;
-    LinearLayout layout_text, layout_edit;
-    Lists_Student listsStudent;
-    byte[] image;
-    int mode, position;
+    private Toolbar toolbar;
+    private CircleImageView iv_profile;
+    private ImageView bt_takePhoto, bt_delete;
+    private Button bt_edit, bt_finish;
+    private TextView tv_name, tv_tel, tv_email;
+    private EditText et_name, et_tel, et_email;
+    private LinearLayout layout_text, layout_edit;
+    private Lists_Student listsStudent;
+    private SetChildrenPresenter childrenPresenter;
+    private String id;
+    private byte[] image;
+    private int mode, position;
+
+    //임시
+    String cvid = "temp";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +78,8 @@ public class DetailViewActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("원생정보");
 
+        childrenPresenter = new SetChildrenPresenterImpl(DetailViewActivity.this, getApplicationContext());
+
     }//init
 
 
@@ -75,6 +87,7 @@ public class DetailViewActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         mode = intent.getIntExtra("mode",-1);
+        id = intent.getStringExtra("id");
 
 
             switch (mode){
@@ -149,17 +162,13 @@ public class DetailViewActivity extends AppCompatActivity {
                 String tel = et_tel.getText().toString();
                 String email = et_email.getText().toString();
 
-                listsStudent = new Lists_Student(image, name, tel, email);
-                Intent intent =  new Intent(DetailViewActivity.this, PeopleListActivity.class);
 
-                    intent.putExtra("position", position);
-                    intent.putExtra("mode", mode);
-                    intent.putExtra("listsStudent", listsStudent);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                if (validateForm(name, tel)){
 
-                    startActivity(intent);
+                    listsStudent = new Lists_Student(image, name, tel, email);
+                    childrenPresenter.performJoin(id, name, cvid, tel);
 
-                    finish();
+                }
 
                 }
 
@@ -249,7 +258,33 @@ public class DetailViewActivity extends AppCompatActivity {
 
 
 
-    }
+    }//
+
+
+    private boolean validateForm(String name, String tel){
+
+        boolean valid= true;
+
+        if(TextUtils.isEmpty(name)){
+            et_name.setError(getResources().getString(R.string.error_void));
+            valid= false;
+        }else{
+            et_name.setError(null);
+        }
+
+
+        if(TextUtils.isEmpty(tel)){
+            et_tel.setError(getResources().getString(R.string.error_void));
+            valid= false;
+        }else{
+            et_tel.setError(null);
+        }
+
+        return valid;
+
+    }//
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -277,6 +312,38 @@ public class DetailViewActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+    }
+
+    @Override
+    public void validation(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void success() {
+
+
+        Toast.makeText(this, "등록 완료", Toast.LENGTH_SHORT).show();
+        Intent intent =  new Intent(DetailViewActivity.this, PeopleListActivity.class);
+        intent.putExtra("id", id);
+        intent.putExtra("position", position);
+        intent.putExtra("mode", mode);
+        intent.putExtra("listsStudent", listsStudent);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        startActivity(intent);
+
+        finish();
+    }
+
+    @Override
+    public void error() {
+        Toast.makeText(this, "등록 실패", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void launch(Class cls) {
 
     }
 }//class
