@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PhotoActivity">
+    tools:context="com.onethefull.attend.PhotoActivity">
 
-    <com.a1thefull.checkout_kindergarten.CameraView
+    <com.onethefull.attend.api.CameraView
         android:id="@+id/cameraView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
