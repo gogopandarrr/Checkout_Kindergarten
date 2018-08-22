@@ -1,8 +1,6 @@
 package com.onethefull.attendmobile;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,7 +9,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,8 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.SearchView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.onethefull.attendmobile.adapter.MyAdapter_PeopleList;
@@ -40,11 +36,10 @@ public class PeopleListActivity extends AppCompatActivity {
     private MyAdapter_PeopleList adapter_peopleList;
     private FloatingActionButton fab_add;
     private ArrayList<Lists_Student> studentArrayList = new ArrayList<>();
+    ImageView iv_noinfo;
     private TextView tv_kindergarten;
-    private SearchView searchView;
     private Button btn_close_drawer;
     Lists_Student listsStudent;
-    private Bitmap bmp;
 
 
     @Override
@@ -65,7 +60,7 @@ public class PeopleListActivity extends AppCompatActivity {
     private void initView(){
 
         fab_add= findViewById(R.id.fab_add);
-
+        iv_noinfo = findViewById(R.id.iv_noinfo);
         peopleList_recycleView= findViewById(R.id.people_recycleView);
         adapter_peopleList= new MyAdapter_PeopleList(this, studentArrayList, peopleList_recycleView);
         peopleList_recycleView.setAdapter(adapter_peopleList);
@@ -77,11 +72,16 @@ public class PeopleListActivity extends AppCompatActivity {
 
     }//init
 
+    private void checkNolist(){
+        if (studentArrayList.size()>0){
+            iv_noinfo.setVisibility(View.GONE);
+        }else iv_noinfo.setVisibility(View.VISIBLE);
+
+    }//
+
+
 
     private void setNavigationView(){
-
-
-
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -90,47 +90,14 @@ public class PeopleListActivity extends AppCompatActivity {
                 switch (menuItem.getItemId()){
 
                     case R.id.navigation_logout:
-
-
                         logout();
-
-//                        AlertDialog.Builder builder = new AlertDialog.Builder(PeopleListActivity.this);
-//
-//                        builder.setTitle("로그아웃 하시겠습니까?");
-//
-//                        builder.setPositiveButton("로그아웃", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialogInterface, int i) {
-//
-//
-//                            }
-//                        });
-//
-//                        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialogInterface, int i) {
-//
-//                            }
-//                        });
-//
-//                        AlertDialog dialog = builder.create();
-//                        dialog.setCanceledOnTouchOutside(false);
-//                        dialog.show();
-
                         break;
-
-
-
                 }
 
-
                 drawerLayout.closeDrawer(navigationView);
-
-
                 return false;
             }
         });
-
 
 
         btn_close_drawer.setOnClickListener(new View.OnClickListener() {
@@ -139,7 +106,6 @@ public class PeopleListActivity extends AppCompatActivity {
                drawerLayout.closeDrawer(navigationView);
             }
         });
-
 
 
 
@@ -228,24 +194,19 @@ public class PeopleListActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
-
-
-
         View headerview = navigationView.getHeaderView(0);
         btn_close_drawer = headerview.findViewById(R.id.btn_close_drawer);
 
 
 
-
-    }
-
-
+    }//
 
 
     private void logout(){
         AlertDialogFragment dialogFragment = AlertDialogFragment.newInstance("로그아웃 하시겠습니까?");
         dialogFragment.show(getSupportFragmentManager(),"dialog");
-    }
+    }//
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -266,7 +227,7 @@ public class PeopleListActivity extends AppCompatActivity {
 
         }
 
-    }
+    }//
 
 
     @Override
@@ -277,7 +238,7 @@ public class PeopleListActivity extends AppCompatActivity {
         search(searchView);
         return true;
 
-    }
+    }//
 
 
     private void search(android.support.v7.widget.SearchView searchView){
@@ -296,23 +257,20 @@ public class PeopleListActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-    }
+    }//
 
 
 
     @Override
     protected void onStart() {
         super.onStart();
-
+        checkNolist();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
+        checkNolist();
         adapter_peopleList.notifyDataSetChanged();
     }
 
@@ -329,7 +287,6 @@ public class PeopleListActivity extends AppCompatActivity {
     public void onBackPressed() {
 
         super.onBackPressed();
-
 
     }
 

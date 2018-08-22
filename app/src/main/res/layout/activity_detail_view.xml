@@ -78,7 +78,7 @@
 
                     <TextView
                         android:id="@+id/tv_stuName"
-                        android:hint="홍길동"
+                        android:hint="원생 이름"
                         android:textSize="17sp"
                         android:textColor="@color/text_color"
                         android:layout_width="match_parent"
@@ -87,7 +87,7 @@
                     <TextView
                         android:layout_marginTop="25dp"
                         android:id="@+id/tv_stuTel"
-                        android:hint="000-0000-0000"
+                        android:hint="보호자 휴대폰 번호"
                         android:textSize="17sp"
                         android:textColor="@color/text_color"
                         android:layout_width="match_parent"
@@ -96,7 +96,7 @@
                     <TextView
                         android:layout_marginTop="25dp"
                         android:id="@+id/tv_stuEmail"
-                        android:hint="wonderful@1thefull.com"
+                        android:hint="보호자 이메일"
                         android:textSize="17sp"
                         android:textColor="@color/text_color"
                         android:layout_width="wrap_content"
@@ -122,6 +122,7 @@
                         android:id="@+id/et_stuName"
                         android:textColor="@color/text_color"
                         android:textSize="13sp"
+                        android:hint="원생 이름"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPersonName"
@@ -135,6 +136,7 @@
                         android:textColor="@color/text_color"
                         android:id="@+id/et_stuTel"
                         android:textSize="13sp"
+                        android:hint="보호자 휴대폰 번호"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="number"
@@ -148,6 +150,7 @@
                         android:textColor="@color/text_color"
                         android:id="@+id/et_stuEmail"
                         android:textSize="13sp"
+                        android:hint="보호자 이메일"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress"
