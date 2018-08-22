@@ -1,4 +1,4 @@
-package com.onethefull.attend.api;
+package com.onethefull.attendmobile.api;
 
 import android.util.Base64;
 import android.util.Log;

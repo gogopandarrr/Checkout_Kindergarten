@@ -1,4 +1,4 @@
-package com.onethefull.attend.api;
+package com.onethefull.attendmobile.api;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

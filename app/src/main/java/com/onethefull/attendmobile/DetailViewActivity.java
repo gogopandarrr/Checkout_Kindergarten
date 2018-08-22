@@ -1,4 +1,4 @@
-package com.onethefull.attend;
+package com.onethefull.attendmobile;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,8 +14,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.onethefull.attend.R;
-import com.onethefull.attend.lists.Lists_Student;
+import com.onethefull.attendmobile.R;
+import com.onethefull.attendmobile.lists.Lists_Student;
 import com.bumptech.glide.Glide;
 
 import de.hdodenhof.circleimageview.CircleImageView;

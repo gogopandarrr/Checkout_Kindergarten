@@ -1,4 +1,4 @@
-package com.onethefull.attend.lists;
+package com.onethefull.attendmobile.lists;
 
 import android.os.Parcel;
 import android.os.Parcelable;

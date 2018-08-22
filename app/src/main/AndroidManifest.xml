@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.onethefull.attend">
+    package="com.onethefull.attendmobile">
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -31,7 +31,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.onethefull.attend.account.IntroActivity">
+        <activity android:name="com.onethefull.attendmobile.account.IntroActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,12 +39,12 @@
             </intent-filter>
 
         </activity>
-        <activity android:name="com.onethefull.attend.account.login.LoginActivity">
+        <activity android:name="com.onethefull.attendmobile.account.login.LoginActivity">
         </activity>
-        <activity android:name="com.onethefull.attend.account.join.RegisterActivity"/>
-        <activity android:name="com.onethefull.attend.PeopleListActivity" android:theme="@style/Actionbar"/>
-        <activity android:name="com.onethefull.attend.DetailViewActivity"/>
-        <activity android:name="com.onethefull.attend.PhotoActivity" />
+        <activity android:name="com.onethefull.attendmobile.account.join.RegisterActivity"/>
+        <activity android:name="com.onethefull.attendmobile.PeopleListActivity" android:theme="@style/Actionbar"/>
+        <activity android:name="com.onethefull.attendmobile.DetailViewActivity"/>
+        <activity android:name="com.onethefull.attendmobile.PhotoActivity" />
 
     </application>
 

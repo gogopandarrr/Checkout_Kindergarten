@@ -1,10 +1,11 @@
-package com.onethefull.attend.account.join;
+package com.onethefull.attendmobile.account.login;
 
 import android.content.Context;
 import android.util.Log;
 
-import com.onethefull.attend.api.ApiService;
-import com.onethefull.attend.api.ApiUtils;
+import com.onethefull.attendmobile.api.ApiService;
+import com.onethefull.attendmobile.api.ApiUtils;
+import com.onethefull.attendmobile.api.SharedPrefManager;
 import com.google.gson.JsonObject;
 
 import org.json.JSONException;
@@ -16,59 +17,73 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class JoinPresenterImpl implements JoinPresenter{
-    private static final String TAG = JoinPresenterImpl.class.getSimpleName();
-    private Context mContext;
-    private JoinView mJoinView;
-    private ApiService service;
+public class PresenterImpl implements LoginPresenter {
 
-    public JoinPresenterImpl(JoinView mJoinView, Context mContext) {
-        this.mJoinView = mJoinView;
-        this.mContext = mContext;
+    private static final String TAG = PresenterImpl.class.getSimpleName();
+    private Context mContext;
+    private LoginView mLoginView;
+    private ApiService service;
+    private SharedPrefManager mSharedPrefs;
+
+    public PresenterImpl(LoginView loginView, Context context) {
+        this.mLoginView = loginView;
+        this.mContext = context;
+        mSharedPrefs = SharedPrefManager.getInstance(context);
     }
 
     @Override
-    public void performJoin(String id, String pwd, String name) {
-        // prepare call in Retrofit 2.0
+    public void performLogin(String id, String pwd) {
+
         service = ApiUtils.getService();
-        JSONObject obj = new JSONObject();
+        final JSONObject obj = new JSONObject();
+
         try {
             obj.put("email", id);
             obj.put("pwd", pwd);
-            obj.put("kindergarten_nm", name);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        // start call
-        service.getJoinResult(obj.toString()).enqueue(new Callback<JsonObject>() {
+        service.getLoginResult(obj.toString()).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()){
                     JsonObject object = response.body();
-                    if (object != null) {
-                        Log.d(TAG,"success:: " + object.toString());
-                        mJoinView.success();
+                    if (object != null){
+                        Log.d(TAG,"success:: "+ object.toString());
+                        String id = object.getAsJsonObject("data").get("email").toString();
+                        mSharedPrefs.saveLoginData(id);
+                        mLoginView.loginSuccess();
                     }
                 }else {
+
                     try {
                         JSONObject errorObj = new JSONObject(response.errorBody().string());
                         Log.d(TAG,"error:: " + errorObj.toString());
                         String msg = errorObj.getString("message");
-                        mJoinView.validation(msg);
+                        mLoginView.loginValidations(msg);
                     }catch (JSONException e){
                         e.printStackTrace();
                     }catch (IOException e){
                         e.printStackTrace();
                     }
                 }
-            }
+
+
+
+            }//oR
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+
                 Log.d(TAG,"onFailure!!" );
-                mJoinView.error();
+                mLoginView.loginError();
+
+
             }
         });
-    }
+
+
+    }//
 }

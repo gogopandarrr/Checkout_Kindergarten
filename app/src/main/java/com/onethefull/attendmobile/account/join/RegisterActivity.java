@@ -1,4 +1,4 @@
-package com.onethefull.attend.account.join;
+package com.onethefull.attendmobile.account.join;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -12,8 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.onethefull.attend.account.login.LoginActivity;
-import com.onethefull.attend.R;
+import com.onethefull.attendmobile.account.login.LoginActivity;
+import com.onethefull.attendmobile.R;
 
 import java.util.regex.Pattern;
 

@@ -1,4 +1,4 @@
-package com.onethefull.attend.api;
+package com.onethefull.attendmobile.api;
 
 import android.content.Context;
 import android.content.SharedPreferences;

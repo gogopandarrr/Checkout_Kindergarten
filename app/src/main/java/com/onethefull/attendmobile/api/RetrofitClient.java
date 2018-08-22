@@ -1,4 +1,4 @@
-package com.onethefull.attend.api;
+package com.onethefull.attendmobile.api;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

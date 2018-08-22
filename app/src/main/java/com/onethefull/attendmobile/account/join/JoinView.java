@@ -1,4 +1,4 @@
-package com.onethefull.attend.account.join;
+package com.onethefull.attendmobile.account.join;
 
 public interface JoinView {
     void validation(String msg);

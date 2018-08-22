@@ -1,4 +1,4 @@
-package com.onethefull.attend.account.login;
+package com.onethefull.attendmobile.account.login;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,9 +12,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.onethefull.attend.PeopleListActivity;
-import com.onethefull.attend.R;
-import com.onethefull.attend.account.join.RegisterActivity;
+import com.onethefull.attendmobile.PeopleListActivity;
+import com.onethefull.attendmobile.R;
+import com.onethefull.attendmobile.account.join.RegisterActivity;
 
 
 public class LoginActivity extends AppCompatActivity implements LoginView {

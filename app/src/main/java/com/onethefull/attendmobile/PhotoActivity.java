@@ -1,4 +1,4 @@
-package com.onethefull.attend;
+package com.onethefull.attendmobile;
 
 import android.Manifest;
 import android.content.Intent;
@@ -15,7 +15,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import com.onethefull.attend.api.CameraView;
+import com.onethefull.attendmobile.api.CameraView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;

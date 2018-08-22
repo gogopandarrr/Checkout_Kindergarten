@@ -1,4 +1,4 @@
-package com.onethefull.attend.account.login;
+package com.onethefull.attendmobile.account.login;
 
 public interface LoginView {
     void loginValidations(String msg);

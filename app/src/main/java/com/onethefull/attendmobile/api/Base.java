@@ -1,4 +1,4 @@
-package com.onethefull.attend.api;
+package com.onethefull.attendmobile.api;
 
 public class Base {
     public static final String KEY_SAVE_LOGIN_DATA = "SAVE_LOGIN_DATA";

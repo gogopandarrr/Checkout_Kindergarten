@@ -1,4 +1,4 @@
-package com.onethefull.attend;
+package com.onethefull.attendmobile;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +12,7 @@ import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
-import com.onethefull.attend.lists.Lists_Student;
+import com.onethefull.attendmobile.lists.Lists_Student;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
