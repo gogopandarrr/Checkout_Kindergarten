@@ -24,8 +24,9 @@ import android.widget.CheckBox;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.onethefull.attendmobile.adapter.MyAdapter_PeopleList;
+import com.onethefull.attendmobile.fragment.AlertDialogFragment;
 import com.onethefull.attendmobile.lists.Lists_Student;
-import com.onethefull.attendmobile.R;
 
 import java.util.ArrayList;
 
@@ -79,6 +80,9 @@ public class PeopleListActivity extends AppCompatActivity {
 
     private void setNavigationView(){
 
+
+
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -87,28 +91,31 @@ public class PeopleListActivity extends AppCompatActivity {
 
                     case R.id.navigation_logout:
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(PeopleListActivity.this);
 
-                        builder.setTitle("로그아웃 하시겠습니까?");
+                        logout();
 
-                        builder.setPositiveButton("로그아웃", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-
-                            }
-                        });
-
-                        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                            }
-                        });
-
-                        AlertDialog dialog = builder.create();
-                        dialog.setCanceledOnTouchOutside(false);
-                        dialog.show();
+//                        AlertDialog.Builder builder = new AlertDialog.Builder(PeopleListActivity.this);
+//
+//                        builder.setTitle("로그아웃 하시겠습니까?");
+//
+//                        builder.setPositiveButton("로그아웃", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialogInterface, int i) {
+//
+//
+//                            }
+//                        });
+//
+//                        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialogInterface, int i) {
+//
+//                            }
+//                        });
+//
+//                        AlertDialog dialog = builder.create();
+//                        dialog.setCanceledOnTouchOutside(false);
+//                        dialog.show();
 
                         break;
 
@@ -233,24 +240,12 @@ public class PeopleListActivity extends AppCompatActivity {
     }
 
 
-    private void hideCheckbox(){
-
-        adapter_peopleList.isChecked = false;
-
-        for (int i = 0; i < peopleList_recycleView.getChildCount(); i++){
-            View view = peopleList_recycleView.getChildAt(i);
-
-            if (view == null) return;
-
-            CheckBox checkBox = view.findViewById(R.id.checkbox_list);
-            checkBox.setVisibility(View.GONE);
-
-        }
 
 
-
+    private void logout(){
+        AlertDialogFragment dialogFragment = AlertDialogFragment.newInstance("로그아웃 하시겠습니까?");
+        dialogFragment.show(getSupportFragmentManager(),"dialog");
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

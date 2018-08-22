@@ -6,10 +6,15 @@
     android:layout_height="match_parent"
     tools:context="com.onethefull.attendmobile.PhotoActivity">
 
-    <com.onethefull.attendmobile.api.CameraView
-        android:id="@+id/cameraView"
+    <com.otaliastudios.cameraview.CameraView
+        android:id="@+id/camera"
+        android:keepScreenOn="true"
+        app:cameraFacing="back"
+        app:cameraJpegQuality="85"
+        app:cameraWhiteBalance="auto"
+        app:cameraCropOutput="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"></com.otaliastudios.cameraview.CameraView>
 
     <android.support.design.widget.FloatingActionButton
         android:onClick="capture"

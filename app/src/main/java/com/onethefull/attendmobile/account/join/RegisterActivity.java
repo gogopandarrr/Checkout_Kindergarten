@@ -209,6 +209,10 @@ public class RegisterActivity extends AppCompatActivity implements JoinView{
             valid= false;
             et_password.setText(null);
             et_password_confirm.setText(null);
+        }else if(password.length()<6){
+            et_password.setError(getResources().getString(R.string.error_password_length));
+            valid= false;
+
         }else{
             et_password.setError(null);
         }

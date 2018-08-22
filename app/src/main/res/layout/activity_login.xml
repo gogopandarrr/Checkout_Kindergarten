@@ -120,7 +120,6 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/btn_login"
                     android:stateListAnimator="@drawable/state_list_animator_z"
-                    android:text="@string/login_button"
                     android:textColor="@color/white"></Button>
             </LinearLayout>
 

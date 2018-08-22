@@ -6,6 +6,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -30,7 +31,7 @@ public class DetailViewActivity extends AppCompatActivity {
     EditText et_name, et_tel, et_email;
     LinearLayout layout_text, layout_edit;
     Lists_Student listsStudent;
-    static byte[] image;
+    byte[] image;
     int mode, position;
 
     @Override
@@ -73,7 +74,6 @@ public class DetailViewActivity extends AppCompatActivity {
     private void modeCheck(){
 
         Intent intent = getIntent();
-
         mode = intent.getIntExtra("mode",-1);
 
 
@@ -85,6 +85,7 @@ public class DetailViewActivity extends AppCompatActivity {
                     bt_edit.setVisibility(View.GONE);
                     bt_takePhoto.setVisibility(View.GONE);
                     bt_delete.setVisibility(View.GONE);
+                    Log.e("mode",mode+"");
 
                     image = getIntent().getByteArrayExtra("image");
                     Glide.with(this).load(image).into(iv_profile);
@@ -97,7 +98,7 @@ public class DetailViewActivity extends AppCompatActivity {
                     bt_takePhoto.setVisibility(View.GONE);
                     bt_finish.setVisibility(View.GONE);
                     bt_delete.setVisibility(View.GONE);
-
+                    Log.e("mode",mode+"");
 
                     position = getIntent().getIntExtra("position",-1);
                     listsStudent = getIntent().getParcelableExtra("listsStudent");
@@ -117,9 +118,10 @@ public class DetailViewActivity extends AppCompatActivity {
                     bt_edit.setVisibility(View.GONE);
                     bt_takePhoto.setVisibility(View.VISIBLE);
                     bt_delete.setVisibility(View.VISIBLE);
-
+                    Log.e("mode",mode+"");
 
                     image = getIntent().getByteArrayExtra("image");
+                    Log.e("e4",image.length+"");
                     Glide.with(this).load(image).into(iv_profile);
 
                     et_name.setText(intent.getStringExtra("name"));
@@ -199,6 +201,7 @@ public class DetailViewActivity extends AppCompatActivity {
 
 
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -262,6 +265,19 @@ public class DetailViewActivity extends AppCompatActivity {
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
     }
 }//class
 

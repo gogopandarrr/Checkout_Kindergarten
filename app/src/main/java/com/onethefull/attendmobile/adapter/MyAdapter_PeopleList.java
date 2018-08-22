@@ -1,4 +1,4 @@
-package com.onethefull.attendmobile;
+package com.onethefull.attendmobile.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,11 +12,13 @@ import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
+
+import com.onethefull.attendmobile.DetailViewActivity;
+import com.onethefull.attendmobile.R;
 import com.onethefull.attendmobile.lists.Lists_Student;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -26,7 +28,6 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
     ArrayList<Lists_Student> studentArrayList;
     ArrayList<Lists_Student> filtered;
     Lists_Student listsStudent;
-    Boolean isChecked = false;
     RecyclerView recyclerView;
 
 
@@ -35,6 +36,7 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
         this.context = context;
         this.studentArrayList = studentArrayList;
         this.recyclerView = recyclerView;
+        this.filtered = studentArrayList;
     }
 
     @NonNull
@@ -77,7 +79,7 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
 
 
 
-        Lists_Student lists_student = studentArrayList.get(position);
+        Lists_Student lists_student = filtered.get(position);
 
          VH vh= (VH) viewHolder;
 
@@ -93,7 +95,7 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
 
     @Override
     public int getItemCount() {
-        return studentArrayList.size();
+        return filtered.size();
     }
 
 
@@ -104,16 +106,15 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
 
-                String query = charSequence.toString();
-                filtered = new ArrayList<>();
+                String charString = charSequence.toString();
 
-                if (query.isEmpty()){
+                if (charString.isEmpty()){
                     filtered = studentArrayList;
                 }else{
                     ArrayList<Lists_Student> filteredList = new ArrayList<>();
                     for (Lists_Student listsStudent : studentArrayList){
 
-                        if (listsStudent.getName_student().toLowerCase().contains(charSequence)){
+                        if (listsStudent.getName_student().toLowerCase().contains(charString)){
 
                             filteredList.add(listsStudent);
 

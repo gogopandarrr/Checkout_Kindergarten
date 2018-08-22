@@ -12,31 +12,38 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.onethefull.attendmobile.api.CameraView;
+import com.otaliastudios.cameraview.AspectRatio;
+import com.otaliastudios.cameraview.CameraListener;
+import com.otaliastudios.cameraview.Size;
+import com.otaliastudios.cameraview.SizeSelector;
+import com.otaliastudios.cameraview.SizeSelectors;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 public class PhotoActivity extends AppCompatActivity {
 
-    CameraView cameraView;
-    int mode;
+    com.otaliastudios.cameraview.CameraView cameraView;
+    static int mode;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
 
-        cameraView = findViewById(R.id.cameraView);
+
 
         modeCheck();
-
         permissionCheck();
-
+        cameraSetting();
 
     }//oc
 
@@ -46,6 +53,7 @@ public class PhotoActivity extends AppCompatActivity {
        mode = getIntent().getIntExtra("mode", -1);
 
     }
+
 
     private void permissionCheck(){
         if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
@@ -58,76 +66,132 @@ public class PhotoActivity extends AppCompatActivity {
     }//permissionCheck
 
 
-    public void capture(View v){
+    private void cameraSetting(){
 
-        cameraView.camera.takePicture(null, null, new Camera.PictureCallback() {
+        cameraView = findViewById(R.id.camera);
+        cameraView.start();
+        cameraView.addCameraListener(new CameraListener() {
             @Override
-            public void onPictureTaken(byte[] bytes, Camera camera) {
+            public void onPictureTaken(byte[] jpeg) {
+                if (jpeg != null){
+
+                    Intent intent = new Intent(PhotoActivity.this, DetailViewActivity.class);
+                    intent.putExtra("image",jpeg);
 
 
-
-                if (bytes != null){
-                    int screenWidth = 480;
-                    int screenHeigh = 640;
-
-                    Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-
-                    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-
-                        Bitmap scaled  = Bitmap.createScaledBitmap(bm, screenHeigh, screenWidth, true);
-                        int w = scaled.getWidth();
-                        int h = scaled.getHeight();
-
-                        Matrix mtx = new Matrix();
-                        mtx.postRotate(90);
-
-                        bm = Bitmap.createBitmap(scaled, 0, 0, w, h, mtx, true);
-                    }else{
-                        Bitmap scaled = Bitmap.createScaledBitmap(bm, screenWidth, screenHeigh, true);
-                        bm = scaled;
-                    }
-
-                    try {
-
-                        ByteArrayOutputStream bs = new ByteArrayOutputStream();
-                        bm.compress(Bitmap.CompressFormat.JPEG, 85, bs);
-
-                        bs.close();
-                        bm.recycle();
-
-
-                        Intent intent = new Intent(PhotoActivity.this, DetailViewActivity.class);
-                        intent.putExtra("image",bs.toByteArray());
-
-
-                        if(mode == 4){
-                            mode = 4;
-                            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            intent.putExtra("name", getIntent().getStringExtra("name"));
-                            intent.putExtra("tel", getIntent().getStringExtra("tel"));
-                            intent.putExtra("email", getIntent().getStringExtra("email"));
-
-                        }
-                        else mode = 1; //처음시작
-
+                    if(mode == 4){
+                        mode = 4;
+                        intent.putExtra("name", getIntent().getStringExtra("name"));
+                        intent.putExtra("tel", getIntent().getStringExtra("tel"));
+                        intent.putExtra("email", getIntent().getStringExtra("email"));
                         intent.putExtra("mode", mode);
-                        startActivity(intent);
 
-
-                        finish();
-
-
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    }else{
+                        mode = 1; //처음시작
+                        intent.putExtra("mode", mode);
                     }
 
+
+                    startActivity(intent);
+
+
+                    finish();
 
                 }//if
 
             }
         });
+
+
+        SizeSelector width = SizeSelectors.minWidth(500);
+        SizeSelector height = SizeSelectors.minHeight(500);
+        SizeSelector dimensions = SizeSelectors.and(width, height);
+        SizeSelector ratio = SizeSelectors.aspectRatio(AspectRatio.of(1, 1), 0);
+        SizeSelector result = SizeSelectors.or(
+                SizeSelectors.and(ratio, dimensions), ratio, SizeSelectors.biggest());
+        cameraView.setPictureSize(result);
+
+
+
+    }///
+
+
+
+    public void capture(View v){
+
+
+
+        cameraView.captureSnapshot();
+
+
+//        cameraView.camera.takePicture(null, null, new Camera.PictureCallback() {
+//            @Override
+//            public void onPictureTaken(byte[] bytes, Camera camera) {
+//
+//
+//
+//                if (bytes != null){
+//                    int screenWidth = 480;
+//                    int screenHeigh = 640;
+//
+//                    Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+//
+//                    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+//
+//                        Bitmap scaled  = Bitmap.createScaledBitmap(bm, screenHeigh, screenWidth, true);
+//                        int w = scaled.getWidth();
+//                        int h = scaled.getHeight();
+//
+//                        Matrix mtx = new Matrix();
+//                        mtx.postRotate(90);
+//
+//                        bm = Bitmap.createBitmap(scaled, 0, 0, w, h, mtx, true);
+//                    }else{
+//                        Bitmap scaled = Bitmap.createScaledBitmap(bm, screenWidth, screenHeigh, true);
+//                        bm = scaled;
+//                    }
+//
+//                    try {
+//
+//                        ByteArrayOutputStream bs = new ByteArrayOutputStream();
+//                        bm.compress(Bitmap.CompressFormat.JPEG, 85, bs);
+//
+//                        bs.close();
+//                        bm.recycle();
+//
+//
+//                        Intent intent = new Intent(PhotoActivity.this, DetailViewActivity.class);
+//                        intent.putExtra("image",bs.toByteArray());
+//
+//
+//                        if(mode == 4){
+//                            mode = 4;
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                            intent.putExtra("name", getIntent().getStringExtra("name"));
+//                            intent.putExtra("tel", getIntent().getStringExtra("tel"));
+//                            intent.putExtra("email", getIntent().getStringExtra("email"));
+//
+//                        }
+//                        else mode = 1; //처음시작
+//
+//                        intent.putExtra("mode", mode);
+//                        startActivity(intent);
+//
+//
+//                        finish();
+//
+//
+//                    } catch (FileNotFoundException e) {
+//                        e.printStackTrace();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//
+//                }//if
+//
+//            }
+//        });
 
 
     }//
@@ -153,7 +217,21 @@ public class PhotoActivity extends AppCompatActivity {
 
     }//
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cameraView.start();
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        cameraView.stop();
+    }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        cameraView.destroy();
+    }
 }//class
