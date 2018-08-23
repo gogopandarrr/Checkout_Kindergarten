@@ -1,9 +1,11 @@
 package com.onethefull.attendmobile.cv;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.hardware.Camera;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.opencv.android.JavaCameraView;
 
@@ -52,6 +54,7 @@ public class DetectionView extends JavaCameraView implements Camera.PictureCallb
         params.setFocusMode(focusMode);
         mCamera.setParameters(params);
     }
+
 
 
 
@@ -114,9 +117,26 @@ public class DetectionView extends JavaCameraView implements Camera.PictureCallb
             fos.write(data);
             fos.close();
 
+
+
+
         } catch (java.io.IOException e) {
             Log.e("PictureDemo", "Exception in photoCallback", e);
         }
 
+    }
+
+
+
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+
+
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+
+
+        }
     }
 }

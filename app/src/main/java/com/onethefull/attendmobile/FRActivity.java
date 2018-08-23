@@ -1,6 +1,7 @@
 package com.onethefull.attendmobile;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.onethefull.attendmobile.account.setchildren.DetailViewActivity;
 import com.onethefull.attendmobile.cv.DetectionBasedTracker;
 import com.onethefull.attendmobile.cv.DetectionView;
 import com.onethefull.wonderful_cv_library.CV_Package.CreateNewUserAsyncTask;
@@ -30,6 +32,7 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.objdetect.CascadeClassifier;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -42,6 +45,7 @@ import butterknife.OnClick;
 
 public class FRActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
     private static final String TAG = FRActivity.class.getSimpleName();
+
 
     @Nullable
     @BindView(R.id.activity_surface_view)
@@ -61,7 +65,9 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
     private float mRelativeFaceSize = 0.2f;
     private int mAbsoluteFaceSize = 0;
     private WonderfulCV wonderfulCV;
+    private Bitmap bmp;
 
+    int mode;
     int addCVid;
     int currentCycle = 0;
     Boolean faceDetectionFinished = false;
@@ -119,10 +125,14 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
 
         ButterKnife.bind(this);
 
+        modeCheck();
+
+
         mDetectionView.setCvCameraViewListener(this);
 //        mDetectionView.setAlpha(0);
 
         mDetectionView.setCameraIndex(1);
+
         mDetectionView.enableView();
         int maxCameraViewWidth = 640;
         int maxCameraViewHeight = 480;
@@ -136,6 +146,7 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
         switch (view.getId()) {
             case R.id.btn_take_picture:
                 cvCreateNewUser();
+                finishCamera();
                 break;
             default:
                 break;
@@ -218,7 +229,7 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
                     try {
                         timestamp = System.currentTimeMillis();
                         if (mRgba.cols() > 0) {
-                            Bitmap bmp = Bitmap.createBitmap(mRgba.cols(), mRgba.rows(), Bitmap.Config.ARGB_8888);
+                            bmp = Bitmap.createBitmap(mRgba.cols(), mRgba.rows(), Bitmap.Config.ARGB_8888);
                             Utils.matToBitmap(mRgba, bmp);
                             if (facePics.size() < 5) {
                                 Log.d(TAG, "Bitmap Size: " + bmp.getByteCount());
@@ -244,14 +255,20 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
     }
 
 
+
+
+
+    // TODO: 2018. 8. 23.  
     private void cvCreateNewUser() {
         wonderfulCV = new WonderfulCV();
 
         Crypto.deleteExistingTokenFromStorage();
 //        wonderfulCV.initiateServerConnection(getApplicationContext(), "1thefull.ml", 5000,
 //                "onni.caffe@1thefull.com", "1thefull322");
+//        wonderfulCV.initiateServerConnection(getApplicationContext(), "1thefull.ml", 5000,
+//                "jwseo2698@1thefull.com", "password");
         wonderfulCV.initiateServerConnection(getApplicationContext(), "1thefull.ml", 5000,
-                "jwseo2698@1thefull.com", "password");
+                "panda@1thefull.com", "zkfmak85");
 
 
         Log.d(TAG, "Registering new user with face");
@@ -266,13 +283,64 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
                 });
 
         if (wonderfulCV.checkIfServerConnectionInitialized()) {
+            Log.e("aaaaa",facePics.size()+"");
             createNewUserTask.setUserInfo(wonderfulCV.serverAddress + "/api/user",
                     "jiwoo","seo", "01097892698", "jwseo2698@1thefull.com",
                     wonderfulCV.token, facePics);
             createNewUserTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
 
+
+
     }
+    
+    
+    ////////////////
+
+
+    private void modeCheck(){
+
+        mode = getIntent().getIntExtra("mode", -1);
+    }
+
+
+    private void finishCamera(){
+
+        Intent intent = new Intent(FRActivity.this, DetailViewActivity.class);
+
+
+//        bitmap을 바이트로 바꿔서 전송.
+        ByteArrayOutputStream bs = new ByteArrayOutputStream();
+        Log.e("size", facePics.size()+"");
+        facePics.get(0).compress(Bitmap.CompressFormat.JPEG, 100, bs);
+        try {
+            bs.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        intent.putExtra("image",bs.toByteArray());
+
+        if(mode == 4){
+            mode = 4;//편집모드에서 사진 다시 찍을 때 모드
+            intent.putExtra("name", getIntent().getStringExtra("name"));
+            intent.putExtra("tel", getIntent().getStringExtra("tel"));
+            intent.putExtra("email", getIntent().getStringExtra("email"));
+            intent.putExtra("mode", mode);
+
+        }else{
+            mode = 1; //처음 원생 등록 모드
+            intent.putExtra("mode", mode);
+        }
+
+        startActivity(intent);
+
+
+        finish();
+
+    }//
+
 
     private void setDetectorType(int type) {
         if (mDetectorType != type) {

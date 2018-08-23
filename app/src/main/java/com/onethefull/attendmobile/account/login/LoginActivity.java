@@ -81,34 +81,20 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
     }
 
-    //자동로그인 저장
-    private void autoSave(int i){
-        Log.d("버튼", "클릭" + et_password.getText().toString().trim());
-        SharedPreferences user = getSharedPreferences("autoUser", MODE_PRIVATE);
-        SharedPreferences.Editor userEditor = user.edit();
 
-        if (i == 0){
-            userEditor.putString("user_email", et_email.getText().toString().trim());
-            userEditor.putString("user_pwd", et_password.getText().toString().trim());
-            userEditor.putBoolean("EMAIL_CHECK", false);
-            userEditor.putBoolean("AUTO_LOGIN", true);
-            userEditor.commit();
-        }else if (i == 1){
-            userEditor.putString("user_email",et_email.getText().toString().trim());
-            userEditor.putString("user_pwd","");
-            userEditor.putBoolean("EMAIL_CHECK",true);
-            userEditor.putBoolean("AUTO_LOGIN", false);
-            userEditor.commit();
-
-        }
-    }
-
-    // 자동 로그 체크 확인
+    // 자동 로그인 체크 확인
     private void autoLoginCheck(){
 
         if (autoCheck.isChecked()) {
             Log.d("버튼", "클릭 + autoCheck.isChecked");
-            autoSave(0);
+            Log.d("버튼", "클릭" + et_password.getText().toString().trim());
+            SharedPreferences user = getSharedPreferences("autoUser", MODE_PRIVATE);
+            SharedPreferences.Editor userEditor = user.edit();
+
+            userEditor.putString("user_email", et_email.getText().toString().trim());
+            userEditor.putString("user_pwd", et_password.getText().toString().trim());
+            userEditor.putBoolean("AUTO_LOGIN", true);
+            userEditor.commit();
         }
     }
 
@@ -121,8 +107,6 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
             public void onClick(View view) {
                 autoLoginCheck(); //자동로그인확인
                 login();
-//                loginSuccess();
-
 
             }
         });
@@ -159,8 +143,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         final String id = et_email.getText().toString();
         String pwd = et_password.getText().toString();
         mLoginPresenter.performLogin(id, pwd);
-
-    }
+    }//
 
 
 
@@ -187,7 +170,6 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     public void loginSuccess() {
         Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getApplicationContext(), PeopleListActivity.class);
-        intent.putExtra("id", et_email.getText().toString());
         startActivity(intent);
 
         finish();

@@ -2,6 +2,7 @@ package com.onethefull.attendmobile.account.setchildren;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,9 +18,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.onethefull.attendmobile.FRActivity;
 import com.onethefull.attendmobile.PeopleListActivity;
 import com.onethefull.attendmobile.PhotoActivity;
 import com.onethefull.attendmobile.R;
+import com.onethefull.attendmobile.api.SharedPrefManager;
 import com.onethefull.attendmobile.lists.Lists_Student;
 import com.bumptech.glide.Glide;
 
@@ -39,6 +42,7 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
     private String id;
     private byte[] image;
     private int mode, position;
+    private SharedPrefManager mSharedPrefs;
 
     //임시
     String cvid = "temp";
@@ -78,7 +82,13 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("원생정보");
 
+      //원생등록
         childrenPresenter = new SetChildrenPresenterImpl(DetailViewActivity.this, getApplicationContext());
+
+
+        //저장된 id 가져오기
+        mSharedPrefs = SharedPrefManager.getInstance(getApplicationContext());
+        id = mSharedPrefs.getLoginId();
 
     }//init
 
@@ -87,7 +97,6 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
 
         Intent intent = getIntent();
         mode = intent.getIntExtra("mode",-1);
-        id = intent.getStringExtra("id");
 
 
             switch (mode){
@@ -164,7 +173,7 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
 
 
                 if (validateForm(name, tel)){
-
+                    //원생등록
                     listsStudent = new Lists_Student(image, name, tel, email);
                     childrenPresenter.performJoin(id, name, cvid, tel);
 

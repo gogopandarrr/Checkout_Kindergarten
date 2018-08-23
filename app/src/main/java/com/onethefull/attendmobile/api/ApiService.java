@@ -21,4 +21,9 @@ public interface ApiService {
     @POST("set_children")
     Call<JsonObject> getChildrenResult (@Body String body);
 
+
+    @Headers("Content-Type: application/json")
+    @POST("children_list")
+    Call<JsonObject> getListResult (@Body String body);
+
 }

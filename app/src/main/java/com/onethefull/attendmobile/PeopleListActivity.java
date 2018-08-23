@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,13 +23,16 @@ import android.widget.TextView;
 
 import com.onethefull.attendmobile.account.setchildren.DetailViewActivity;
 import com.onethefull.attendmobile.adapter.MyAdapter_PeopleList;
+import com.onethefull.attendmobile.api.SharedPrefManager;
 import com.onethefull.attendmobile.fragment.AlertDialogFragment;
+import com.onethefull.attendmobile.getlist.GetListPresenterImpl;
+import com.onethefull.attendmobile.getlist.GetListView;
 import com.onethefull.attendmobile.lists.Lists_Student;
 
 import java.util.ArrayList;
 
 
-public class PeopleListActivity extends AppCompatActivity {
+public class PeopleListActivity extends AppCompatActivity implements GetListView {
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -42,6 +46,9 @@ public class PeopleListActivity extends AppCompatActivity {
     private Button btn_close_drawer;
     private Lists_Student listsStudent;
     private String id;
+    private SharedPrefManager mSharedPrefs;
+    private GetListPresenterImpl getListPresenter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +75,14 @@ public class PeopleListActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager= new LinearLayoutManager(this);
         peopleList_recycleView.setLayoutManager(layoutManager);
 
+
+        //저장된 id 가져오기
+        mSharedPrefs = SharedPrefManager.getInstance(getApplicationContext());
+        id = mSharedPrefs.getLoginId();
+
+        //리스트 가져오기
+        getListPresenter = new GetListPresenterImpl(PeopleListActivity.this, getApplicationContext());
+        getListPresenter.getInfo(id);
 
 
 
@@ -121,7 +136,6 @@ public class PeopleListActivity extends AppCompatActivity {
 
         int mode = intent.getIntExtra("mode",-1);
 
-        id = intent.getStringExtra("id");
 
         if (mode == 1) {
 
@@ -165,8 +179,7 @@ public class PeopleListActivity extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                Intent intent= new Intent(PeopleListActivity.this, PhotoActivity.class);
-                intent.putExtra("id",id);
+                Intent intent= new Intent(PeopleListActivity.this, FRActivity.class);
                 startActivity(intent);
             }
         });
@@ -282,4 +295,23 @@ public class PeopleListActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void validation(String msg) {
+
+    }
+
+    @Override
+    public void success() {
+
+    }
+
+    @Override
+    public void error() {
+
+    }
+
+    @Override
+    public void launch(Class cls) {
+
+    }
 }//class

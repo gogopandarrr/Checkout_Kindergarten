@@ -70,6 +70,11 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.4'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.github.bumptech.glide:glide:4.7.1'
+
+    //butterknife
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
     //retrofit2
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
@@ -81,7 +86,6 @@ dependencies {
     implementation 'com.android.support:exifinterface:27.1.1'
     implementation project(':openCVLibrary300')
 
-    //butterknife
-    implementation 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
+
 }
