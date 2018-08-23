@@ -17,4 +17,8 @@ public interface ApiService {
     @POST("login")
     Call<JsonObject> getLoginResult(@Body String body);
 
+    @Headers("Content-Type: application/json")
+    @POST("set_children")
+    Call<JsonObject> getChildrenResult (@Body String body);
+
 }

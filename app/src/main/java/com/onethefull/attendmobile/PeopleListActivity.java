@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.onethefull.attendmobile.account.setchildren.DetailViewActivity;
 import com.onethefull.attendmobile.adapter.MyAdapter_PeopleList;
 import com.onethefull.attendmobile.fragment.AlertDialogFragment;
 import com.onethefull.attendmobile.lists.Lists_Student;
@@ -36,11 +37,11 @@ public class PeopleListActivity extends AppCompatActivity {
     private MyAdapter_PeopleList adapter_peopleList;
     private FloatingActionButton fab_add;
     private ArrayList<Lists_Student> studentArrayList = new ArrayList<>();
-    ImageView iv_noinfo;
+    private ImageView iv_noinfo;
     private TextView tv_kindergarten;
     private Button btn_close_drawer;
-    Lists_Student listsStudent;
-
+    private Lists_Student listsStudent;
+    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,14 +121,9 @@ public class PeopleListActivity extends AppCompatActivity {
 
         int mode = intent.getIntExtra("mode",-1);
 
+        id = intent.getStringExtra("id");
 
         if (mode == 1) {
-//            String name = intent.getStringExtra("name");
-//            String tel = intent.getStringExtra("tel");
-//            String email = intent.getStringExtra("email");
-//            byte[] image = intent.getByteArrayExtra("byteImage");
-//            bmp = BitmapFactory.decodeByteArray(
-//                    intent.getByteArrayExtra("byteImage"),0, intent.getByteArrayExtra("byteImage").length);
 
             listsStudent = intent.getParcelableExtra("listsStudent");
             studentArrayList.add(listsStudent);
@@ -167,12 +163,14 @@ public class PeopleListActivity extends AppCompatActivity {
         fab_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent= new Intent(PeopleListActivity.this, PhotoActivity.class);
-//                startActivity(intent);
-                Intent intent= new Intent(getApplicationContext(), FRActivity.class);
+
+
+                Intent intent= new Intent(PeopleListActivity.this, PhotoActivity.class);
+                intent.putExtra("id",id);
                 startActivity(intent);
             }
         });
+
     }//listener
 
 
@@ -202,26 +200,25 @@ public class PeopleListActivity extends AppCompatActivity {
     }//
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        switch (requestCode){
-
-            case 3:
-                if(requestCode==RESULT_OK){
-                    Uri uri= data.getData();
-
-
-                        Intent intent= new Intent(this, DetailViewActivity.class);
-                        intent.putExtra("uri",uri);
-                        startActivity(intent);
-
-                }
-
-        }
-
-    }//
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        switch (requestCode){
+//
+//            case 3:
+//                if(requestCode==RESULT_OK){
+//                    Uri uri= data.getData();
+//
+//                        Intent intent= new Intent(this, DetailViewActivity.class);
+//                        intent.putExtra("uri",uri);
+//                        startActivity(intent);
+//
+//                }
+//
+//        }
+//
+//    }//
 
 
     @Override

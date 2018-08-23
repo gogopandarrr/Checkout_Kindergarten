@@ -3,35 +3,26 @@ package com.onethefull.attendmobile;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.hardware.Camera;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.onethefull.attendmobile.api.CameraView;
+import com.onethefull.attendmobile.account.setchildren.DetailViewActivity;
 import com.otaliastudios.cameraview.AspectRatio;
 import com.otaliastudios.cameraview.CameraListener;
-import com.otaliastudios.cameraview.Size;
 import com.otaliastudios.cameraview.SizeSelector;
 import com.otaliastudios.cameraview.SizeSelectors;
-
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.List;
 
 public class PhotoActivity extends AppCompatActivity {
 
     com.otaliastudios.cameraview.CameraView cameraView;
     static int mode;
+    private String id;
 
 
     @Override
@@ -45,13 +36,15 @@ public class PhotoActivity extends AppCompatActivity {
         permissionCheck();
         cameraSetting();
 
+
+
     }//oc
 
 
     private void modeCheck(){
 
        mode = getIntent().getIntExtra("mode", -1);
-
+        id = getIntent().getStringExtra("id");
     }
 
 
@@ -77,20 +70,19 @@ public class PhotoActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(PhotoActivity.this, DetailViewActivity.class);
                     intent.putExtra("image",jpeg);
-
+                    intent.putExtra("id", id);
 
                     if(mode == 4){
-                        mode = 4;
+                        mode = 4;//편집모드에서 사진 다시 찍을 때 모드
                         intent.putExtra("name", getIntent().getStringExtra("name"));
                         intent.putExtra("tel", getIntent().getStringExtra("tel"));
                         intent.putExtra("email", getIntent().getStringExtra("email"));
                         intent.putExtra("mode", mode);
 
                     }else{
-                        mode = 1; //처음시작
+                        mode = 1; //처음 원생 등록 모드
                         intent.putExtra("mode", mode);
                     }
-
 
                     startActivity(intent);
 
@@ -111,6 +103,13 @@ public class PhotoActivity extends AppCompatActivity {
                 SizeSelectors.and(ratio, dimensions), ratio, SizeSelectors.biggest());
         cameraView.setPictureSize(result);
 
+
+
+        //카메라 오버레이 작업
+        LayoutInflater inflater = LayoutInflater.from(getBaseContext());
+        View viewOverlay =inflater.inflate(R.layout.overlay_camera, null);
+        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
+        this.addContentView(viewOverlay, layoutParams);
 
 
     }///
