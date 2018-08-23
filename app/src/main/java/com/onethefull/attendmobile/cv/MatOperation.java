@@ -1,0 +1,154 @@
+package com.onethefull.attendmobile.cv;
+
+
+import org.opencv.core.Core;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
+
+/**
+ * Created by Michael Vogl on 27-Nov-17.
+ */
+
+
+public class MatOperation {
+    private static final Scalar FACE_RECT_COLOR = new Scalar(0, 255, 0, 255);
+    private static final Scalar CONNECTION_LOST_COLOR = new Scalar(255, 0, 0, 255);
+
+    private static final int FONT_SIZE = 2;
+    private static final int THICKNESS = 2;
+    private static final int PROGRESS_BAR_THICKNESS = 2;
+
+    private static final int CONNECTION_FONT_SIZE = 3;
+    private static final int CONNECTION_FONT_THICKNESS = 4;
+    /***************************************************************************************
+     *    Title: Rotate image by 90, 180 or 270 degrees
+     *    Author: StereoMatching
+     *    Date: 29.04.2013
+     *    Code version: -
+     *    Availability: http://stackoverflow.com
+     *
+     ***************************************************************************************/
+
+    public static void rotate_90n(Mat img, int angle)
+    {
+        if(angle == 270 || angle == -90){
+            // Rotate clockwise 270 degrees
+            Core.transpose(img, img);
+            Core.flip(img, img, 0);
+        }else if(angle == 180 || angle == -180){
+            // Rotate clockwise 180 degrees
+            Core.flip(img, img, -1);
+        }else if(angle == 90 || angle == -270){
+            // Rotate clockwise 90 degrees
+            Core.transpose(img, img);
+            Core.flip(img, img, 1);
+        }
+    }
+
+    public static Point drawRectangleOnPreview(Mat img, Rect face, boolean front_camera){
+        if(front_camera){
+            Rect mirroredFace = getMirroredFaceForFrontCamera(img, face);
+            Imgproc.rectangle(img, mirroredFace.tl(), mirroredFace.br(), FACE_RECT_COLOR, THICKNESS);
+            return mirroredFace.tl();
+        } else {
+            Imgproc.rectangle(img, face.tl(), face.br(), FACE_RECT_COLOR, THICKNESS);
+            return face.tl();
+        }
+    }
+
+    public static void drawProgressBarOnPreview(Mat img, Rect face, boolean front_camera, double progress){
+        if(front_camera){
+            Rect mirroredFace = getMirroredFaceForFrontCamera(img, face);
+            Point org  = new Point(mirroredFace.br().x + 7, mirroredFace.br().y);
+            Point offset = new Point(mirroredFace.br().x + 10, mirroredFace.br().y);
+            offset.y += progress;
+            Imgproc.rectangle(img, org, offset, FACE_RECT_COLOR, PROGRESS_BAR_THICKNESS);
+        } else {
+            Point org  = new Point(face.br().x + 7, face.br().y);
+            Point offset = new Point(face.br().x + 10, face.br().y);
+            offset.y += progress;
+            Imgproc.rectangle(img, org, offset, FACE_RECT_COLOR, PROGRESS_BAR_THICKNESS);
+        }
+    }
+
+    public static void drawRectangleAndLabelOnPreview(Mat img, Rect face, String label, boolean front_camera){
+        Point tl = drawRectangleOnPreview(img, face, front_camera);
+        Imgproc.putText(img, label, tl, Core.FONT_HERSHEY_PLAIN, FONT_SIZE, FACE_RECT_COLOR, THICKNESS);
+    }
+
+
+    public static void drawOnlyLabelOnPreview(Mat img, Rect face, String label, boolean front_camera){
+
+        Rect resultFace;
+
+        if(front_camera){
+            Rect mirroredFace = getMirroredFaceForFrontCamera(img, face);
+            Imgproc.rectangle(img, mirroredFace.tl(), mirroredFace.br(), FACE_RECT_COLOR, THICKNESS);
+            resultFace = mirroredFace;
+        } else {
+            Imgproc.rectangle(img, face.tl(), face.br(), FACE_RECT_COLOR, THICKNESS);
+            resultFace = face;
+        }
+
+        Imgproc.putText(img, label, resultFace.tl(), Core.FONT_HERSHEY_PLAIN, FONT_SIZE, FACE_RECT_COLOR, THICKNESS);
+    }
+
+
+    public static void drawConnectionLostTextOnPreview(Mat img, boolean front_camera){
+        Point tl = drawRectangleOnPreview(img, new Rect(525,50,0,0), front_camera);
+        Point t2 = drawRectangleOnPreview(img, new Rect(575,125,0,0), front_camera);
+
+        Imgproc.putText(img, "Connection Lost", tl,
+                Core.FONT_HERSHEY_PLAIN, CONNECTION_FONT_SIZE, CONNECTION_LOST_COLOR, CONNECTION_FONT_THICKNESS);
+        Imgproc.putText(img, "Trying to reconnect", t2,
+                Core.FONT_HERSHEY_PLAIN, CONNECTION_FONT_SIZE, CONNECTION_LOST_COLOR, CONNECTION_FONT_THICKNESS);
+    }
+
+
+    public static void drawRectangleAndProgressBarOnPreview(Mat img, Rect face, double progress, boolean front_camera){
+        drawRectangleOnPreview(img, face, front_camera);
+        drawProgressBarOnPreview(img, face, front_camera, progress);
+    }
+
+    public static Rect[] rotateFaces(Mat img, Rect[] faces, int angle){
+        Point center = new Point(img.cols()/2, img.rows()/2);
+        Mat rotMat = Imgproc.getRotationMatrix2D(center, angle, 1);
+        rotMat.convertTo(rotMat, CvType.CV_32FC1);
+        float scale = img.cols()/img.rows();
+        for(Rect face : faces){
+            Mat m = new Mat(3, 1, CvType.CV_32FC1);
+            m.put(0,0,face.x);
+            m.put(1,0,face.y);
+            m.put(2,0,1);
+            Mat res = Mat.zeros(2,1,CvType.CV_32FC1);
+            Core.gemm(rotMat, m, 1, new Mat(), 0, res, 0);
+            face.x = (int)res.get(0,0)[0];
+            face.y = (int)res.get(1,0)[0];
+            if(angle == 270 || angle == -90){
+                face.x = (int)(face.x * scale - face.width);
+                face.x = face.x + face.width/4;
+                face.y = face.y + face.height/4;
+            }else if(angle == 180 || angle == -180){
+                face.x = face.x - face.width;
+                face.y = face.y - face.height;
+            }else if(angle == 90 || angle == -270){
+                face.y = (int)(face.y * scale - face.height);
+                face.x = face.x - face.width/4;
+                face.y = face.y - face.height/4;
+            }
+        }
+        return faces;
+    }
+
+    public static Rect getMirroredFaceForFrontCamera(Mat img, Rect face){
+        int topLeftX = (int) (img.cols() - (face.tl().x + face.width));
+        int bottomRightX = (int) (img.cols() - (face.br().x) + face.width);
+        Point tl = new Point(topLeftX, face.tl().y);
+        Point br = new Point(bottomRightX, face.br().y);
+        return new Rect(tl, br);
+    }
+}

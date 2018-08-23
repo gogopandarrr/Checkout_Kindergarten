@@ -167,18 +167,12 @@ public class PeopleListActivity extends AppCompatActivity {
         fab_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Intent intent= new Intent(PeopleListActivity.this, PhotoActivity.class);
+//                Intent intent= new Intent(PeopleListActivity.this, PhotoActivity.class);
+//                startActivity(intent);
+                Intent intent= new Intent(getApplicationContext(), FRActivity.class);
                 startActivity(intent);
             }
         });
-
-
-
-
-
-
-
     }//listener
 
 
