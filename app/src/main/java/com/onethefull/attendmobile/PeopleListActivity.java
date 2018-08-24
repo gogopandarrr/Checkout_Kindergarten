@@ -79,6 +79,8 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
         //저장된 id 가져오기
         mSharedPrefs = SharedPrefManager.getInstance(getApplicationContext());
         id = mSharedPrefs.getLoginId();
+        id = id.replace("\"", "");
+
 
         //리스트 가져오기
         getListPresenter = new GetListPresenterImpl(PeopleListActivity.this, getApplicationContext());
@@ -275,6 +277,7 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
     protected void onResume() {
         super.onResume();
         checkNolist();
+        getListPresenter.getInfo(id);
         adapter_peopleList.notifyDataSetChanged();
     }
 

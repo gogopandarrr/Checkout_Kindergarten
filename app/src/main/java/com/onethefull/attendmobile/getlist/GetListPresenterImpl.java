@@ -3,10 +3,12 @@ package com.onethefull.attendmobile.getlist;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.onethefull.attendmobile.api.ApiService;
 import com.onethefull.attendmobile.api.ApiUtils;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,12 +21,12 @@ import retrofit2.Response;
 public class GetListPresenterImpl implements GetListPresenter {
     private static final String TAG = GetListPresenterImpl.class.getSimpleName();
     private Context mContext;
-    private GetListView GetListView;
+    private GetListView getListView;
     private ApiService service;
 
 
-    public GetListPresenterImpl(GetListView GetListView, Context mContext) {
-        this.GetListView = GetListView;
+    public GetListPresenterImpl(GetListView getListView, Context mContext) {
+        this.getListView = getListView;
         this.mContext = mContext;
 
     }
@@ -34,7 +36,7 @@ public class GetListPresenterImpl implements GetListPresenter {
         service = ApiUtils.getService();
         JSONObject obj = new JSONObject();
         try {
-            obj.put("email", id);
+            obj.put("USER_EMAIL", id);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -47,7 +49,24 @@ public class GetListPresenterImpl implements GetListPresenter {
                     JsonObject object = response.body();
                     if (object != null) {
                         Log.d(TAG,"success:: " + object.toString());
-//                        setChildrenView.success();
+
+                        JsonArray datas = object.getAsJsonArray("data");
+
+                        for (int i = 0 ; i < datas.size(); i++){
+
+                            JsonObject studentInfo = (JsonObject) datas.get(i);
+
+                            String name = studentInfo.get("CHILDREN_NAME").toString();
+                            String email_parent = studentInfo.get("PARENT_EMAIL").toString();
+                            String tel_parent = studentInfo.get("PARENT_TEL").toString();
+                            String date_registration = studentInfo.get("REGISTRATION_DATE").toString();
+
+
+
+
+                        }
+
+                        getListView.success();
                     }
                 }else {
                     try {
@@ -70,6 +89,7 @@ public class GetListPresenterImpl implements GetListPresenter {
             }
         });
     }//
+
 
 
 

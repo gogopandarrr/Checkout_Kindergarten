@@ -28,15 +28,16 @@ public class SetChildrenPresenterImpl implements SetChildrenPresenter{
     }
 
     @Override
-    public void performJoin(String id, String name, String cvid, String parentsTel) {
+    public void performJoin(String id, String name, String cvid, String parentsTel, String parentsEmail) {
         // prepare call in Retrofit 2.0
         service = ApiUtils.getService();
         JSONObject obj = new JSONObject();
         try {
-            obj.put("email", id);
-            obj.put("name", name);
-            obj.put("cvid", cvid);
-            obj.put("tel", parentsTel);
+            obj.put("USER_EMAIL", id);
+            obj.put("CHILDREN_NAME", name);
+            obj.put("CHILDREN_CVID", cvid);
+            obj.put("PARENT_TEL", parentsTel);
+            obj.put("PARENT_EMAIL", parentsEmail);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -73,4 +74,6 @@ public class SetChildrenPresenterImpl implements SetChildrenPresenter{
             }
         });
     }
+
+
 }

@@ -89,6 +89,7 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
         //저장된 id 가져오기
         mSharedPrefs = SharedPrefManager.getInstance(getApplicationContext());
         id = mSharedPrefs.getLoginId();
+        id = id.replace("\"", "");
 
     }//init
 
@@ -175,7 +176,10 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
                 if (validateForm(name, tel)){
                     //원생등록
                     listsStudent = new Lists_Student(image, name, tel, email);
-                    childrenPresenter.performJoin(id, name, cvid, tel);
+
+
+                    Log.e("id_detail", id+"");
+                    childrenPresenter.performJoin(id, name, cvid, tel, email);
 
                 }
 

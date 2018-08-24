@@ -6,7 +6,7 @@ import android.os.Parcelable;
 public class Lists_Student implements Parcelable {
 
     byte[] image;
-    String name_student, tel_parents, email_parents;
+    String name_student, tel_parents, email_parents, cvid, date_register;
 
 
     public Lists_Student(byte[] image, String name_student, String tel_parents, String email_parents) {
