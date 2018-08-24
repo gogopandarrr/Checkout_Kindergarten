@@ -3,6 +3,7 @@ package com.onethefull.attendmobile.account.setchildren;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import com.onethefull.attendmobile.R;
 import com.onethefull.attendmobile.api.SharedPrefManager;
 import com.onethefull.attendmobile.lists.Lists_Student;
 import com.bumptech.glide.Glide;
+import com.onethefull.attendmobile.lists.Lists_downInfo;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -37,15 +39,13 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
     private TextView tv_name, tv_tel, tv_email;
     private EditText et_name, et_tel, et_email;
     private LinearLayout layout_text, layout_edit;
-    private Lists_Student listsStudent;
+    private Lists_downInfo listsDownInfo;
     private SetChildrenPresenter childrenPresenter;
-    private String id;
+    private String id, cvid;
     private byte[] image;
     private int mode, position;
     private SharedPrefManager mSharedPrefs;
 
-    //임시
-    String cvid = "temp";
 
 
     @Override
@@ -106,12 +106,8 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
 
                     layout_text.setVisibility(View.GONE);
                     bt_edit.setVisibility(View.GONE);
-                    bt_takePhoto.setVisibility(View.GONE);
+                    bt_takePhoto.setVisibility(View.VISIBLE);
                     bt_delete.setVisibility(View.GONE);
-                    Log.e("mode",mode+"");
-
-                    image = getIntent().getByteArrayExtra("image");
-                    Glide.with(this).load(image).into(iv_profile);
 
                     break;
 
@@ -124,35 +120,35 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
                     Log.e("mode",mode+"");
 
                     position = getIntent().getIntExtra("position",-1);
-                    listsStudent = getIntent().getParcelableExtra("listsStudent");
+                    listsDownInfo = getIntent().getParcelableExtra("listsDownInfo");
 
-                    Glide.with(this).load(listsStudent.getImage()).into(iv_profile);
+//                    Glide.with(this).load(listsDownInfo.getImage()).into(iv_profile);
 
-                    tv_name.setText(listsStudent.getName_student());
-                    tv_tel.setText(listsStudent.getTel_parents());
-                    tv_email.setText(listsStudent.getEmail_parents());
-
-                    break;
-
-
-                case 4 : //카메라 재촬영후 수정모드
-
-                    layout_text.setVisibility(View.GONE);
-                    bt_edit.setVisibility(View.GONE);
-                    bt_takePhoto.setVisibility(View.VISIBLE);
-                    bt_delete.setVisibility(View.VISIBLE);
-                    Log.e("mode",mode+"");
-
-                    image = getIntent().getByteArrayExtra("image");
-                    Log.e("e4",image.length+"");
-                    Glide.with(this).load(image).into(iv_profile);
-
-                    et_name.setText(intent.getStringExtra("name"));
-                    et_tel.setText(intent.getStringExtra("tel"));
-                    et_email.setText(intent.getStringExtra("email"));
-
+                    tv_name.setText(listsDownInfo.getName());
+                    tv_tel.setText(listsDownInfo.getTel());
+                    tv_email.setText(listsDownInfo.getEmail());
 
                     break;
+
+//
+//                case 4 : //카메라 재촬영후 수정모드
+//
+//                    layout_text.setVisibility(View.GONE);
+//                    bt_edit.setVisibility(View.GONE);
+//                    bt_takePhoto.setVisibility(View.VISIBLE);
+//                    bt_delete.setVisibility(View.VISIBLE);
+//                    Log.e("mode",mode+"");
+//
+//                    image = getIntent().getByteArrayExtra("image");
+//                    Log.e("e4",image.length+"");
+//                    Glide.with(this).load(image).into(iv_profile);
+//
+//                    et_name.setText(intent.getStringExtra("name"));
+//                    et_tel.setText(intent.getStringExtra("tel"));
+//                    et_email.setText(intent.getStringExtra("email"));
+//
+//
+//                    break;
 
             }
 
@@ -173,15 +169,14 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
                 String email = et_email.getText().toString();
 
 
-                if (validateForm(name, tel)){
+                if (validateForm(name, tel) && image != null){
                     //원생등록
-                    listsStudent = new Lists_Student(image, name, tel, email);
-
-
-                    Log.e("id_detail", id+"");
                     childrenPresenter.performJoin(id, name, cvid, tel, email);
 
+                }else{
+                    Toast.makeText(DetailViewActivity.this, "사진과 필수 정보를 입력해주세요.", Toast.LENGTH_SHORT).show();
                 }
+
 
                 }
 
@@ -197,13 +192,11 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
                 bt_edit.setVisibility(View.GONE);
                 layout_edit.setVisibility(View.VISIBLE);
                 bt_finish.setVisibility(View.VISIBLE);
-                bt_takePhoto.setVisibility(View.VISIBLE);
+                bt_takePhoto.setVisibility(View.GONE);
                 bt_delete.setVisibility(View.VISIBLE);
-
-
-                et_name.setText(listsStudent.getName_student());
-                et_tel.setText(listsStudent.getTel_parents());
-                et_email.setText(listsStudent.getEmail_parents());
+                et_name.setText(listsDownInfo.getName());
+                et_tel.setText(listsDownInfo.getTel());
+                et_email.setText(listsDownInfo.getEmail());
 
 
             }
@@ -213,17 +206,20 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
         bt_takePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int mode = 4;
-                Intent intent = new Intent(DetailViewActivity.this, PhotoActivity.class);
-
-                intent.putExtra("name",et_name.getText().toString());
-                intent.putExtra("tel",et_tel.getText().toString());
-                intent.putExtra("email",et_email.getText().toString());
-                intent.putExtra("mode", mode);
 
 
-                startActivity(intent);
-                finish();
+                if (validateForm(et_name.getText().toString(), et_tel.getText().toString())){
+
+                    Intent intent = new Intent(DetailViewActivity.this, FRActivity.class);
+                    intent.putExtra("name",et_name.getText().toString());
+                    intent.putExtra("tel",et_tel.getText().toString());
+                    intent.putExtra("email",et_email.getText().toString());
+                    startActivityForResult(intent, 11);
+
+                }else{
+                    Toast.makeText(DetailViewActivity.this, "필수 칸을 먼저 입력해주세요.", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -247,9 +243,7 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
                         intent.putExtra("position", position);
                         intent.putExtra("mode", mode);
                         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-                        startActivity(intent);
-
+                        setResult(RESULT_OK, intent);
                         finish();
 
                     }
@@ -272,6 +266,8 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
 
 
     }//
+
+
 
 
     private boolean validateForm(String name, String tel){
@@ -338,13 +334,12 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
 
 
         Toast.makeText(this, "등록 완료", Toast.LENGTH_SHORT).show();
-        Intent intent =  new Intent(DetailViewActivity.this, PeopleListActivity.class);
-        intent.putExtra("id", id);
-        intent.putExtra("position", position);
-        intent.putExtra("mode", mode);
-        intent.putExtra("listsStudent", listsStudent);
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
+
+        Intent intent =  new Intent(DetailViewActivity.this, PeopleListActivity.class);
+        intent.putExtra("position", position);
+        intent.putExtra("image", image);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
 
         finish();
@@ -358,6 +353,29 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
     @Override
     public void launch(Class cls) {
 
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        switch (requestCode){
+
+            case 11:
+                if(resultCode==RESULT_OK) {
+
+                    cvid = data.getStringExtra("cvid");
+                    image = data.getByteArrayExtra("image");
+                    Glide.with(this).load(image).into(iv_profile);
+
+                }
+
+                break;
+
+
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }//class
 

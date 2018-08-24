@@ -7,12 +7,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.onethefull.attendmobile.api.ApiService;
 import com.onethefull.attendmobile.api.ApiUtils;
+import com.onethefull.attendmobile.lists.Lists_downInfo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,6 +25,7 @@ public class GetListPresenterImpl implements GetListPresenter {
     private Context mContext;
     private GetListView getListView;
     private ApiService service;
+    private ArrayList<Lists_downInfo> downInfoArrayList = new ArrayList<>();
 
 
     public GetListPresenterImpl(GetListView getListView, Context mContext) {
@@ -57,16 +60,20 @@ public class GetListPresenterImpl implements GetListPresenter {
                             JsonObject studentInfo = (JsonObject) datas.get(i);
 
                             String name = studentInfo.get("CHILDREN_NAME").toString();
-                            String email_parent = studentInfo.get("PARENT_EMAIL").toString();
+                            name = name.replace("\"", "");
                             String tel_parent = studentInfo.get("PARENT_TEL").toString();
+                            tel_parent = tel_parent.replace("\"", "");
+                            String email_parent = studentInfo.get("PARENT_EMAIL").toString();
+                            email_parent = email_parent.replace("\"", "");
                             String date_registration = studentInfo.get("REGISTRATION_DATE").toString();
+                            date_registration = date_registration.replace("\"", "");
 
-
-
+                            downInfoArrayList.add(new Lists_downInfo(name, tel_parent, email_parent, date_registration));
 
                         }
 
-                        getListView.success();
+                        getListView.success(downInfoArrayList);
+                        downInfoArrayList.clear();
                     }
                 }else {
                     try {

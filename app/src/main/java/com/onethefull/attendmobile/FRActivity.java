@@ -66,6 +66,7 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
     private int mAbsoluteFaceSize = 0;
     private WonderfulCV wonderfulCV;
     private Bitmap bmp;
+    private String name, tel, email;
 
     int mode;
     int addCVid;
@@ -126,13 +127,14 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
         ButterKnife.bind(this);
 
         modeCheck();
+        getDatas();
+
+
 
 
         mDetectionView.setCvCameraViewListener(this);
 //        mDetectionView.setAlpha(0);
-
         mDetectionView.setCameraIndex(1);
-
         mDetectionView.enableView();
         int maxCameraViewWidth = 640;
         int maxCameraViewHeight = 480;
@@ -276,17 +278,18 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
                 new CreateNewUserAsyncTask.AsyncResponse() {
                     @Override
                     public void processFinish(int cvId) {
-                        Log.d(TAG,"cv등록 완료");
+                        addCVid = cvId;
+
                         Toast.makeText(getApplicationContext(),
                                 "cv등록 완료", Toast.LENGTH_SHORT).show();
                     }
                 });
 
         if (wonderfulCV.checkIfServerConnectionInitialized()) {
-            Log.e("aaaaa",facePics.size()+"");
+
+            Log.d(TAG,"cv등록 완료");
             createNewUserTask.setUserInfo(wonderfulCV.serverAddress + "/api/user",
-                    "jiwoo","seo", "01097892698", "jwseo2698@1thefull.com",
-                    wonderfulCV.token, facePics);
+                    "nul;","null", tel, email, wonderfulCV.token, facePics);
             createNewUserTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
 
@@ -320,24 +323,12 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
             e.printStackTrace();
         }
 
-        intent.putExtra("image",bs.toByteArray());
+            intent.putExtra("image",bs.toByteArray());
+//////////////
 
-        if(mode == 4){
-            mode = 4;//편집모드에서 사진 다시 찍을 때 모드
-            intent.putExtra("name", getIntent().getStringExtra("name"));
-            intent.putExtra("tel", getIntent().getStringExtra("tel"));
-            intent.putExtra("email", getIntent().getStringExtra("email"));
-            intent.putExtra("mode", mode);
-
-        }else{
-            mode = 1; //처음 원생 등록 모드
-            intent.putExtra("mode", mode);
-        }
-
-        startActivity(intent);
-
-
-        finish();
+            intent.putExtra("cvid", addCVid);
+            setResult(RESULT_OK, intent);
+            finish();
 
     }//
 
@@ -361,4 +352,17 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
         mAbsoluteFaceSize = 0;
     }
 
-}
+    private  void getDatas(){
+
+           Intent intent = getIntent();
+
+           name = intent.getStringExtra("name");
+           tel = intent.getStringExtra("tel");
+           email = intent.getStringExtra("email");
+
+    }//
+
+
+
+
+}//class

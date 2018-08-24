@@ -36,7 +36,9 @@ public class PhotoActivity extends AppCompatActivity {
     com.otaliastudios.cameraview.CameraView cameraView;
     private ArrayList<Bitmap> facePics = new ArrayList<Bitmap>();
     private WonderfulCV wonderfulCV;
+    private String name, tel, email;
     static int mode;
+
 
 
     @Override
@@ -157,6 +159,8 @@ public class PhotoActivity extends AppCompatActivity {
 
         if (wonderfulCV.checkIfServerConnectionInitialized()) {
 
+
+
             Log.e("facepic",facePics.size()+"");
             createNewUserTask.setUserInfo(wonderfulCV.serverAddress + "/api/user",
                     "jiwoo","seo", "01097892698", "jwseo2698@1thefull.com",
@@ -172,22 +176,13 @@ public class PhotoActivity extends AppCompatActivity {
         Intent intent = new Intent(PhotoActivity.this, DetailViewActivity.class);
         intent.putExtra("image",bytes);
 
-        if(mode == 4){
-            mode = 4;//편집모드에서 사진 다시 찍을 때 모드
+
             intent.putExtra("name", getIntent().getStringExtra("name"));
             intent.putExtra("tel", getIntent().getStringExtra("tel"));
             intent.putExtra("email", getIntent().getStringExtra("email"));
             intent.putExtra("mode", mode);
-
-        }else{
-            mode = 1; //처음 원생 등록 모드
-            intent.putExtra("mode", mode);
-        }
-
-        startActivity(intent);
-
-
-        finish();
+            startActivity(intent);
+            finish();
 
     }//
 

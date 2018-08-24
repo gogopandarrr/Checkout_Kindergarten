@@ -17,6 +17,7 @@ import com.onethefull.attendmobile.account.setchildren.DetailViewActivity;
 import com.onethefull.attendmobile.R;
 import com.onethefull.attendmobile.lists.Lists_Student;
 import com.bumptech.glide.Glide;
+import com.onethefull.attendmobile.lists.Lists_downInfo;
 
 import java.util.ArrayList;
 
@@ -25,18 +26,18 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filterable {
 
     Context context;
-    ArrayList<Lists_Student> studentArrayList;
-    ArrayList<Lists_Student> filtered;
-    Lists_Student listsStudent;
+    ArrayList<Lists_downInfo> downInfoArrayList;
+    ArrayList<Lists_downInfo> filtered;
+    Lists_downInfo listsDownInfo;
     RecyclerView recyclerView;
 
 
 
-    public MyAdapter_PeopleList(Context context, ArrayList<Lists_Student> studentArrayList, RecyclerView recyclerView) {
+    public MyAdapter_PeopleList(Context context, ArrayList<Lists_downInfo> downInfoArrayList, RecyclerView recyclerView) {
         this.context = context;
-        this.studentArrayList = studentArrayList;
+        this.downInfoArrayList = downInfoArrayList;
         this.recyclerView = recyclerView;
-        this.filtered = studentArrayList;
+        this.filtered = downInfoArrayList;
     }
 
     @NonNull
@@ -57,10 +58,9 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
 
                 int position = holder.getAdapterPosition();
                 int mode = 2; // 보기모드
-
-                listsStudent = studentArrayList.get(position);
+                listsDownInfo = downInfoArrayList.get(position);
                 Intent intent = new Intent(context, DetailViewActivity.class);
-                intent.putExtra("listsStudent", listsStudent);
+                intent.putExtra("listsDownInfo", listsDownInfo);
                 intent.putExtra("position", position);
                 intent.putExtra("mode", mode);
 
@@ -79,13 +79,13 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
 
 
 
-        Lists_Student lists_student = filtered.get(position);
+        Lists_downInfo lists_downInfo = filtered.get(position);
 
          VH vh= (VH) viewHolder;
 
-        vh.tv_name.setText(lists_student.getName_student());
+        vh.tv_name.setText(lists_downInfo.getName());
 
-        Glide.with(context).load(lists_student.getImage()).into(vh.iv_pic);
+//        Glide.with(context).load(lists_downInfo.getImage()).into(vh.iv_pic);
 
 
 
@@ -109,14 +109,14 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
                 String charString = charSequence.toString();
 
                 if (charString.isEmpty()){
-                    filtered = studentArrayList;
+                    filtered = downInfoArrayList;
                 }else{
-                    ArrayList<Lists_Student> filteredList = new ArrayList<>();
-                    for (Lists_Student listsStudent : studentArrayList){
+                    ArrayList<Lists_downInfo> filteredList = new ArrayList<>();
+                    for (Lists_downInfo listsDownInfo : downInfoArrayList){
 
-                        if (listsStudent.getName_student().toLowerCase().contains(charString)){
+                        if (listsDownInfo.getName().toLowerCase().contains(charString)){
 
-                            filteredList.add(listsStudent);
+                            filteredList.add(listsDownInfo);
 
                         }
                     }
@@ -133,7 +133,7 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
 
-                filtered = (ArrayList<Lists_Student>) filterResults.values;
+                filtered = (ArrayList<Lists_downInfo>) filterResults.values;
                 notifyDataSetChanged();
             }
         };

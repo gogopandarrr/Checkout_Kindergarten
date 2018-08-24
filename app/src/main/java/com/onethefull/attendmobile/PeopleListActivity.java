@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.onethefull.attendmobile.account.setchildren.DetailViewActivity;
 import com.onethefull.attendmobile.adapter.MyAdapter_PeopleList;
 import com.onethefull.attendmobile.api.SharedPrefManager;
@@ -28,6 +29,7 @@ import com.onethefull.attendmobile.fragment.AlertDialogFragment;
 import com.onethefull.attendmobile.getlist.GetListPresenterImpl;
 import com.onethefull.attendmobile.getlist.GetListView;
 import com.onethefull.attendmobile.lists.Lists_Student;
+import com.onethefull.attendmobile.lists.Lists_downInfo;
 
 import java.util.ArrayList;
 
@@ -41,6 +43,7 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
     private MyAdapter_PeopleList adapter_peopleList;
     private FloatingActionButton fab_add;
     private ArrayList<Lists_Student> studentArrayList = new ArrayList<>();
+    private ArrayList<Lists_downInfo> downInfoArrayList = new ArrayList<>();
     private ImageView iv_noinfo;
     private TextView tv_kindergarten;
     private Button btn_close_drawer;
@@ -48,6 +51,8 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
     private String id;
     private SharedPrefManager mSharedPrefs;
     private GetListPresenterImpl getListPresenter;
+    private byte[] image;
+    private int position;
 
 
     @Override
@@ -70,7 +75,7 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
         fab_add= findViewById(R.id.fab_add);
         iv_noinfo = findViewById(R.id.iv_noinfo);
         peopleList_recycleView= findViewById(R.id.people_recycleView);
-        adapter_peopleList= new MyAdapter_PeopleList(this, studentArrayList, peopleList_recycleView);
+        adapter_peopleList= new MyAdapter_PeopleList(this, downInfoArrayList, peopleList_recycleView);
         peopleList_recycleView.setAdapter(adapter_peopleList);
         RecyclerView.LayoutManager layoutManager= new LinearLayoutManager(this);
         peopleList_recycleView.setLayoutManager(layoutManager);
@@ -181,8 +186,10 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
             public void onClick(View view) {
 
 
-                Intent intent= new Intent(PeopleListActivity.this, FRActivity.class);
-                startActivity(intent);
+                Intent intent= new Intent(PeopleListActivity.this, DetailViewActivity.class);
+                int mode = 1; //등록 모드
+                intent.putExtra("mode", mode);
+                startActivityForResult(intent, 10);
             }
         });
 
@@ -214,26 +221,6 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
         dialogFragment.show(getSupportFragmentManager(),"dialog");
     }//
 
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        switch (requestCode){
-//
-//            case 3:
-//                if(requestCode==RESULT_OK){
-//                    Uri uri= data.getData();
-//
-//                        Intent intent= new Intent(this, DetailViewActivity.class);
-//                        intent.putExtra("uri",uri);
-//                        startActivity(intent);
-//
-//                }
-//
-//        }
-//
-//    }//
 
 
     @Override
@@ -271,6 +258,7 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
     protected void onStart() {
         super.onStart();
         checkNolist();
+        getListPresenter.getInfo(id);
     }
 
     @Override
@@ -304,7 +292,14 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
     }
 
     @Override
-    public void success() {
+    public void success(ArrayList<Lists_downInfo> downInfoArrayList_pre) {
+
+        downInfoArrayList.clear();
+        for(int i = 0; i < downInfoArrayList_pre.size(); i++){
+            downInfoArrayList.add(downInfoArrayList_pre.get(i));
+
+            adapter_peopleList.notifyDataSetChanged();
+        }
 
     }
 
@@ -316,5 +311,33 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
     @Override
     public void launch(Class cls) {
 
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        switch (requestCode){
+
+
+            case 10:
+                if(resultCode==RESULT_OK) {
+
+                    position = data.getIntExtra("positon", -1);
+
+                    image = data.getByteArrayExtra("image");
+
+                    getListPresenter.getInfo(id);
+
+
+
+
+                }
+
+                break;
+
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }//class
