@@ -3,20 +3,25 @@ package com.onethefull.attendmobile;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.onethefull.attendmobile.account.setchildren.DetailViewActivity;
 import com.onethefull.attendmobile.cv.DetectionBasedTracker;
 import com.onethefull.attendmobile.cv.DetectionView;
+import com.onethefull.wonderful_cv_library.CV_Package.RequestUserImagesAsyncTask;
 import com.onethefull.wonderful_cv_library.CV_Package.CreateNewUserAsyncTask;
 import com.onethefull.wonderful_cv_library.CV_Package.Crypto;
+import com.onethefull.wonderful_cv_library.CV_Package.Identity;
 import com.onethefull.wonderful_cv_library.CV_Package.WonderfulCV;
 
 import org.opencv.android.BaseLoaderCallback;
@@ -37,6 +42,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -67,6 +73,7 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
     private WonderfulCV wonderfulCV;
     private Bitmap bmp;
     private String name, tel, email;
+    static ArrayList<String> uriArrayList = new ArrayList<>();
 
     int mode;
     int addCVid;
@@ -141,6 +148,15 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
         mDetectionView.setMaxFrameSize(maxCameraViewWidth, maxCameraViewHeight);
         setDetectorType(JAVA_DETECTOR);
         setMinFaceSize(0.3f);
+
+
+        //카메라 오버레이 작업
+        LayoutInflater inflater = LayoutInflater.from(getBaseContext());
+        View viewOverlay =inflater.inflate(R.layout.overlay_camera, null);
+        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
+        this.addContentView(viewOverlay, layoutParams);
+
+
     }
 
     @OnClick({R.id.btn_take_picture})
@@ -148,7 +164,6 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
         switch (view.getId()) {
             case R.id.btn_take_picture:
                 cvCreateNewUser();
-                finishCamera();
                 break;
             default:
                 break;
@@ -235,11 +250,21 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
                             Utils.matToBitmap(mRgba, bmp);
                             if (facePics.size() < 5) {
                                 Log.d(TAG, "Bitmap Size: " + bmp.getByteCount());
-                                facePics.add(bmp);
+
+                                facePics.add(RotateBitmap(bmp,270));
                                 Log.d(TAG, "facePics Size: " + facePics.size());
                             } else {
                                 Log.d(TAG, "Reached face pics threshold");
                                 faceDetectionFinished = true;
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mBtnPicture.setVisibility(View.VISIBLE);
+                                    }
+                                });
+
+
+
                             }
                         }
                     } catch (CvException e) {
@@ -256,7 +281,11 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
         return mRgba;
     }
 
-
+    private Bitmap RotateBitmap(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+    }
 
 
 
@@ -265,10 +294,6 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
         wonderfulCV = new WonderfulCV();
 
         Crypto.deleteExistingTokenFromStorage();
-//        wonderfulCV.initiateServerConnection(getApplicationContext(), "1thefull.ml", 5000,
-//                "onni.caffe@1thefull.com", "1thefull322");
-//        wonderfulCV.initiateServerConnection(getApplicationContext(), "1thefull.ml", 5000,
-//                "jwseo2698@1thefull.com", "password");
         wonderfulCV.initiateServerConnection(getApplicationContext(), "1thefull.ml", 5000,
                 "panda@1thefull.com", "zkfmak85");
 
@@ -278,19 +303,24 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
                 new CreateNewUserAsyncTask.AsyncResponse() {
                     @Override
                     public void processFinish(int cvId) {
+
                         addCVid = cvId;
 
                         Toast.makeText(getApplicationContext(),
-                                "cv등록 완료", Toast.LENGTH_SHORT).show();
+                                cvId+"", Toast.LENGTH_SHORT).show();
+
+                        finishCamera();
                     }
                 });
 
         if (wonderfulCV.checkIfServerConnectionInitialized()) {
 
-            Log.d(TAG,"cv등록 완료");
+            Log.d(TAG,"cv유저 등록 완료");
             createNewUserTask.setUserInfo(wonderfulCV.serverAddress + "/api/user",
-                    "nul;","null", tel, email, wonderfulCV.token, facePics);
+                    name,"temp", tel, email, wonderfulCV.token, facePics);
             createNewUserTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+            getImagesFromServer();
         }
 
 
@@ -314,7 +344,6 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
 
 //        bitmap을 바이트로 바꿔서 전송.
         ByteArrayOutputStream bs = new ByteArrayOutputStream();
-        Log.e("size", facePics.size()+"");
         facePics.get(0).compress(Bitmap.CompressFormat.JPEG, 100, bs);
         try {
             bs.close();
@@ -325,12 +354,63 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
 
             intent.putExtra("image",bs.toByteArray());
 //////////////
-
             intent.putExtra("cvid", addCVid);
+
             setResult(RESULT_OK, intent);
             finish();
 
+
     }//
+
+    public void getImagesFromServer() {
+
+        RequestUserImagesAsyncTask requestImagesTask = new RequestUserImagesAsyncTask(
+                new RequestUserImagesAsyncTask.AsyncResponse() {
+
+                    @Override
+                    public void processFinish(final ArrayList<Identity> userList) {
+                        if (userList.size() > 0) {
+
+                            Identity user = userList.get(userList.size()-1);
+
+                                String urlString =  "http://1thefull.ml:5000/faceimages/"+user.imageName;
+
+
+                                uriArrayList.add(urlString);
+                                Log.e("size_array", uriArrayList.size()+"");
+
+                            }
+
+
+//                            Identity user1 = userList.get(0);
+//                            Log.d("CV_Info", "User info");
+//                            Log.d("CV_Info", "First name:" + user1.firstName);
+//                            Log.d("CV_Info", "Last  name:" + user1.lastName);
+//                            Log.d("CV_Info", "cv_id:" + user1.id);
+//                            Log.d("CV_Info", "company name:" + user1.companyName);
+//                            Log.d("CV_Info", "full image url: http://1thefull.ml:5000/faceimages/" + user1.imageName);
+//
+//                            textOutput.setText("Retrieved " + userList.size() + "users \n" +
+//                                    "Sample Output: User 1 \n" +
+//                                    "First Name: " + user1.firstName + "\n" +
+//                                    "Last Name: " + user1.lastName + "\n" +
+//                                    "User ID (CV_ID):" + user1.id + "\n" +
+//                                    "Company Name: " + user1.companyName + "\n" +
+//                                    "Image URL:  http://1thefull.ml:5000/faceimages/" + user1.imageName
+//                            );
+
+
+
+                    }
+                });
+
+        if (wonderfulCV.checkIfServerConnectionInitialized()) {
+            requestImagesTask.setRequestParameters(wonderfulCV.serverAddress +
+                    "/api/users/", wonderfulCV.token, 10);
+            requestImagesTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+
+    }
 
 
     private void setDetectorType(int type) {
