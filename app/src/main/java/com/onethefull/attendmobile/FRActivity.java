@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.onethefull.attendmobile.cv.DetectionBasedTracker;
@@ -73,6 +74,11 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
     private WonderfulCV wonderfulCV;
     private Bitmap bmp;
     private String name, tel, email;
+    private ImageView[] iv = new ImageView[5];
+
+
+
+    View viewOverlay;
     static ArrayList<String> uriArrayList = new ArrayList<>();
 
     int mode;
@@ -141,7 +147,7 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
 
         mDetectionView.setCvCameraViewListener(this);
 //        mDetectionView.setAlpha(0);
-        mDetectionView.setCameraIndex(1);
+        mDetectionView.setCameraIndex(0);
         mDetectionView.enableView();
         int maxCameraViewWidth = 640;
         int maxCameraViewHeight = 480;
@@ -150,11 +156,21 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
         setMinFaceSize(0.3f);
 
 
+        //프리뷰 작업
+        for(int i=0;i<5;i++){
+
+            iv[i] = findViewById(R.id.img_pic_01+i);
+
+        }
+
+
+
         //카메라 오버레이 작업
         LayoutInflater inflater = LayoutInflater.from(getBaseContext());
-        View viewOverlay =inflater.inflate(R.layout.overlay_camera, null);
-        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
+        viewOverlay =inflater.inflate(R.layout.overlay_camera, null);
+        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         this.addContentView(viewOverlay, layoutParams);
+
 
 
     }
@@ -242,6 +258,11 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
                 Rect[] facesArray = faces.toArray();
 
 
+
+
+                ////////////////////////////////////
+
+
                 if (facesArray.length == 1 && (System.currentTimeMillis() - timestamp) > 1000) {
                     try {
                         timestamp = System.currentTimeMillis();
@@ -251,14 +272,25 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
                             if (facePics.size() < 5) {
                                 Log.d(TAG, "Bitmap Size: " + bmp.getByteCount());
 
-                                facePics.add(RotateBitmap(bmp,270));
+                                facePics.add(RotateBitmap(bmp,0));
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        iv[facePics.size()-1].setImageBitmap(bmp);
+                                    }
+                                });
+
                                 Log.d(TAG, "facePics Size: " + facePics.size());
                             } else {
                                 Log.d(TAG, "Reached face pics threshold");
                                 faceDetectionFinished = true;
+
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
+
+                                        viewOverlay.setVisibility(View.INVISIBLE);
                                         mBtnPicture.setVisibility(View.VISIBLE);
                                     }
                                 });
@@ -293,6 +325,16 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
     private void cvCreateNewUser() {
         wonderfulCV = new WonderfulCV();
 
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mBtnPicture.setVisibility(View.GONE);
+            }
+        });
+
+
+        Toast.makeText(this, "등록 중 입니다. 잠시만 기다려주세요.", Toast.LENGTH_LONG).show();
         Crypto.deleteExistingTokenFromStorage();
         wonderfulCV.initiateServerConnection(getApplicationContext(), "1thefull.ml", 5000,
                 "panda@1thefull.com", "zkfmak85");
