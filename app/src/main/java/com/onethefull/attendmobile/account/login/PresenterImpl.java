@@ -52,6 +52,7 @@ public class PresenterImpl implements LoginPresenter {
                     JsonObject object = response.body();
                     if (object != null){
                         Log.d(TAG,"success:: "+ object.toString());
+
                         String id = object.getAsJsonObject("data").get("email").toString();
                         mSharedPrefs.saveLoginData(id);
                         mLoginView.loginSuccess();

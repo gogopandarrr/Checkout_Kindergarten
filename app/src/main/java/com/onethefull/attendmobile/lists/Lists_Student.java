@@ -9,7 +9,7 @@ public class Lists_Student implements Parcelable {
     String name_student, tel_parents, email_parents, cvid, date_register;
 
 
-    public Lists_Student(byte[] image, String name_student, String tel_parents, String email_parents, String cvid, String date_register) {
+    public Lists_Student(byte[] image, String name_student, String tel_parents, String email_parents, String cvid) {
         this.image = image;
         this.name_student = name_student;
         this.tel_parents = tel_parents;

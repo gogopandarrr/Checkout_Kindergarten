@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.onethefull.attendmobile.account.setchildren.DetailViewActivity"
+    tools:context="com.onethefull.attendmobile.DetailViewActivity"
     android:orientation="vertical"
     android:background="@drawable/bg2"
     >
@@ -36,19 +36,22 @@
 
             <ImageView
                 android:id="@+id/bt_takePhoto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:elevation="20dp"
                 android:layout_alignBottom="@+id/iv_profile"
                 android:layout_alignEnd="@+id/iv_profile"
                 android:src="@drawable/edit_photo" />
 
 
+
+
             <ImageView
                 android:id="@+id/btn_delete"
                 android:elevation="11dp"
-                android:layout_marginTop="46dp"
-                android:layout_marginEnd="13dp"
+                android:src="@drawable/btn_delete"
+                android:layout_marginTop="45dp"
+                android:layout_marginEnd="18dp"
                 android:layout_alignParentEnd="true"
                 android:layout_width="40dp"
                 android:layout_height="40dp" />
@@ -125,7 +128,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPersonName"
-                        android:privateImeOptions="defaultInputmode=korean"
                         android:singleLine="true"/>
 
                     <EditText
@@ -139,7 +141,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="number"
-                        android:privateImeOptions="defaultInputmode=korean"
                         android:singleLine="true" />
 
                     <EditText
@@ -153,7 +154,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress"
-                        android:privateImeOptions="defaultInputmode=korean"
                         android:singleLine="true"/>
 
 

@@ -3,7 +3,7 @@
     android:layout_width="match_parent" android:layout_height="match_parent">
 
     <ImageView
-        android:src="@drawable/frame2"
+        android:src="@drawable/detecting"
         android:layout_centerInParent="true"
         android:id="@+id/iv_overlay"
         android:layout_width="wrap_content"

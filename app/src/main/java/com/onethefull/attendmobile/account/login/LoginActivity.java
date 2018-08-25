@@ -170,6 +170,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     public void loginSuccess() {
         Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getApplicationContext(), PeopleListActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
 
         finish();
@@ -184,9 +185,6 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     @Override
     public void launch(Class cls) {
 
-        Intent intent = new Intent(getApplicationContext(), cls);
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
     }
 
 

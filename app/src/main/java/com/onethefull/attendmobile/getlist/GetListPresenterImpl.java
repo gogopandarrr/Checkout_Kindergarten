@@ -61,14 +61,25 @@ public class GetListPresenterImpl implements GetListPresenter {
 
                             String name = studentInfo.get("CHILDREN_NAME").toString();
                             name = name.replace("\"", "");
-                            String tel_parent = studentInfo.get("PARENT_TEL").toString();
-                            tel_parent = tel_parent.replace("\"", "");
+
                             String email_parent = studentInfo.get("PARENT_EMAIL").toString();
                             email_parent = email_parent.replace("\"", "");
+
+
+                            String tel_parent = studentInfo.get("PARENT_TEL").toString();
+                            tel_parent = tel_parent.replace("\"", "");
+
+
                             String date_registration = studentInfo.get("REGISTRATION_DATE").toString();
                             date_registration = date_registration.replace("\"", "");
 
-                            downInfoArrayList.add(new Lists_downInfo(name, tel_parent, email_parent, date_registration));
+
+//                            String cvid = studentInfo.get("CHILDREN_CVID").toString();
+//                            cvid = cvid.replace("\"", "");
+
+                            String cvid = "temp";
+
+                            downInfoArrayList.add(new Lists_downInfo(name, tel_parent, email_parent, date_registration, cvid));
 
                         }
 
@@ -80,7 +91,7 @@ public class GetListPresenterImpl implements GetListPresenter {
                         JSONObject errorObj = new JSONObject(response.errorBody().string());
                         Log.d(TAG,"error:: " + errorObj.toString());
                         String msg = errorObj.getString("message");
-//                        setChildrenView.validation(msg);
+                        getListView.validation(msg);
                     }catch (JSONException e){
                         e.printStackTrace();
                     }catch (IOException e){

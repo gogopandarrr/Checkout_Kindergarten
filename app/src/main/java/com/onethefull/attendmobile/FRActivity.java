@@ -317,7 +317,7 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
 
             Log.d(TAG,"cv유저 등록 완료");
             createNewUserTask.setUserInfo(wonderfulCV.serverAddress + "/api/user",
-                    name,"temp", tel, email, wonderfulCV.token, facePics);
+                    name,"temp", tel, "temp@aaa.com", wonderfulCV.token, facePics);
             createNewUserTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
             getImagesFromServer();
@@ -377,7 +377,6 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
 
 
                                 uriArrayList.add(urlString);
-                                Log.e("size_array", uriArrayList.size()+"");
 
                             }
 
