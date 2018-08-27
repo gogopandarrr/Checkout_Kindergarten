@@ -1,6 +1,7 @@
 package com.onethefull.attendmobile;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 
 import com.onethefull.attendmobile.adapter.MyAdapter_PeopleList;
 import com.onethefull.attendmobile.api.SharedPrefManager;
+import com.onethefull.attendmobile.api.TinyDB;
 import com.onethefull.attendmobile.fragment.AlertDialogFragment;
 import com.onethefull.attendmobile.getlist.GetListPresenterImpl;
 import com.onethefull.attendmobile.getlist.GetListView;
@@ -49,6 +51,8 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
     private String id;
     private SharedPrefManager mSharedPrefs;
     private GetListPresenterImpl getListPresenter;
+    TinyDB tinyDB;
+    ArrayList<Object> stp;
     int mode;
 
 
@@ -62,6 +66,7 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
         toolbar_Navi();
         setNavigationView();
         setListener();
+        loadToPhone();
 
 
 
@@ -69,6 +74,7 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
 
     private void initView(){
 
+        tinyDB = new TinyDB(this);
         fab_add= findViewById(R.id.fab_add);
         iv_noinfo = findViewById(R.id.iv_noinfo);
         peopleList_recycleView= findViewById(R.id.people_recycleView);
@@ -100,6 +106,37 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
     }//
 
 
+    private void saveToPhone(){
+
+
+        stp = new ArrayList<>();
+        for (Lists_Student a : studentArrayList){
+            stp.add(a);
+        }
+
+        tinyDB.putListObject("studentArrayList"+id, stp);
+        tinyDB.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
+            @Override
+            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+
+            }
+        });
+
+
+
+    }//
+
+    private void loadToPhone(){
+
+
+
+        stp = tinyDB.getListObject("studentArrayList"+id, Lists_Student.class);
+        studentArrayList.clear();
+        for (Object obj : stp){
+            studentArrayList.add((Lists_Student) obj);
+        }
+        adapter_peopleList.notifyDataSetChanged();
+    }
 
     private void setNavigationView(){
 
@@ -140,7 +177,6 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
         if (mode == 1) {
             listsStudent = intent.getParcelableExtra("listsStudent");
             studentArrayList.add(listsStudent);
-            Log.e("size_ㅁㅁㅁ",studentArrayList.size()+"");
 
         }
 
@@ -151,6 +187,7 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
 
         }
 
+        saveToPhone();
         adapter_peopleList.notifyDataSetChanged();
 
 
@@ -315,7 +352,7 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
                 if(resultCode==RESULT_OK) {
 
                     int mode = data.getIntExtra("mode",-1);
-                    Log.e("mode_10",mode+"");
+
 
                 }
 
