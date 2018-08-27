@@ -17,6 +17,7 @@
         android:visibility="visible" />
 
     <Button
+        android:onClick="reShot"
         android:rotation="90"
         android:layout_margin="10dp"
         android:id="@+id/btn_reShot"

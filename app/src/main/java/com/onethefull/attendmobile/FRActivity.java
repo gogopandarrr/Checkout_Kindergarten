@@ -187,11 +187,17 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
                 cvCreateNewUser();
                 break;
 
-
             default:
                 break;
         }
     }
+
+    @OnClick({R.id.btn_reShot})
+    public void reShot(View view){
+
+
+    }
+
 
     @Override
     public void onPause() {
