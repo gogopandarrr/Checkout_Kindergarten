@@ -16,8 +16,10 @@ import android.widget.TextView;
 import com.onethefull.attendmobile.DetailViewActivity;
 
 import com.onethefull.attendmobile.R;
+import com.onethefull.attendmobile.api.TinyDB;
 import com.onethefull.attendmobile.lists.Lists_Student;
 import com.bumptech.glide.Glide;
+import com.onethefull.wonderful_cv_library.CV_Package.Identity;
 
 import java.util.ArrayList;
 
@@ -28,8 +30,12 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
     Context context;
     ArrayList<Lists_Student> studentArrayList;
     ArrayList<Lists_Student> filtered;
+    ArrayList<Identity> userList = new ArrayList<>();
+    ArrayList<Object> stp;
     Lists_Student listsStudent;
     RecyclerView recyclerView;
+    TinyDB tinyDB;
+    String urlString;
 
 
 
@@ -45,6 +51,9 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
 
         LayoutInflater inflater = LayoutInflater.from(context);
+
+
+        tinyDB = new TinyDB(context);
 
         View itemView;
         itemView= inflater.inflate(R.layout.list_people, viewGroup, false);
@@ -81,14 +90,40 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
         VH vh= (VH) viewHolder;
 
 
-
         Lists_Student lists_student = filtered.get(position);
+
+
+        String cvid = lists_student.getCvid();
+
+
+
+        //유저 리스트 불러오기
+
+        stp = tinyDB.getListObject("userList", Identity.class);
+        userList.clear();
+        for (Object obj : stp){
+            userList.add((Identity) obj);
+        }
+
+
+        //유저 리스트 cvid로 이미지 주소 찾기
+        for (int i = 0; i < userList.size(); i++){
+
+            if(userList.get(i).userId.contains(cvid)){
+
+               urlString =  "http://1thefull.ml:5000/faceimages/"+userList.get(i).imageName;
+
+            }
+
+
+        }
+
 
          if (lists_student != null){
 
              vh.tv_name.setText(lists_student.getName_student());
 
-             Glide.with(context).load(lists_student.getImage()).into(vh.iv_pic);
+             Glide.with(context).load(urlString).into(vh.iv_pic);
 
          }
 

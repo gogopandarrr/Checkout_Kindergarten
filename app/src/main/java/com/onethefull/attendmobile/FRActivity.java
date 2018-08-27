@@ -1,11 +1,15 @@
 package com.onethefull.attendmobile;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.onethefull.attendmobile.api.TinyDB;
 import com.onethefull.attendmobile.cv.DetectionBasedTracker;
 import com.onethefull.attendmobile.cv.DetectionView;
 import com.onethefull.wonderful_cv_library.CV_Package.RequestUserImagesAsyncTask;
@@ -75,8 +80,8 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
     private Bitmap bmp;
     private String name, tel, email;
     private ImageView[] iv = new ImageView[5];
-
-
+    private TinyDB tinyDB;
+    private ArrayList<Object> stp;
 
     View viewOverlay;
     static ArrayList<String> uriArrayList = new ArrayList<>();
@@ -136,8 +141,8 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fr);
-
         ButterKnife.bind(this);
+        tinyDB = new TinyDB(this);
 
         modeCheck();
         getDatas();
@@ -181,6 +186,8 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
             case R.id.btn_take_picture:
                 cvCreateNewUser();
                 break;
+
+
             default:
                 break;
         }
@@ -263,7 +270,7 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
                 ////////////////////////////////////
 
 
-                if (facesArray.length == 1 && (System.currentTimeMillis() - timestamp) > 1000) {
+                if (facesArray.length == 1 && (System.currentTimeMillis() - timestamp) > 3000) {
                     try {
                         timestamp = System.currentTimeMillis();
                         if (mRgba.cols() > 0) {
@@ -359,10 +366,10 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
 
             Log.d(TAG,"cv유저 등록 완료");
             createNewUserTask.setUserInfo(wonderfulCV.serverAddress + "/api/user",
-                    name,"temp", tel, "temp@aaa.com", wonderfulCV.token, facePics);
+                    name,"Kim", tel, "temp@aaa.com", wonderfulCV.token, facePics);
             createNewUserTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-            getImagesFromServer();
+//            getImagesFromServer();
         }
 
 
@@ -376,6 +383,15 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
     private void modeCheck(){
 
         mode = getIntent().getIntExtra("mode", -1);
+
+            if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
+                int permission = checkSelfPermission(Manifest.permission.CAMERA);
+                if (permission == PackageManager.PERMISSION_DENIED){
+                    String[] arr = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                    requestPermissions(arr, 10);
+                }
+
+                 }
     }
 
 
@@ -386,7 +402,7 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
 
 //        bitmap을 바이트로 바꿔서 전송.
         ByteArrayOutputStream bs = new ByteArrayOutputStream();
-        facePics.get(0).compress(Bitmap.CompressFormat.JPEG, 100, bs);
+        facePics.get(3).compress(Bitmap.CompressFormat.JPEG, 100, bs);
         try {
             bs.close();
 
@@ -413,12 +429,20 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
                     public void processFinish(final ArrayList<Identity> userList) {
                         if (userList.size() > 0) {
 
-                            Identity user = userList.get(userList.size()-1);
+                            stp = new ArrayList<>();
+                            for (Identity a : userList){
+                                stp.add(a);
+                            }
+                            tinyDB.putListObject("userList", stp);
 
-                                String urlString =  "http://1thefull.ml:5000/faceimages/"+user.imageName;
 
 
-                                uriArrayList.add(urlString);
+
+
+//                            Identity user = userList.get(userList.size()-1);
+//
+//                              String urlString =  "http://1thefull.ml:5000/faceimages/"+user.imageName;
+//                              uriArrayList.add(urlString);
 
                             }
 
@@ -447,7 +471,7 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
 
         if (wonderfulCV.checkIfServerConnectionInitialized()) {
             requestImagesTask.setRequestParameters(wonderfulCV.serverAddress +
-                    "/api/users/", wonderfulCV.token, 10);
+                    "/api/users/", wonderfulCV.token, 999999);
             requestImagesTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
 
@@ -484,6 +508,20 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
     }//
 
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
+        switch (requestCode){
 
+            case 10:
+                if (grantResults[0] == PackageManager.PERMISSION_DENIED|| grantResults[1] == PackageManager.PERMISSION_DENIED) {
+
+                    Toast.makeText(this, "카메라 사용불가", Toast.LENGTH_SHORT).show();
+                }
+                else{
+
+                }
+        }
+    }
 }//class
