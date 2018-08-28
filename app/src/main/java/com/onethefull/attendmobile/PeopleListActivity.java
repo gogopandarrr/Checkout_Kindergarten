@@ -45,6 +45,7 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
     private MyAdapter_PeopleList adapter_peopleList;
     private FloatingActionButton fab_add;
     private ArrayList<Lists_Student> studentArrayList = new ArrayList<>();
+    private ArrayList<Lists_downInfo> downInfoArrayList = new ArrayList<>();
     private ImageView iv_noinfo;
     private TextView tv_kindergarten;
     private Button btn_close_drawer;
@@ -67,7 +68,7 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
         toolbar_Navi();
         setNavigationView();
         setListener();
-        loadToPhone();
+//        loadToPhone();
 
 
 
@@ -79,7 +80,7 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
         fab_add= findViewById(R.id.fab_add);
         iv_noinfo = findViewById(R.id.iv_noinfo);
         peopleList_recycleView= findViewById(R.id.people_recycleView);
-        adapter_peopleList= new MyAdapter_PeopleList(this, studentArrayList, peopleList_recycleView);
+        adapter_peopleList= new MyAdapter_PeopleList(this, downInfoArrayList, peopleList_recycleView);
         peopleList_recycleView.setAdapter(adapter_peopleList);
         RecyclerView.LayoutManager layoutManager= new LinearLayoutManager(this);
         peopleList_recycleView.setLayoutManager(layoutManager);
@@ -91,6 +92,8 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
         id = id.replace("\"", "");
 
 
+
+
         //리스트 가져오기
         getListPresenter = new GetListPresenterImpl(PeopleListActivity.this, getApplicationContext());
         getListPresenter.getInfo(id);
@@ -100,7 +103,7 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
     }//init
 
     private void checkNolist(){
-        if (studentArrayList.size()>0){
+        if (downInfoArrayList.size()>0){
             iv_noinfo.setVisibility(View.GONE);
         }else iv_noinfo.setVisibility(View.VISIBLE);
 
@@ -140,6 +143,9 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
         adapter_peopleList.notifyDataSetChanged();
     }
 
+
+
+
     private void setNavigationView(){
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -176,11 +182,11 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
 
     private void getDatas(Intent intent){
 
-        if (mode == 1) {
-            listsStudent = intent.getParcelableExtra("listsStudent");
-            studentArrayList.add(listsStudent);
-
-        }
+//        if (mode == 1) {
+//            listsStudent = intent.getParcelableExtra("listsStudent");
+//            studentArrayList.add(listsStudent);
+//
+//        }
 
         if (mode == 3){
             int position = intent.getIntExtra("position",-1);
@@ -189,7 +195,7 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
 
         }
 
-        saveToPhone();
+//        saveToPhone();
         adapter_peopleList.notifyDataSetChanged();
 
 
@@ -301,7 +307,7 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
     @Override
     protected void onResume() {
         super.onResume();
-
+        getListPresenter.getInfo(id);
         checkNolist();
     }
 
@@ -312,6 +318,7 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
 
         mode = intent.getIntExtra("mode",-1);
         getDatas(intent);
+        getListPresenter.getInfo(id);
         checkNolist();
 
     }
@@ -333,7 +340,14 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
     @Override
     public void success(ArrayList<Lists_downInfo> downInfoArrayList_pre) {
 
+        downInfoArrayList.clear();
 
+        for (int i = 0; i < downInfoArrayList_pre.size(); i++){
+            downInfoArrayList.add(downInfoArrayList_pre.get(i));
+
+        }
+
+        adapter_peopleList.notifyDataSetChanged();
     }
 
 
@@ -353,7 +367,7 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
             case 10:
                 if(resultCode==RESULT_OK) {
 
-                    int mode = data.getIntExtra("mode",-1);
+                    mode = data.getIntExtra("mode",-1);
 
 
                 }

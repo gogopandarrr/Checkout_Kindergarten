@@ -28,6 +28,7 @@ public class GetListPresenterImpl implements GetListPresenter {
     private ArrayList<Lists_downInfo> downInfoArrayList = new ArrayList<>();
 
 
+
     public GetListPresenterImpl(GetListView getListView, Context mContext) {
         this.getListView = getListView;
         this.mContext = mContext;
@@ -53,7 +54,12 @@ public class GetListPresenterImpl implements GetListPresenter {
                     if (object != null) {
                         Log.d(TAG,"success:: " + object.toString());
 
+
+
+
                         JsonArray datas = object.getAsJsonArray("data");
+
+                        Log.e("datas_size", datas.size()+"sss");
 
                         for (int i = 0 ; i < datas.size(); i++){
 
@@ -74,15 +80,13 @@ public class GetListPresenterImpl implements GetListPresenter {
                             date_registration = date_registration.replace("\"", "");
 
 
-//                            String cvid = studentInfo.get("CHILDREN_CVID").toString();
-//                            cvid = cvid.replace("\"", "");
-
-                            String cvid = "temp";
+                            String cvid = studentInfo.get("CHILDREN_CVID").toString();
+                            cvid = cvid.replace("\"", "");
 
                             downInfoArrayList.add(new Lists_downInfo(name, tel_parent, email_parent, date_registration, cvid));
 
                         }
-
+                        Log.e("size_server", downInfoArrayList.size()+"");
                         getListView.success(downInfoArrayList);
                         downInfoArrayList.clear();
                     }

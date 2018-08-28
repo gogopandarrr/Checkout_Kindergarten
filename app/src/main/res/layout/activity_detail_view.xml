@@ -124,10 +124,10 @@
                         android:id="@+id/et_stuName"
                         android:textColor="@color/text_color"
                         android:textSize="13sp"
-                        android:hint="원생 이름 (영문)"
+                        android:hint="원생 이름 (필수)"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textVisiblePassword"
+                        android:inputType="textPersonName"
                         android:singleLine="true"/>
 
                     <EditText

@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+artifacts.add("default", file('wonderful_cv_library-debug.aar'))

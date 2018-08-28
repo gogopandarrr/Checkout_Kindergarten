@@ -36,6 +36,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DetailViewActivity extends AppCompatActivity implements SetChildrenView, DeleteListView{
 
+    private static final String TAG = FRActivity.class.getSimpleName();
     private Toolbar toolbar;
     private CircleImageView iv_profile;
     private ImageView bt_takePhoto, bt_delete;
@@ -47,7 +48,7 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
     private SetChildrenPresenter childrenPresenter;
     private DeleteListPresenter deleteListPresenter;
     private String id, cvid;
-    private byte[] image;
+    private String image;
     private int mode, position;
     private SharedPrefManager mSharedPrefs;
     private Lists_Student listsStudent;
@@ -127,14 +128,14 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
                     bt_finish.setVisibility(View.GONE);
                     bt_delete.setVisibility(View.GONE);
 
-                    listsStudent = getIntent().getParcelableExtra("listsStudent");
+                    listsDownInfo = getIntent().getParcelableExtra("listsStudent");
 
-                    Glide.with(this).load(listsStudent.getImage()).into(iv_profile);
+                    Glide.with(this).load(image).into(iv_profile);
 
-                    tv_name.setText(listsStudent.getName_student());
-                    tv_tel.setText(listsStudent.getTel_parents());
-                    tv_email.setText(listsStudent.getEmail_parents());
-                    cvid = listsStudent.getCvid();
+                    tv_name.setText(listsDownInfo.getName());
+                    tv_tel.setText(listsDownInfo.getTel());
+                    tv_email.setText(listsDownInfo.getEmail());
+                    cvid = listsDownInfo.getCvid();
                     position = getIntent().getIntExtra("position",-1);
 
                     break;
@@ -148,7 +149,7 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
                     bt_delete.setVisibility(View.VISIBLE);
 
 
-                    image = getIntent().getByteArrayExtra("image");
+//                    image = getIntent().getByteArrayExtra("image");
 
                     Glide.with(this).load(image).into(iv_profile);
 
@@ -203,9 +204,9 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
                 bt_finish.setVisibility(View.VISIBLE);
                 bt_takePhoto.setVisibility(View.GONE);
                 bt_delete.setVisibility(View.VISIBLE);
-                et_name.setText(listsStudent.getName_student());
-                et_tel.setText(listsStudent.getTel_parents());
-                et_email.setText(listsStudent.getEmail_parents());
+                et_name.setText(listsDownInfo.getEmail());
+                et_tel.setText(listsDownInfo.getTel());
+                et_email.setText(listsDownInfo.getEmail());
 
 
             }
@@ -319,6 +320,13 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
 
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
@@ -340,19 +348,17 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
 
 
         Toast.makeText(this, "등록 완료", Toast.LENGTH_SHORT).show();
-
-
         Intent intent =  new Intent(DetailViewActivity.this, PeopleListActivity.class);
 
-        listsStudent = new Lists_Student(image, et_name.getText().toString(), et_tel.getText().toString(), et_email.getText().toString(), cvid);
+//        listsStudent = new Lists_Student(et_name.getText().toString(), et_tel.getText().toString(), et_email.getText().toString(), cvid);
+//        intent.putExtra("listsStudent", listsStudent);
 
         mode = 1;
         intent.putExtra("mode", mode);
-        intent.putExtra("listsStudent", listsStudent);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
-
         finish();
+
     }
 
     @Override
@@ -369,9 +375,10 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
             case 11:
                 if(resultCode==RESULT_OK) {
 
-
                     cvid = data.getStringExtra("cvid");
-                    image = data.getByteArrayExtra("image");
+                    Log.e(TAG, cvid+"<------------");
+                    image = data.getStringExtra("image");
+                    Log.e(TAG, image+"<------------");
                     Glide.with(this).load(image).into(iv_profile);
 
                 }

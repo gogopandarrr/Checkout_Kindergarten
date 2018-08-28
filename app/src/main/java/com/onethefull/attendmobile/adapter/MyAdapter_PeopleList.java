@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.onethefull.attendmobile.R;
 import com.onethefull.attendmobile.api.TinyDB;
 import com.onethefull.attendmobile.lists.Lists_Student;
 import com.bumptech.glide.Glide;
+import com.onethefull.attendmobile.lists.Lists_downInfo;
 import com.onethefull.wonderful_cv_library.CV_Package.Identity;
 
 import java.util.ArrayList;
@@ -28,18 +30,19 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filterable {
 
     Context context;
-    ArrayList<Lists_Student> studentArrayList;
-    ArrayList<Lists_Student> filtered;
+
+    ArrayList<Lists_downInfo> studentArrayList;
+    ArrayList<Lists_downInfo> filtered;
     ArrayList<Identity> userList = new ArrayList<>();
     ArrayList<Object> stp;
-    Lists_Student listsStudent;
+    Lists_downInfo listsStudent;
     RecyclerView recyclerView;
     TinyDB tinyDB;
     String urlString;
 
 
 
-    public MyAdapter_PeopleList(Context context, ArrayList<Lists_Student> studentArrayList, RecyclerView recyclerView) {
+    public MyAdapter_PeopleList(Context context, ArrayList<Lists_downInfo> studentArrayList, RecyclerView recyclerView) {
         this.context = context;
         this.studentArrayList = studentArrayList;
         this.recyclerView = recyclerView;
@@ -90,7 +93,7 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
         VH vh= (VH) viewHolder;
 
 
-        Lists_Student lists_student = filtered.get(position);
+        Lists_downInfo lists_student = filtered.get(position);
 
 
         String cvid = lists_student.getCvid();
@@ -109,10 +112,13 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
         //유저 리스트 cvid로 이미지 주소 찾기
         for (int i = 0; i < userList.size(); i++){
 
-            if(userList.get(i).userId.contains(cvid)){
+            String list_cvid = userList.get(i).id.toString();
+
+
+            if(list_cvid.equals(cvid)){
 
                urlString =  "http://1thefull.ml:5000/faceimages/"+userList.get(i).imageName;
-
+                Log.e("adapter_image", urlString+"");
             }
 
 
@@ -121,7 +127,7 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
 
          if (lists_student != null){
 
-             vh.tv_name.setText(lists_student.getName_student());
+             vh.tv_name.setText(lists_student.getName());
 
              Glide.with(context).load(urlString).into(vh.iv_pic);
 
@@ -153,10 +159,10 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
                 if (charString.isEmpty()){
                     filtered = studentArrayList;
                 }else{
-                    ArrayList<Lists_Student> filteredList = new ArrayList<>();
-                    for (Lists_Student listsStudent : studentArrayList){
+                    ArrayList<Lists_downInfo> filteredList = new ArrayList<>();
+                    for (Lists_downInfo listsStudent : studentArrayList){
 
-                        if (listsStudent.getName_student().toLowerCase().contains(charString)){
+                        if (listsStudent.getName().toLowerCase().contains(charString)){
 
                             filteredList.add(listsStudent);
 
@@ -175,7 +181,7 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
 
-                filtered = (ArrayList<Lists_Student>) filterResults.values;
+                filtered = (ArrayList<Lists_downInfo>) filterResults.values;
                 notifyDataSetChanged();
             }
         };

@@ -82,12 +82,10 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
     private ImageView[] iv = new ImageView[5];
     private TinyDB tinyDB;
     private ArrayList<Object> stp;
-
+    String urlString;
     View viewOverlay;
-    static ArrayList<String> uriArrayList = new ArrayList<>();
-
     int mode;
-    int addCVid;
+    String addCVid;
     int currentCycle = 0;
     Boolean faceDetectionFinished = false;
     private ArrayList<Bitmap> facePics = new ArrayList<Bitmap>();
@@ -194,7 +192,15 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
 
     @OnClick({R.id.btn_reShot})
     public void reShot(View view){
+        switch (view.getId()) {
+            case R.id.btn_reShot:
+                finish();
+                startActivity(getIntent());
+                break;
 
+            default:
+                break;
+        }
 
     }
 
@@ -276,7 +282,7 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
                 ////////////////////////////////////
 
 
-                if (facesArray.length == 1 && (System.currentTimeMillis() - timestamp) > 3000) {
+                if (facesArray.length == 1 && (System.currentTimeMillis() - timestamp) > 1000) {
                     try {
                         timestamp = System.currentTimeMillis();
                         if (mRgba.cols() > 0) {
@@ -358,24 +364,25 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
                 new CreateNewUserAsyncTask.AsyncResponse() {
                     @Override
                     public void processFinish(int cvId) {
-
-                        addCVid = cvId;
+                        addCVid = Integer.toString(cvId);
 
                         Toast.makeText(getApplicationContext(),
                                 cvId+"", Toast.LENGTH_SHORT).show();
 
                         finishCamera();
+
                     }
                 });
 
         if (wonderfulCV.checkIfServerConnectionInitialized()) {
 
             Log.d(TAG,"cv유저 등록 완료");
+
             createNewUserTask.setUserInfo(wonderfulCV.serverAddress + "/api/user",
-                    name,"Kim", tel, "temp@aaa.com", wonderfulCV.token, facePics);
+                    "원","김", "1111111", "temp@aaa.com", wonderfulCV.token, facePics);
             createNewUserTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-//            getImagesFromServer();
+            getImagesFromServer();
         }
 
 
@@ -405,21 +412,21 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
 
         Intent intent = new Intent(FRActivity.this, DetailViewActivity.class);
 
+////        bitmap을 바이트로 바꿔서 전송.
+//        ByteArrayOutputStream bs = new ByteArrayOutputStream();
+//        facePics.get(3).compress(Bitmap.CompressFormat.JPEG, 100, bs);
+//        try {
+//            bs.close();
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//            intent.putExtra("image",urlString);
+////////////////
 
-//        bitmap을 바이트로 바꿔서 전송.
-        ByteArrayOutputStream bs = new ByteArrayOutputStream();
-        facePics.get(3).compress(Bitmap.CompressFormat.JPEG, 100, bs);
-        try {
-            bs.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-            intent.putExtra("image",bs.toByteArray());
-//////////////
+            intent.putExtra("image", urlString);
             intent.putExtra("cvid", addCVid);
-
             setResult(RESULT_OK, intent);
             finish();
 
@@ -439,16 +446,14 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
                             for (Identity a : userList){
                                 stp.add(a);
                             }
+
                             tinyDB.putListObject("userList", stp);
+                            Identity user = userList.get(0);
+                            urlString  =  "http://1thefull.ml:5000/faceimages/"+user.imageName;
 
 
 
 
-
-//                            Identity user = userList.get(userList.size()-1);
-//
-//                              String urlString =  "http://1thefull.ml:5000/faceimages/"+user.imageName;
-//                              uriArrayList.add(urlString);
 
                             }
 
@@ -477,7 +482,7 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
 
         if (wonderfulCV.checkIfServerConnectionInitialized()) {
             requestImagesTask.setRequestParameters(wonderfulCV.serverAddress +
-                    "/api/users/", wonderfulCV.token, 999999);
+                    "/api/users/", wonderfulCV.token, 9999);
             requestImagesTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
 

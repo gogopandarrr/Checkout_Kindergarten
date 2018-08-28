@@ -5,12 +5,12 @@ import android.os.Parcelable;
 
 public class Lists_Student implements Parcelable {
 
-    byte[] image;
+
     String name_student, tel_parents, email_parents, cvid, date_register;
 
 
-    public Lists_Student(byte[] image, String name_student, String tel_parents, String email_parents, String cvid) {
-        this.image = image;
+    public Lists_Student(String name_student, String tel_parents, String email_parents, String cvid) {
+
         this.name_student = name_student;
         this.tel_parents = tel_parents;
         this.email_parents = email_parents;
@@ -20,7 +20,6 @@ public class Lists_Student implements Parcelable {
 
 
     protected Lists_Student(Parcel in) {
-        image = in.createByteArray();
         name_student = in.readString();
         tel_parents = in.readString();
         email_parents = in.readString();
@@ -40,13 +39,8 @@ public class Lists_Student implements Parcelable {
         }
     };
 
-    public byte[] getImage() {
-        return image;
-    }
 
-    public void setImage(byte[] image) {
-        this.image = image;
-    }
+
 
     public String getName_student() {
         return name_student;
@@ -95,7 +89,6 @@ public class Lists_Student implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeByteArray(image);
         parcel.writeString(name_student);
         parcel.writeString(tel_parents);
         parcel.writeString(email_parents);
