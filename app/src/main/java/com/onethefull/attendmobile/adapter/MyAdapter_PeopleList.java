@@ -71,12 +71,11 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
                 int position = holder.getAdapterPosition();
                 int mode = 2; // 보기모드
 
+
                 listsStudent = studentArrayList.get(position);
                 Intent intent = new Intent(context, DetailViewActivity.class);
                 intent.putExtra("listsStudent", listsStudent);
-                intent.putExtra("position", position);
                 intent.putExtra("mode", mode);
-
                 context.startActivity(intent);
 
             }
@@ -98,7 +97,7 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
 
         String cvid = lists_student.getCvid();
 
-        Log.d("adapter_cvid", cvid+"");
+
 
         //유저 리스트 불러오기
 
@@ -108,22 +107,17 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
             userList.add((Identity) obj);
         }
 
-        Log.e("adapter_stp", stp.size()+"");
 
         //유저 리스트 cvid로 이미지 주소 찾기
         for (int i = 0; i < userList.size(); i++){
 
             String list_cvid = userList.get(i).id.toString();
-            Log.d("adapter_users_cvid", list_cvid+"");
-
 
             if(list_cvid.equals(cvid)){
 
                 if (!userList.get(i).imageName.equals("null")){
 
-                    Log.e("adapter_image", userList.get(i).imageName+"");
                     urlString =  "http://1thefull.ml:5000/faceimages/"+userList.get(i).imageName;
-                    Log.d("adapter_image", urlString+"");
                     Glide.with(context).load(urlString).into(vh.iv_pic);
                     vh.tv_name.setText(lists_student.getName());
                     vh.iv_pic.setVisibility(View.VISIBLE);
@@ -132,7 +126,7 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
                 }else{
                     Log.e("adapter_image_null", userList.get(i).imageName+"");
 
-                    vh.tv_name.setText("삭제 후 다시 등록해주세요");
+                    vh.tv_name.setText(R.string.error_userPic);
                     vh.iv_pic.setVisibility(View.GONE);
                     vh.tv_sub.setVisibility(View.GONE);
 

@@ -23,12 +23,14 @@ import com.onethefull.attendmobile.account.setchildren.SetChildrenPresenter;
 import com.onethefull.attendmobile.account.setchildren.SetChildrenPresenterImpl;
 import com.onethefull.attendmobile.account.setchildren.SetChildrenView;
 import com.onethefull.attendmobile.api.SharedPrefManager;
+import com.onethefull.attendmobile.api.TinyDB;
 import com.onethefull.attendmobile.deletelist.DeleteListPresenter;
 import com.onethefull.attendmobile.deletelist.DeleteListView;
 import com.onethefull.attendmobile.deletelist.DeletePresenterImpl;
 import com.bumptech.glide.Glide;
 import com.onethefull.attendmobile.lists.Lists_Student;
 import com.onethefull.attendmobile.lists.Lists_downInfo;
+import com.onethefull.wonderful_cv_library.CV_Package.Identity;
 
 import java.util.ArrayList;
 
@@ -47,11 +49,16 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
     private Lists_downInfo listsDownInfo;
     private SetChildrenPresenter childrenPresenter;
     private DeleteListPresenter deleteListPresenter;
+    private SharedPrefManager mSharedPrefs;
+    private ArrayList<Object> stp;
+    private ArrayList<Identity> userList = new ArrayList<>();
+
     String id, cvid;
     byte[] image;
-    private int mode, position;
-    private SharedPrefManager mSharedPrefs;
-    private Lists_Student listsStudent;
+    int mode;
+
+    TinyDB tinyDB;
+
 
 
 
@@ -84,6 +91,8 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
         layout_edit = findViewById(R.id.layout_profile_edit);
         layout_text = findViewById(R.id.layout_profile);
         bt_takePhoto = findViewById(R.id.bt_takePhoto);
+
+        tinyDB = new TinyDB(this);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -129,33 +138,27 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
                     bt_delete.setVisibility(View.GONE);
 
                     listsDownInfo = getIntent().getParcelableExtra("listsStudent");
-
-                    Glide.with(this).load(image).into(iv_profile);
-
                     tv_name.setText(listsDownInfo.getName());
                     tv_tel.setText(listsDownInfo.getTel());
                     tv_email.setText(listsDownInfo.getEmail());
                     cvid = listsDownInfo.getCvid();
-                    position = getIntent().getIntExtra("position",-1);
 
-                    break;
+                    stp = tinyDB.getListObject("userList", Identity.class);
+                    userList.clear();
+                    for (Object obj : stp){
+                        userList.add((Identity) obj);
+                    }
 
+                    //유저 리스트 cvid로 이미지 주소 찾기
+                    for (int i = 0; i < userList.size(); i++) {
 
-                case 4 : //편집 모드
+                        String list_cvid = userList.get(i).id.toString();
 
-                    layout_text.setVisibility(View.GONE);
-                    bt_edit.setVisibility(View.GONE);
-                    bt_takePhoto.setVisibility(View.GONE);
-                    bt_delete.setVisibility(View.VISIBLE);
-
-
-//                    image = getIntent().getByteArrayExtra("image");
-
-                    Glide.with(this).load(image).into(iv_profile);
-
-                    et_name.setText(intent.getStringExtra("name"));
-                    et_tel.setText(intent.getStringExtra("tel"));
-                    et_email.setText(intent.getStringExtra("email"));
+                        if (list_cvid.equals(cvid)) {
+                            String urlString = "http://1thefull.ml:5000/faceimages/" + userList.get(i).imageName;
+                            Glide.with(this).load(urlString).into(iv_profile);
+                        }//if
+                    }//for
 
 
                     break;
@@ -184,7 +187,7 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
                     childrenPresenter.performJoin(id, name, cvid, tel, email);
 
                 }else{
-                    Toast.makeText(DetailViewActivity.this, "사진과 필수 정보를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DetailViewActivity.this, R.string.error_formFill, Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -204,7 +207,7 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
                 bt_finish.setVisibility(View.VISIBLE);
                 bt_takePhoto.setVisibility(View.GONE);
                 bt_delete.setVisibility(View.VISIBLE);
-                et_name.setText(listsDownInfo.getEmail());
+                et_name.setText(listsDownInfo.getName());
                 et_tel.setText(listsDownInfo.getTel());
                 et_email.setText(listsDownInfo.getEmail());
 
@@ -227,7 +230,7 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
                     startActivity(intent);
 
                 }else{
-                    Toast.makeText(DetailViewActivity.this, "필수 칸을 먼저 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DetailViewActivity.this, R.string.error_formFill2, Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -242,7 +245,7 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(DetailViewActivity.this);
 
-                builder.setTitle("원생 정보를 삭제하시겠습니까?");
+                builder.setTitle(R.string.delete_sutudent);
 
                 builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
                     @Override
@@ -355,9 +358,6 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
         Toast.makeText(this, "등록 완료", Toast.LENGTH_SHORT).show();
         Intent intent =  new Intent(DetailViewActivity.this, PeopleListActivity.class);
 
-//        listsStudent = new Lists_Student(et_name.getText().toString(), et_tel.getText().toString(), et_email.getText().toString(), cvid);
-//        intent.putExtra("listsStudent", listsStudent);
-
         mode = 1;
         intent.putExtra("mode", mode);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -388,7 +388,6 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
         Intent intent = new Intent(DetailViewActivity.this, PeopleListActivity.class);
         mode = 3;
         intent.putExtra("mode", 3);
-        intent.putExtra("position",position);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
