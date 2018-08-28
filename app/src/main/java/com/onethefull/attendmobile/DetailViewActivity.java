@@ -36,7 +36,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DetailViewActivity extends AppCompatActivity implements SetChildrenView, DeleteListView{
 
-    private static final String TAG = FRActivity.class.getSimpleName();
+    private static final String TAG = DetailViewActivity.class.getSimpleName();
     private Toolbar toolbar;
     private CircleImageView iv_profile;
     private ImageView bt_takePhoto, bt_delete;
@@ -47,8 +47,8 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
     private Lists_downInfo listsDownInfo;
     private SetChildrenPresenter childrenPresenter;
     private DeleteListPresenter deleteListPresenter;
-    private String id, cvid;
-    private String image;
+    String id, cvid;
+    byte[] image;
     private int mode, position;
     private SharedPrefManager mSharedPrefs;
     private Lists_Student listsStudent;
@@ -224,7 +224,7 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
                     intent.putExtra("name",et_name.getText().toString());
                     intent.putExtra("tel",et_tel.getText().toString());
                     intent.putExtra("email",et_email.getText().toString());
-                    startActivityForResult(intent, 11);
+                    startActivity(intent);
 
                 }else{
                     Toast.makeText(DetailViewActivity.this, "필수 칸을 먼저 입력해주세요.", Toast.LENGTH_SHORT).show();
@@ -323,6 +323,11 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
+        cvid = intent.getStringExtra("cvid");
+        Log.e(TAG, cvid+"<------------");
+        image = intent.getByteArrayExtra("image");
+        Glide.with(this).load(image).into(iv_profile);
+
 
     }
 
@@ -370,25 +375,10 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
-        switch (requestCode){
-
-            case 11:
-                if(resultCode==RESULT_OK) {
-
-                    cvid = data.getStringExtra("cvid");
-                    Log.e(TAG, cvid+"<------------");
-                    image = data.getStringExtra("image");
-                    Log.e(TAG, image+"<------------");
-                    Glide.with(this).load(image).into(iv_profile);
-
-                }
-
-                break;
-
-
-        }
 
         super.onActivityResult(requestCode, resultCode, data);
+
+
     }
 
     @Override

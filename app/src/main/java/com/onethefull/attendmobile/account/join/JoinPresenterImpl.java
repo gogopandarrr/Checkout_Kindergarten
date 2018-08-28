@@ -48,7 +48,6 @@ public class JoinPresenterImpl implements JoinPresenter{
                     JsonObject object = response.body();
                     if (object != null) {
                         Log.d(TAG,"success:: " + object.toString());
-//                        object.getAsJsonObject("data").get("email").toString();
                         mJoinView.success();
                     }
                 }else {

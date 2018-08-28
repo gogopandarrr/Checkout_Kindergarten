@@ -38,6 +38,8 @@ import java.util.ArrayList;
 
 public class PeopleListActivity extends AppCompatActivity implements GetListView {
 
+
+    private static final String TAG = PeopleListActivity.class.getSimpleName();
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private ActionBarDrawerToggle drawerToggle;
@@ -187,15 +189,17 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
 //            studentArrayList.add(listsStudent);
 //
 //        }
-
-        if (mode == 3){
-            int position = intent.getIntExtra("position",-1);
-            studentArrayList.remove(position);
-
-
-        }
-
+//
+//        if (mode == 3){
+//            int position = intent.getIntExtra("position",-1);
+//            studentArrayList.remove(position);
+//
+//
+//        }
+//
 //        saveToPhone();
+
+
         adapter_peopleList.notifyDataSetChanged();
 
 
@@ -317,7 +321,6 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
         super.onNewIntent(intent);
 
         mode = intent.getIntExtra("mode",-1);
-        getDatas(intent);
         getListPresenter.getInfo(id);
         checkNolist();
 
@@ -342,11 +345,11 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
 
         downInfoArrayList.clear();
 
+
         for (int i = 0; i < downInfoArrayList_pre.size(); i++){
             downInfoArrayList.add(downInfoArrayList_pre.get(i));
 
         }
-
         adapter_peopleList.notifyDataSetChanged();
     }
 
@@ -368,7 +371,7 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
                 if(resultCode==RESULT_OK) {
 
                     mode = data.getIntExtra("mode",-1);
-
+                    getListPresenter.getInfo(id);
 
                 }
 

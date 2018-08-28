@@ -98,7 +98,7 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
 
         String cvid = lists_student.getCvid();
 
-
+        Log.d("adapter_cvid", cvid+"");
 
         //유저 리스트 불러오기
 
@@ -108,17 +108,19 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
             userList.add((Identity) obj);
         }
 
+        Log.e("adapter_stp", stp.size()+"");
 
         //유저 리스트 cvid로 이미지 주소 찾기
         for (int i = 0; i < userList.size(); i++){
 
             String list_cvid = userList.get(i).id.toString();
 
+            Log.d("adapter_users_cvid", list_cvid+"");
 
             if(list_cvid.equals(cvid)){
 
                urlString =  "http://1thefull.ml:5000/faceimages/"+userList.get(i).imageName;
-                Log.e("adapter_image", urlString+"");
+                Log.d("adapter_image", urlString+"");
             }
 
 

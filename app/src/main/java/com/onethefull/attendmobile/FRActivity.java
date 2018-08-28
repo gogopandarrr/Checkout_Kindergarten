@@ -359,6 +359,7 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
                 "panda@1thefull.com", "zkfmak85");
 
 
+
         Log.d(TAG, "Registering new user with face");
         CreateNewUserAsyncTask createNewUserTask = new CreateNewUserAsyncTask(
                 new CreateNewUserAsyncTask.AsyncResponse() {
@@ -369,21 +370,28 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
                         Toast.makeText(getApplicationContext(),
                                 cvId+"", Toast.LENGTH_SHORT).show();
 
-                        finishCamera();
-
+                        if (addCVid != null){
+                            finishCamera();
+                        }else{
+                            Toast.makeText(getApplicationContext(),
+                                    "다시 찍으세요.", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
 
         if (wonderfulCV.checkIfServerConnectionInitialized()) {
 
-            Log.d(TAG,"cv유저 등록 완료");
+
 
             createNewUserTask.setUserInfo(wonderfulCV.serverAddress + "/api/user",
                     "원","김", "1111111", "temp@aaa.com", wonderfulCV.token, facePics);
             createNewUserTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-            getImagesFromServer();
+            Log.d(TAG,"cv유저 등록 완료");
+
+
         }
+
 
 
 
@@ -412,22 +420,24 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
 
         Intent intent = new Intent(FRActivity.this, DetailViewActivity.class);
 
-////        bitmap을 바이트로 바꿔서 전송.
-//        ByteArrayOutputStream bs = new ByteArrayOutputStream();
-//        facePics.get(3).compress(Bitmap.CompressFormat.JPEG, 100, bs);
-//        try {
-//            bs.close();
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//            intent.putExtra("image",urlString);
-////////////////
+//        bitmap을 바이트로 바꿔서 전송.
+        ByteArrayOutputStream bs = new ByteArrayOutputStream();
+        facePics.get(3).compress(Bitmap.CompressFormat.JPEG, 100, bs);
+        try {
+            bs.close();
 
-            intent.putExtra("image", urlString);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+            getImagesFromServer();
+
+            intent.putExtra("image",bs.toByteArray());
+//////////////
+
             intent.putExtra("cvid", addCVid);
-            setResult(RESULT_OK, intent);
+            Log.d(TAG, addCVid+"<------------");
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
             finish();
 
 
@@ -448,11 +458,9 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
                             }
 
                             tinyDB.putListObject("userList", stp);
-                            Identity user = userList.get(0);
-                            urlString  =  "http://1thefull.ml:5000/faceimages/"+user.imageName;
 
-
-
+//                            Identity user = userList.get(0);
+//                            urlString  =  "http://1thefull.ml:5000/faceimages/"+user.imageName;
 
 
                             }
