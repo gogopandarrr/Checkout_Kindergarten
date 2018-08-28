@@ -34,5 +34,4 @@ public interface ApiService {
     @Headers("Content-Type: application/json")
     @HTTP(method = "DELETE", path = "/delete_children", hasBody = true)
     Call<JsonObject> deleteListResult(@Body String body);
-
 }

@@ -21,6 +21,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.onethefull.attendmobile.account.login.PresenterImpl;
+import com.onethefull.attendmobile.api.SharedPrefManager;
 import com.onethefull.attendmobile.api.TinyDB;
 import com.onethefull.attendmobile.cv.DetectionBasedTracker;
 import com.onethefull.attendmobile.cv.DetectionView;
@@ -76,7 +78,6 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
     private int mDetectorType = JAVA_DETECTOR;
     private float mRelativeFaceSize = 0.2f;
     private int mAbsoluteFaceSize = 0;
-    private WonderfulCV wonderfulCV;
     private Bitmap bmp;
     private String name, tel, email;
     private ImageView[] iv = new ImageView[5];
@@ -89,7 +90,7 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
     int currentCycle = 0;
     Boolean faceDetectionFinished = false;
     private ArrayList<Bitmap> facePics = new ArrayList<Bitmap>();
-
+    private SharedPrefManager mSharedPrefs;
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
         @Override
         public void onManagerConnected(int status) {
@@ -342,7 +343,6 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
 
     // TODO: 2018. 8. 23.  
     private void cvCreateNewUser() {
-        wonderfulCV = new WonderfulCV();
 
 
         runOnUiThread(new Runnable() {
@@ -354,12 +354,15 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
 
 
         Toast.makeText(this, "등록 중 입니다. 잠시만 기다려주세요.", Toast.LENGTH_LONG).show();
-        Crypto.deleteExistingTokenFromStorage();
-        wonderfulCV.initiateServerConnection(getApplicationContext(), "1thefull.ml", 5000,
-                "panda@1thefull.com", "zkfmak85");
+
+        //cv 계정 세팅
+//        Crypto.deleteExistingTokenFromStorage();
+        mSharedPrefs = SharedPrefManager.getInstance(getApplicationContext());
+        Log.d(TAG, mSharedPrefs.getAuthToken()); // 로그인한 유저의 auth token 가져오기
+        String authToken = mSharedPrefs.getAuthToken();
 
 
-        Log.d(TAG, "Registering new user with face");
+                Log.d(TAG, "Registering new user with face");
         CreateNewUserAsyncTask createNewUserTask = new CreateNewUserAsyncTask(
                 new CreateNewUserAsyncTask.AsyncResponse() {
                     @Override
@@ -368,24 +371,15 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
 
                         Toast.makeText(getApplicationContext(),
                                 cvId+"", Toast.LENGTH_SHORT).show();
-
+                        Log.d(TAG, String.valueOf(cvId));
                         finishCamera();
 
                     }
                 });
-
-        if (wonderfulCV.checkIfServerConnectionInitialized()) {
-
-            Log.d(TAG,"cv유저 등록 완료");
-
-            createNewUserTask.setUserInfo(wonderfulCV.serverAddress + "/api/user",
-                    "원","김", "1111111", "temp@aaa.com", wonderfulCV.token, facePics);
-            createNewUserTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
-            getImagesFromServer();
-        }
-
-
+        createNewUserTask.setUserInfo("http://218.145.215.120:5000" + "/api/user",
+                "원","김", "1111111", "temp@aaa.com",authToken, facePics);
+        createNewUserTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        getImagesFromServer();
 
     }
     
@@ -480,11 +474,12 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
                     }
                 });
 
-        if (wonderfulCV.checkIfServerConnectionInitialized()) {
-            requestImagesTask.setRequestParameters(wonderfulCV.serverAddress +
-                    "/api/users/", wonderfulCV.token, 9999);
-            requestImagesTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        }
+//        if (wonderfulCV.checkIfServerConnectionInitialized()) {
+//            String authToken = mSharedPrefs.getAuthToken();
+//            requestImagesTask.setRequestParameters(wonderfulCV.serverAddress +
+//                    "/api/users/", wonderfulCV.token, 9999);
+//            requestImagesTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//        }
 
     }
 

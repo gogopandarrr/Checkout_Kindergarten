@@ -53,6 +53,7 @@
                         android:inputType="textPersonName"
                         android:textSize="13sp"
                         android:singleLine="true"
+                        android:text="test11@1thefull.com"
                         />
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
@@ -86,6 +87,7 @@
                         android:inputType="textPassword"
                         android:textSize="13sp"
                         android:singleLine="true"
+                        android:text="1thefull"
                         />
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>

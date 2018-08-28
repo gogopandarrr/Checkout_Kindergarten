@@ -48,44 +48,48 @@
                 android:hint="이메일 주소를 입력해주세요."
                 android:inputType="textEmailAddress"
                 android:textSize="14sp"
-                android:singleLine="true"/>
+                android:singleLine="true"
+                android:text="test14@1thefull.com"/>
 
-        <EditText
-            android:id="@+id/et_kindergarten"
-            android:layout_width="240dp"
-            android:layout_height="37dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="35dp"
-            android:layout_marginEnd="15dp"
-            android:hint="유치원 이름을 입력해주세요."
-            android:inputType="textPersonName"
-            android:textSize="14sp"
-            android:privateImeOptions="defaultInputmode=korean"
-            android:singleLine="true"/>
+            <EditText
+                android:id="@+id/et_kindergarten"
+                android:layout_width="240dp"
+                android:layout_height="37dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="35dp"
+                android:layout_marginEnd="15dp"
+                android:hint="유치원 이름을 입력해주세요."
+                android:inputType="textPersonName"
+                android:textSize="14sp"
+                android:privateImeOptions="defaultInputmode=korean"
+                android:singleLine="true"
+                android:text="test14"/>
 
-        <EditText
-            android:id="@+id/et_password"
-            android:layout_width="240dp"
-            android:layout_height="37dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="35dp"
-            android:layout_marginEnd="15dp"
-            android:hint="비밀번호를 입력해주세요"
-            android:inputType="textPassword"
-            android:textSize="14sp"
-            android:singleLine="true"/>
+            <EditText
+                android:id="@+id/et_password"
+                android:layout_width="240dp"
+                android:layout_height="37dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="35dp"
+                android:layout_marginEnd="15dp"
+                android:hint="비밀번호를 입력해주세요"
+                android:inputType="textPassword"
+                android:textSize="14sp"
+                android:singleLine="true"
+                android:text="1thefull"/>
 
-        <EditText
-            android:id="@+id/et_password_confirm"
-            android:layout_width="240dp"
-            android:layout_height="37dp"
-            android:layout_marginTop="5sp"
-            android:layout_marginStart="35dp"
-            android:layout_marginEnd="15dp"
-            android:hint="비밀번호를 한번 더 입력해주세요"
-            android:inputType="textPassword"
-            android:textSize="14sp"
-            android:singleLine="true"/>
+            <EditText
+                android:id="@+id/et_password_confirm"
+                android:layout_width="240dp"
+                android:layout_height="37dp"
+                android:layout_marginTop="5sp"
+                android:layout_marginStart="35dp"
+                android:layout_marginEnd="15dp"
+                android:hint="비밀번호를 한번 더 입력해주세요"
+                android:inputType="textPassword"
+                android:textSize="14sp"
+                android:singleLine="true"
+                android:text="1thefull"/>
 
 
         </LinearLayout>
@@ -120,17 +124,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/et_email_find"
-            android:layout_width="240dp"
-            android:layout_height="37dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="35dp"
-            android:layout_marginEnd="15dp"
-            android:hint="이메일 주소를 입력해주세요."
-            android:inputType="textEmailAddress"
-            android:textSize="14sp"
-            android:singleLine="true"/>
+            <EditText
+                android:id="@+id/et_email_find"
+                android:layout_width="240dp"
+                android:layout_height="37dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="35dp"
+                android:layout_marginEnd="15dp"
+                android:hint="이메일 주소를 입력해주세요."
+                android:inputType="textEmailAddress"
+                android:textSize="14sp"
+                android:singleLine="true"/>
 
             <TextView
                 android:id="@+id/tv_forgot"

@@ -7,6 +7,8 @@ import com.onethefull.attendmobile.api.ApiService;
 import com.onethefull.attendmobile.api.ApiUtils;
 import com.onethefull.attendmobile.api.SharedPrefManager;
 import com.google.gson.JsonObject;
+import com.onethefull.wonderful_cv_library.CV_Package.Crypto;
+import com.onethefull.wonderful_cv_library.CV_Package.WonderfulCV;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,15 +26,18 @@ public class PresenterImpl implements LoginPresenter {
     private LoginView mLoginView;
     private ApiService service;
     private SharedPrefManager mSharedPrefs;
+    public WonderfulCV wonderfulCV = new WonderfulCV();
 
     public PresenterImpl(LoginView loginView, Context context) {
         this.mLoginView = loginView;
         this.mContext = context;
         mSharedPrefs = SharedPrefManager.getInstance(context);
+        wonderfulCV = new WonderfulCV();
+        wonderfulCV.getFullServerAddress("1thefull.ml", 5000);
     }
 
     @Override
-    public void performLogin(String id, String pwd) {
+    public void performLogin(final String id,final String pwd) {
 
         service = ApiUtils.getService();
         final JSONObject obj = new JSONObject();
@@ -53,8 +58,15 @@ public class PresenterImpl implements LoginPresenter {
                     if (object != null){
                         Log.d(TAG,"success:: "+ object.toString());
 
-                        String id = object.getAsJsonObject("data").get("email").toString();
-                        mSharedPrefs.saveLoginData(id);
+//                        String id = object.getAsJsonObject("data").get("email").toString();
+                        Crypto.deleteExistingTokenFromStorage();
+                        Log.d("CV_Info", wonderfulCV.serverAddress);
+                        if( wonderfulCV.initiateServerConnection(mContext, "1thefull.ml", 5000,
+                                id, pwd)) {
+                            Log.d("CV_Info",  wonderfulCV.token);
+                        }
+                        mSharedPrefs.saveLoginData(id.trim());
+                        mSharedPrefs.saveAuthToken(wonderfulCV.token);
                         mLoginView.loginSuccess();
                     }
                 }else {

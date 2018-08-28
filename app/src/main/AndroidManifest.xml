@@ -31,22 +31,24 @@
         android:roundIcon="@drawable/appicon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.onethefull.attendmobile.account.IntroActivity">
+        <activity android:name=".account.IntroActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".account.login.LoginActivity"></activity>
+        <activity android:name=".account.join.RegisterActivity" />
+        <activity
+            android:name=".PeopleListActivity"
+            android:theme="@style/Actionbar" />
+        <activity android:name=".DetailViewActivity" />
+        <activity android:name=".PhotoActivity" />
+        <activity android:name=".FRActivity" />
+        <activity android:name=".CVServiceRegistration">
 
         </activity>
-        <activity android:name="com.onethefull.attendmobile.account.login.LoginActivity">
-        </activity>
-        <activity android:name="com.onethefull.attendmobile.account.join.RegisterActivity"/>
-        <activity android:name="com.onethefull.attendmobile.PeopleListActivity" android:theme="@style/Actionbar"/>
-        <activity android:name="com.onethefull.attendmobile.DetailViewActivity"/>
-        <activity android:name="com.onethefull.attendmobile.PhotoActivity"/>
-        <activity android:name="com.onethefull.attendmobile.FRActivity"/>
-
     </application>
 
 </manifest>

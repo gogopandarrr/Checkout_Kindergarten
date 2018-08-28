@@ -3,6 +3,8 @@ package com.onethefull.attendmobile.api;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.ArrayList;
+
 public class SharedPrefManager {
     private static final String TAG = SharedPrefManager.class.getSimpleName();
     private static SharedPrefManager mInstance;
@@ -39,7 +41,11 @@ public class SharedPrefManager {
         mEditor.commit();
 
     }
-
+    public void saveAuthToken(String authToken) {
+        mEditor.putBoolean(Base.KEY_SAVE_LOGIN_DATA, true);
+        mEditor.putString(Base.KEY_SAVE_LOGIN_AUTHTOKEN, authToken);
+        mEditor.commit();
+    }
     public boolean getLoginBoolean(){
         return mSharedPrefs.getBoolean(Base.KEY_SAVE_LOGIN_DATA, false);
     }
@@ -47,6 +53,11 @@ public class SharedPrefManager {
     public String getLoginId(){
         String id = "";
         return mSharedPrefs.getString(Base.KEY_SAVE_LOGIN_ID, id);
+    }
+
+    public String getAuthToken(){
+        String authToken = "";
+        return mSharedPrefs.getString(Base.KEY_SAVE_LOGIN_AUTHTOKEN, authToken);
     }
 
 

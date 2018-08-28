@@ -1,6 +1,6 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
- * Original file: /Users/q1/Documents/Checkout_Kindergarten/openCVLibrary300/src/main/aidl/org/opencv/engine/OpenCVEngineInterface.aidl
+ * Original file: /Users/sjw/AndroidStudioProjects/robot-pudding-attend-mobile-recent/openCVLibrary300/src/main/aidl/org/opencv/engine/OpenCVEngineInterface.aidl
  */
 package org.opencv.engine;
 /**
