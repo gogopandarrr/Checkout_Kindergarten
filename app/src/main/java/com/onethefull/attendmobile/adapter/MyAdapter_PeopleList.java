@@ -114,26 +114,44 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
         for (int i = 0; i < userList.size(); i++){
 
             String list_cvid = userList.get(i).id.toString();
-
             Log.d("adapter_users_cvid", list_cvid+"");
+
 
             if(list_cvid.equals(cvid)){
 
-               urlString =  "http://1thefull.ml:5000/faceimages/"+userList.get(i).imageName;
-                Log.d("adapter_image", urlString+"");
+                if (!userList.get(i).imageName.equals("null")){
+
+                    Log.e("adapter_image", userList.get(i).imageName+"");
+                    urlString =  "http://1thefull.ml:5000/faceimages/"+userList.get(i).imageName;
+                    Log.d("adapter_image", urlString+"");
+                    Glide.with(context).load(urlString).into(vh.iv_pic);
+                    vh.tv_name.setText(lists_student.getName());
+                    vh.iv_pic.setVisibility(View.VISIBLE);
+                    vh.tv_sub.setVisibility(View.VISIBLE);
+
+                }else{
+                    Log.e("adapter_image_null", userList.get(i).imageName+"");
+
+                    vh.tv_name.setText("삭제 후 다시 등록해주세요");
+                    vh.iv_pic.setVisibility(View.GONE);
+                    vh.tv_sub.setVisibility(View.GONE);
+
+                }
+
+
+
+
             }
 
 
         }
 
 
-         if (lists_student != null){
 
-             vh.tv_name.setText(lists_student.getName());
 
-             Glide.with(context).load(urlString).into(vh.iv_pic);
 
-         }
+
+
 
 
 
@@ -196,7 +214,7 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
         CardView cardView;
         CheckBox checkBox;
         CircleImageView iv_pic;
-        TextView tv_name;
+        TextView tv_name, tv_sub;
 
 
         public VH(@NonNull final View itemView) {
@@ -206,6 +224,7 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
             cardView = itemView.findViewById(R.id.cardView_people);
             iv_pic = itemView.findViewById(R.id.iv_pic);
             tv_name = itemView.findViewById(R.id.tv_name);
+            tv_sub = itemView.findViewById(R.id.tv_sub);
 
 
         }
