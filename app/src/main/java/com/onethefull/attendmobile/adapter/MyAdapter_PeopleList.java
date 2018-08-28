@@ -71,12 +71,11 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
                 int position = holder.getAdapterPosition();
                 int mode = 2; // 보기모드
 
+
                 listsStudent = studentArrayList.get(position);
                 Intent intent = new Intent(context, DetailViewActivity.class);
                 intent.putExtra("listsStudent", listsStudent);
-                intent.putExtra("position", position);
                 intent.putExtra("mode", mode);
-
                 context.startActivity(intent);
 
             }
@@ -114,24 +113,39 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
 
             String list_cvid = userList.get(i).id.toString();
 
-
             if(list_cvid.equals(cvid)){
 
-               urlString =  "http://1thefull.ml:5000/faceimages/"+userList.get(i).imageName;
-                Log.e("adapter_image", urlString+"");
+                if (!userList.get(i).imageName.equals("null")){
+
+                    urlString =  "http://1thefull.ml:5000/faceimages/"+userList.get(i).imageName;
+                    Glide.with(context).load(urlString).into(vh.iv_pic);
+                    vh.tv_name.setText(lists_student.getName());
+                    vh.iv_pic.setVisibility(View.VISIBLE);
+                    vh.tv_sub.setVisibility(View.VISIBLE);
+
+                }else{
+                    Log.e("adapter_image_null", userList.get(i).imageName+"");
+
+                    vh.tv_name.setText(R.string.error_userPic);
+                    vh.iv_pic.setVisibility(View.GONE);
+                    vh.tv_sub.setVisibility(View.GONE);
+
+                }
+
+
+
+
             }
 
 
         }
 
 
-         if (lists_student != null){
 
-             vh.tv_name.setText(lists_student.getName());
 
-             Glide.with(context).load(urlString).into(vh.iv_pic);
 
-         }
+
+
 
 
 
@@ -194,7 +208,7 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
         CardView cardView;
         CheckBox checkBox;
         CircleImageView iv_pic;
-        TextView tv_name;
+        TextView tv_name, tv_sub;
 
 
         public VH(@NonNull final View itemView) {
@@ -204,6 +218,7 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
             cardView = itemView.findViewById(R.id.cardView_people);
             iv_pic = itemView.findViewById(R.id.iv_pic);
             tv_name = itemView.findViewById(R.id.tv_name);
+            tv_sub = itemView.findViewById(R.id.tv_sub);
 
 
         }
