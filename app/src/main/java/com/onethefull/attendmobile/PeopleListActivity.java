@@ -23,8 +23,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
+import com.onethefull.attendmobile.account.changename.ChangeNMPresenterImpl;
+import com.onethefull.attendmobile.account.changename.ChangeNMView;
 import com.onethefull.attendmobile.adapter.MyAdapter_PeopleList;
 import com.onethefull.attendmobile.api.SharedPrefManager;
 import com.onethefull.attendmobile.api.TinyDB;
@@ -33,11 +36,12 @@ import com.onethefull.attendmobile.getlist.GetListPresenterImpl;
 import com.onethefull.attendmobile.getlist.GetListView;
 import com.onethefull.attendmobile.lists.Lists_Student;
 import com.onethefull.attendmobile.lists.Lists_downInfo;
+import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 
 import java.util.ArrayList;
 
 
-public class PeopleListActivity extends AppCompatActivity implements GetListView {
+public class PeopleListActivity extends AppCompatActivity implements GetListView, ChangeNMView {
 
 
     private static final String TAG = PeopleListActivity.class.getSimpleName();
@@ -51,9 +55,10 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
     private ImageView iv_noinfo;
     private TextView tv_kindergarten;
     private Button btn_close_drawer;
-    private String id;
+    private String id, kindergarten;
     private SharedPrefManager mSharedPrefs;
     private GetListPresenterImpl getListPresenter;
+    private ChangeNMPresenterImpl changeNMPresenter;
     TinyDB tinyDB;
     ArrayList<Object> stp;
     int mode;
@@ -64,12 +69,11 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_people_list);
 
-
-        initView();
         toolbar_Navi();
+        initView();
         setNavigationView();
         setListener();
-//        loadToPhone();
+
 
 
 
@@ -91,6 +95,13 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
         mSharedPrefs = SharedPrefManager.getInstance(getApplicationContext());
         id = mSharedPrefs.getLoginId();
         id = id.replace("\"", "");
+
+        //유치원명 가져오기
+        kindergarten = mSharedPrefs.getKindergarten();
+        kindergarten = kindergarten.replace("\"","");
+        Log.e(TAG, kindergarten+"<------");
+        tv_kindergarten.setText(kindergarten);
+
 
 
 
@@ -119,6 +130,30 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
                 switch (menuItem.getItemId()){
+
+                    case R.id.navigation_changeNM:
+
+                        new LovelyTextInputDialog(PeopleListActivity.this, R.style.EditTextTintTheme)
+
+                                .setTitle(R.string.dialog_change_name)
+                                .setIcon(R.drawable.pen)
+                                .setNegativeButton("취소", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+
+                                    }
+                                })
+                                .setConfirmButton("변경", new LovelyTextInputDialog.OnTextInputConfirmListener() {
+                                    @Override
+                                    public void onTextInputConfirmed(String text) {
+                                        changeNMPresenter = new ChangeNMPresenterImpl(PeopleListActivity.this, getApplicationContext());
+                                        changeNMPresenter.changeNM(id, text);
+
+                                    }
+                                }).show();
+
+                        break;
+
 
                     case R.id.navigation_logout:
                         logout();
@@ -179,6 +214,7 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
 
         View headerview = navigationView.getHeaderView(0);
         btn_close_drawer = headerview.findViewById(R.id.btn_close_drawer);
+        tv_kindergarten = headerview.findViewById(R.id.tv_kindergarten);
 
 
 
@@ -189,7 +225,6 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
         AlertDialogFragment dialogFragment = AlertDialogFragment.newInstance("로그아웃 하시겠습니까?");
         dialogFragment.show(getSupportFragmentManager(),"dialog");
     }//
-
 
 
     @Override
@@ -258,6 +293,19 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
 
     @Override
     public void validation(String msg) {
+
+    }
+
+    @Override
+    public void changeSuccess(String name) {
+
+        tv_kindergarten.setText(name);
+        Toast.makeText(this, R.string.changeNM_done, Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void Error() {
 
     }
 

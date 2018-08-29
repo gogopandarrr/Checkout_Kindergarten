@@ -124,7 +124,7 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
                     vh.tv_sub.setVisibility(View.VISIBLE);
 
                 }else{
-                    Log.e("adapter_image_null", userList.get(i).imageName+"");
+
 
                     vh.tv_name.setText(R.string.error_userPic);
                     vh.iv_pic.setVisibility(View.GONE);

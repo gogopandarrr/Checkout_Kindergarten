@@ -30,13 +30,18 @@ import com.onethefull.attendmobile.deletelist.DeletePresenterImpl;
 import com.bumptech.glide.Glide;
 import com.onethefull.attendmobile.lists.Lists_Student;
 import com.onethefull.attendmobile.lists.Lists_downInfo;
+import com.onethefull.updatelist.UpdateChildrenPresenterImp;
+import com.onethefull.updatelist.UpdateChildrenView;
+import com.onethefull.updatelist.UpdatePresenter;
+import com.onethefull.wonderful_cv_library.CV_Package.CVServiceConnectionManager;
 import com.onethefull.wonderful_cv_library.CV_Package.Identity;
+import com.onethefull.wonderful_cv_library.CV_Package.WonderfulCV;
 
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class DetailViewActivity extends AppCompatActivity implements SetChildrenView, DeleteListView{
+public class DetailViewActivity extends AppCompatActivity implements SetChildrenView, DeleteListView, UpdateChildrenView{
 
     private static final String TAG = DetailViewActivity.class.getSimpleName();
     private Toolbar toolbar;
@@ -49,9 +54,11 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
     private Lists_downInfo listsDownInfo;
     private SetChildrenPresenter childrenPresenter;
     private DeleteListPresenter deleteListPresenter;
+    private UpdatePresenter updatePresenter;
     private SharedPrefManager mSharedPrefs;
     private ArrayList<Object> stp;
     private ArrayList<Identity> userList = new ArrayList<>();
+    WonderfulCV wonderfulCV = new WonderfulCV();
 
     String id, cvid;
     byte[] image;
@@ -102,6 +109,13 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
         childrenPresenter = new SetChildrenPresenterImpl(DetailViewActivity.this, getApplicationContext());
       //삭제 준비
         deleteListPresenter = new DeletePresenterImpl(DetailViewActivity.this, getApplicationContext());
+      //업데이트 준비
+        updatePresenter = new UpdateChildrenPresenterImp(DetailViewActivity.this, getApplicationContext());
+
+     //cv서버 연결
+        wonderfulCV.getFullServerAddress("1thefull.ml", 5000);
+        //토큰 받기
+        wonderfulCV.retrieveTokenFromStorage();
 
 
 
@@ -155,10 +169,21 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
                         String list_cvid = userList.get(i).id.toString();
 
                         if (list_cvid.equals(cvid)) {
+
                             String urlString = "http://1thefull.ml:5000/faceimages/" + userList.get(i).imageName;
                             Glide.with(this).load(urlString).into(iv_profile);
+
+                            //사진 등록안된 유저 보기 모드 진입시 삭제 버튼 보이기
+                            if (userList.get(i).imageName.equals("null")){
+
+                                bt_delete.setVisibility(View.VISIBLE);
+
+                            }
+
+
                         }//if
                     }//for
+
 
 
                     break;
@@ -181,14 +206,35 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
                 String tel = et_tel.getText().toString();
                 String email = et_email.getText().toString();
 
+                switch (mode){
 
-                if (validateForm(name, tel) && image != null){
-                    //원생등록
-                    childrenPresenter.performJoin(id, name, cvid, tel, email);
+                    case 1 :
 
-                }else{
-                    Toast.makeText(DetailViewActivity.this, R.string.error_formFill, Toast.LENGTH_SHORT).show();
+                        if (validateForm(name, tel) && image != null){
+                            //원생등록
+                            childrenPresenter.performJoin(id, name, cvid, tel, email);
+
+                        }else{
+                            Toast.makeText(DetailViewActivity.this, R.string.error_formFill, Toast.LENGTH_SHORT).show();
+                        }
+
+                        break;
+
+                    case 2 : //보기-편집 모드
+
+
+                        updatePresenter.updateChildrenInfo(id, cvid, name, tel, email);
+
+
+                        break;
+
+
+
                 }
+
+
+
+
 
 
                 }
@@ -255,6 +301,13 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
                         deleteListPresenter.deleteList(id, cvid);
 
 
+                        Integer userId = Integer.parseInt(cvid);
+                        Log.e(TAG, cvid+"<----------delete");
+                        Log.e(TAG, wonderfulCV.serverAddress+"<----------serveradresss");
+                        Log.e(TAG, wonderfulCV.token+"<----------token");
+                        CVServiceConnectionManager.deleteUser(wonderfulCV.serverAddress, wonderfulCV.token, userId);
+
+
 
                     }
                 });
@@ -305,6 +358,9 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
 
 
 
+
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -327,9 +383,15 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
         super.onNewIntent(intent);
 
         cvid = intent.getStringExtra("cvid");
-        Log.e(TAG, cvid+"<------------");
         image = intent.getByteArrayExtra("image");
         Glide.with(this).load(image).into(iv_profile);
+
+
+        if (cvid.equals("-1")){
+
+            finish();
+            Toast.makeText(this, R.string.error_cvid, Toast.LENGTH_SHORT).show();
+        }
 
 
     }
@@ -349,6 +411,16 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
     @Override
     public void validation(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void updateSuccess() {
+
+        Toast.makeText(this, R.string.update_info_done, Toast.LENGTH_SHORT).show();
+        Intent intent =  new Intent(DetailViewActivity.this, PeopleListActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
     }
 
     @Override

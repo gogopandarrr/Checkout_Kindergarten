@@ -43,26 +43,31 @@
         android:orientation="vertical">
 
         <ImageView
+            android:rotation="90"
             android:id="@+id/img_pic_01"
             android:layout_width="100dp"
             android:layout_height="100dp" />
 
         <ImageView
+            android:rotation="90"
             android:id="@+id/img_pic_02"
             android:layout_width="100dp"
             android:layout_height="100dp" />
 
         <ImageView
+            android:rotation="90"
             android:id="@+id/img_pic_03"
             android:layout_width="100dp"
             android:layout_height="100dp" />
 
         <ImageView
+            android:rotation="90"
             android:id="@+id/img_pic_04"
             android:layout_width="100dp"
             android:layout_height="100dp" />
 
         <ImageView
+            android:rotation="90"
             android:id="@+id/img_pic_05"
             android:layout_width="100dp"
             android:layout_height="100dp" />

@@ -384,7 +384,7 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
 
 
             createNewUserTask.setUserInfo(wonderfulCV.serverAddress + "/api/user",
-                    name,"김", tel, email, wonderfulCV.token, facePics);
+                    name,"어린이", tel, "temp@1thefull.com", wonderfulCV.token, facePics);
             createNewUserTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
             Log.d(TAG,"cv유저 등록 완료");
@@ -435,7 +435,6 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
 //////////////
 
             intent.putExtra("cvid", addCVid);
-            Log.d(TAG, addCVid+"<------------");
             intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();

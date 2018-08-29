@@ -4,9 +4,9 @@
     <group android:checkableBehavior="single">
 
     <item
-        android:id="@+id/navigation_home"
-        android:icon="@drawable/btn_home"
-        android:title="홈" />
+        android:id="@+id/navigation_changeNM"
+        android:icon="@drawable/pen"
+        android:title="유치원 이름 변경" />
     <item
         android:id="@+id/navigation_attend"
         android:icon="@drawable/btn_book"

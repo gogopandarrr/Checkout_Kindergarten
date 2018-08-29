@@ -15,7 +15,11 @@
     <string name="error_formFill">사진과 필수 정보를 입력해주세요.</string>
     <string name="error_userPic">삭제 후 다시 등록해주세요.</string>
     <string name="error_registration">양식에 맞게 작성해주세요.</string>
+    <string name="error_cvid">오류가 발생했습니다. 다시 등록해주세요.</string>
 
+    <string name="update_info_done">정보를 변경 했습니다.</string>
+    <string name="changeNM_done">유치원 이름을 변경하였습니다.</string>
+    <string name="dialog_change_name">새로운 유치원 이름을 적어주세요.</string>
     <string name="delete_sutudent">원생 정보를 삭제하시겠습니까?</string>
     <string name="ok">OK</string>
     <string name="success_registeration">성공적으로 가입하였습니다.</string>

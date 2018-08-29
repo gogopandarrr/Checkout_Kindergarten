@@ -27,4 +27,8 @@
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     <item name="colorAccent">@color/main_blue</item>
     </style>
+
+    <style name="EditTextTintTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/main_blue</item>
+    </style>
 </resources>
