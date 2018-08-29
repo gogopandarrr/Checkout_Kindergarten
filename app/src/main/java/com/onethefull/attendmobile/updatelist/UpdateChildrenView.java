@@ -1,4 +1,4 @@
-package com.onethefull.updatelist;
+package com.onethefull.attendmobile.updatelist;
 
 public interface UpdateChildrenView {
     void validation(String msg);

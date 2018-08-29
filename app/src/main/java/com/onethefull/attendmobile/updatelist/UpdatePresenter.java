@@ -1,4 +1,4 @@
-package com.onethefull.updatelist;
+package com.onethefull.attendmobile.updatelist;
 
 public interface UpdatePresenter {
 

@@ -2,7 +2,6 @@ package com.onethefull.attendmobile;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -28,11 +27,10 @@ import com.onethefull.attendmobile.deletelist.DeleteListPresenter;
 import com.onethefull.attendmobile.deletelist.DeleteListView;
 import com.onethefull.attendmobile.deletelist.DeletePresenterImpl;
 import com.bumptech.glide.Glide;
-import com.onethefull.attendmobile.lists.Lists_Student;
 import com.onethefull.attendmobile.lists.Lists_downInfo;
-import com.onethefull.updatelist.UpdateChildrenPresenterImp;
-import com.onethefull.updatelist.UpdateChildrenView;
-import com.onethefull.updatelist.UpdatePresenter;
+import com.onethefull.attendmobile.updatelist.UpdateChildrenPresenterImp;
+import com.onethefull.attendmobile.updatelist.UpdateChildrenView;
+import com.onethefull.attendmobile.updatelist.UpdatePresenter;
 import com.onethefull.wonderful_cv_library.CV_Package.CVServiceConnectionManager;
 import com.onethefull.wonderful_cv_library.CV_Package.Identity;
 import com.onethefull.wonderful_cv_library.CV_Package.WonderfulCV;
@@ -302,9 +300,6 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
 
 
                         Integer userId = Integer.parseInt(cvid);
-                        Log.e(TAG, cvid+"<----------delete");
-                        Log.e(TAG, wonderfulCV.serverAddress+"<----------serveradresss");
-                        Log.e(TAG, wonderfulCV.token+"<----------token");
                         CVServiceConnectionManager.deleteUser(wonderfulCV.serverAddress, wonderfulCV.token, userId);
 
 

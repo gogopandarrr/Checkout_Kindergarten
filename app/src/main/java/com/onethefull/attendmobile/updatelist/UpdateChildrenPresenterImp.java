@@ -1,4 +1,4 @@
-package com.onethefull.updatelist;
+package com.onethefull.attendmobile.updatelist;
 
 import android.content.Context;
 import android.util.Log;
