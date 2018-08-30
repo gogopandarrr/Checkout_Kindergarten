@@ -4,7 +4,7 @@
 
     <ImageView
         android:rotation="90"
-        android:src="@drawable/detecting"
+        android:src="@drawable/frame2"
         android:layout_centerInParent="true"
         android:id="@+id/iv_overlay"
         android:layout_width="wrap_content"

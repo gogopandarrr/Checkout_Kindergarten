@@ -2,6 +2,7 @@ package com.onethefull.attendmobile.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +23,8 @@ import com.onethefull.attendmobile.lists.Lists_Student;
 import com.bumptech.glide.Glide;
 import com.onethefull.attendmobile.lists.Lists_downInfo;
 import com.onethefull.wonderful_cv_library.CV_Package.Identity;
+import com.onethefull.wonderful_cv_library.CV_Package.RequestUserImagesAsyncTask;
+import com.onethefull.wonderful_cv_library.CV_Package.WonderfulCV;
 
 import java.util.ArrayList;
 
@@ -31,22 +34,23 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
 
     Context context;
 
-    ArrayList<Lists_downInfo> studentArrayList;
+    ArrayList<Lists_downInfo> downInfoArrayList;
     ArrayList<Lists_downInfo> filtered;
-    ArrayList<Identity> userList = new ArrayList<>();
+    ArrayList<Identity> userList;
     ArrayList<Object> stp;
     Lists_downInfo listsStudent;
-    RecyclerView recyclerView;
     TinyDB tinyDB;
     String urlString;
 
 
 
-    public MyAdapter_PeopleList(Context context, ArrayList<Lists_downInfo> studentArrayList, RecyclerView recyclerView) {
+
+    public MyAdapter_PeopleList(Context context, ArrayList<Lists_downInfo> downInfoArrayList, ArrayList<Identity> userList) {
         this.context = context;
-        this.studentArrayList = studentArrayList;
-        this.recyclerView = recyclerView;
-        this.filtered = studentArrayList;
+        this.downInfoArrayList = downInfoArrayList;
+        this.userList = userList;
+        this.filtered = downInfoArrayList;
+
     }
 
     @NonNull
@@ -64,6 +68,9 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
         final VH holder = new VH(itemView);
 
 
+
+
+        //클릭시 보기 모드
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,7 +79,7 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
                 int mode = 2; // 보기모드
 
 
-                listsStudent = studentArrayList.get(position);
+                listsStudent = downInfoArrayList.get(position);
                 Intent intent = new Intent(context, DetailViewActivity.class);
                 intent.putExtra("listsStudent", listsStudent);
                 intent.putExtra("mode", mode);
@@ -99,14 +106,6 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
 
 
 
-        //유저 리스트 불러오기
-
-        stp = tinyDB.getListObject("userList", Identity.class);
-        userList.clear();
-        for (Object obj : stp){
-            userList.add((Identity) obj);
-        }
-
 
         //유저 리스트 cvid로 이미지 주소 찾기
         for (int i = 0; i < userList.size(); i++){
@@ -132,25 +131,9 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
 
                 }
 
-
-
-
             }
 
-
         }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     }
@@ -171,10 +154,10 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
                 String charString = charSequence.toString();
 
                 if (charString.isEmpty()){
-                    filtered = studentArrayList;
+                    filtered = downInfoArrayList;
                 }else{
                     ArrayList<Lists_downInfo> filteredList = new ArrayList<>();
-                    for (Lists_downInfo listsStudent : studentArrayList){
+                    for (Lists_downInfo listsStudent : downInfoArrayList){
 
                         if (listsStudent.getName().toLowerCase().contains(charString)){
 

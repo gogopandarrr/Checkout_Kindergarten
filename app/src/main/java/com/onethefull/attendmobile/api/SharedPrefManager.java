@@ -61,4 +61,16 @@ public class SharedPrefManager {
     }
 
 
+    public void saveKindergarten(String kindergarten){
+        mEditor.putString("name_kindergarten", kindergarten);
+        mEditor.commit();
+
+    }
+
+    public String getKindergarten(){
+        String kindergarten = "";
+        return mSharedPrefs.getString("name_kindergarten", kindergarten);
+    }
+
 }
+

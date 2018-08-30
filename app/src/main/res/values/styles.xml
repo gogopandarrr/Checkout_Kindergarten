@@ -31,4 +31,17 @@
     <style name="EditTextTintTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@color/main_blue</item>
     </style>
+
+    <style name="softkey_transparent" parent="Theme.AppCompat.NoActionBar">
+        <!--&lt;!&ndash; Action Bar 없애기 (위에 앱 이름이랑 메뉴 나오는거) &ndash;&gt;-->
+        <!--<item name="android:windowActionBar">true</item>-->
+        <!--<item name="android:windowNoTitle">true</item>-->
+        <!--<item name="android:windowFullscreen">false</item>-->
+
+        <!-- Navigation Bar를 투명하게 만들기 -->
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+
 </resources>

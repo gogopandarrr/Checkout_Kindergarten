@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -36,9 +37,14 @@ import com.onethefull.attendmobile.getlist.GetListPresenterImpl;
 import com.onethefull.attendmobile.getlist.GetListView;
 import com.onethefull.attendmobile.lists.Lists_Student;
 import com.onethefull.attendmobile.lists.Lists_downInfo;
+import com.onethefull.wonderful_cv_library.CV_Package.Identity;
+import com.onethefull.wonderful_cv_library.CV_Package.RequestUserImagesAsyncTask;
+import com.onethefull.wonderful_cv_library.CV_Package.WonderfulCV;
 import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class PeopleListActivity extends AppCompatActivity implements GetListView, ChangeNMView {
@@ -52,6 +58,7 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
     private MyAdapter_PeopleList adapter_peopleList;
     private FloatingActionButton fab_add;
     private ArrayList<Lists_downInfo> downInfoArrayList = new ArrayList<>();
+    private ArrayList<Identity> userList = new ArrayList<>();
     private ImageView iv_noinfo;
     private TextView tv_kindergarten;
     private Button btn_close_drawer;
@@ -59,9 +66,12 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
     private SharedPrefManager mSharedPrefs;
     private GetListPresenterImpl getListPresenter;
     private ChangeNMPresenterImpl changeNMPresenter;
+    private Handler handler;
+    private Runnable runnable;
     TinyDB tinyDB;
     ArrayList<Object> stp;
     int mode;
+    WonderfulCV wonderfulCV = new WonderfulCV();
 
 
     @Override
@@ -73,6 +83,7 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
         initView();
         setNavigationView();
         setListener();
+        getListPresenter.getInfo(id);
 
 
 
@@ -85,7 +96,7 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
         fab_add= findViewById(R.id.fab_add);
         iv_noinfo = findViewById(R.id.iv_noinfo);
         peopleList_recycleView= findViewById(R.id.people_recycleView);
-        adapter_peopleList= new MyAdapter_PeopleList(this, downInfoArrayList, peopleList_recycleView);
+        adapter_peopleList= new MyAdapter_PeopleList(this, downInfoArrayList, userList);
         peopleList_recycleView.setAdapter(adapter_peopleList);
         RecyclerView.LayoutManager layoutManager= new LinearLayoutManager(this);
         peopleList_recycleView.setLayoutManager(layoutManager);
@@ -103,16 +114,27 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
         tv_kindergarten.setText(kindergarten);
 
 
-
-
-
         //리스트 가져오기
         getListPresenter = new GetListPresenterImpl(PeopleListActivity.this, getApplicationContext());
-        getListPresenter.getInfo(id);
+
 
 
 
     }//init
+
+
+    private void delayReflesh(){
+
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                adapter_peopleList.notifyDataSetChanged();
+            }
+        };
+
+        handler = new Handler();
+        handler.postDelayed(runnable, 1000);
+    }
 
     private void checkNolist(){
         if (downInfoArrayList.size()>0){
@@ -314,14 +336,51 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
 
         downInfoArrayList.clear();
 
-
         for (int i = 0; i < downInfoArrayList_pre.size(); i++){
             downInfoArrayList.add(downInfoArrayList_pre.get(i));
 
         }
 
+
         checkNolist();
-        adapter_peopleList.notifyDataSetChanged();
+
+        //cv서버 유저리스트 받아오기
+        wonderfulCV.getFullServerAddress("1thefull.ml", 5000);
+        wonderfulCV.initiateServerConnection(getApplicationContext(), "1thefull.ml", 5000,
+                "panda@1thefull.com", "zkfmak85");
+
+
+        RequestUserImagesAsyncTask requestUserImagesAsyncTask = new RequestUserImagesAsyncTask(new RequestUserImagesAsyncTask.AsyncResponse() {
+            @Override
+            public void processFinish(ArrayList<Identity> arrayList) {
+
+                if (arrayList.size() > 0){
+
+                    //유저리스트 내부저장소 저장
+                    stp = new ArrayList<>();
+                    for (Identity a : arrayList){
+                        stp.add(a);
+                    }
+                    tinyDB.putListObject("userList", stp);
+
+                }
+
+
+                userList.clear();
+                for (int i = 0; i < arrayList.size(); i++){
+                    userList.add(arrayList.get(i));
+                }
+            }
+        });
+
+
+        if (wonderfulCV.checkIfServerConnectionInitialized()) {
+            requestUserImagesAsyncTask.setRequestParameters(wonderfulCV.serverAddress +
+                    "/api/users/", wonderfulCV.token, 99999);
+            requestUserImagesAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+
+        delayReflesh();
     }
 
 

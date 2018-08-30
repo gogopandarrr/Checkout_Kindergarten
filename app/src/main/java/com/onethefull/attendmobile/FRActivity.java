@@ -64,6 +64,8 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
     DetectionView mDetectionView;
     @BindView(R.id.btn_take_picture)
     Button mBtnPicture;
+    @BindView((R.id.btn_start_take))
+    Button btn_startFR;
 
     private static final Scalar FACE_RECT_COLOR = new Scalar(0, 255, 0, 255);
     public static final int JAVA_DETECTOR = 0;
@@ -88,6 +90,9 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
     String addCVid;
     int currentCycle = 0;
     Boolean faceDetectionFinished = false;
+    Boolean startFR = false;
+
+
     private ArrayList<Bitmap> facePics = new ArrayList<Bitmap>();
 
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
@@ -182,6 +187,7 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
     public void onViewClick(View view) {
         switch (view.getId()) {
             case R.id.btn_take_picture:
+
                 cvCreateNewUser();
                 break;
 
@@ -196,6 +202,28 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
             case R.id.btn_reShot:
                 finish();
                 startActivity(getIntent());
+                break;
+
+            default:
+                break;
+        }
+
+    }
+
+    @OnClick({R.id.btn_start_take})
+    public void startFR(View view){
+        switch (view.getId()) {
+            case R.id.btn_start_take:
+
+                startFR = true;
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        btn_startFR.setVisibility(View.GONE);
+                    }
+                });
+
                 break;
 
             default:
@@ -236,6 +264,7 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
 
     @Override
     public void onCameraViewStarted(int width, int height) {
+
         mGray = new Mat();
         mRgba = new Mat();
     }
@@ -248,6 +277,8 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
 
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
+
+
         long timestamp = 0;
         if (currentCycle % 1 == 0) {
             mRgba = inputFrame.rgba();
@@ -282,7 +313,7 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
                 ////////////////////////////////////
 
 
-                if (facesArray.length == 1 && (System.currentTimeMillis() - timestamp) > 1000) {
+                if (facesArray.length == 1 && (System.currentTimeMillis() - timestamp) > 1000 && startFR) {
                     try {
                         timestamp = System.currentTimeMillis();
                         if (mRgba.cols() > 0) {
@@ -422,14 +453,14 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
 
 //        bitmap을 바이트로 바꿔서 전송.
         ByteArrayOutputStream bs = new ByteArrayOutputStream();
-        facePics.get(3).compress(Bitmap.CompressFormat.JPEG, 100, bs);
+        facePics.get(0).compress(Bitmap.CompressFormat.JPEG, 100, bs);
         try {
             bs.close();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-            getImagesFromServer();
+
 
             intent.putExtra("image",bs.toByteArray());
 //////////////
@@ -442,58 +473,6 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
 
     }//
 
-    public void getImagesFromServer() {
-
-        RequestUserImagesAsyncTask requestImagesTask = new RequestUserImagesAsyncTask(
-                new RequestUserImagesAsyncTask.AsyncResponse() {
-
-                    @Override
-                    public void processFinish(final ArrayList<Identity> userList) {
-                        if (userList.size() > 0) {
-
-                            stp = new ArrayList<>();
-                            for (Identity a : userList){
-                                stp.add(a);
-                            }
-
-                            tinyDB.putListObject("userList", stp);
-
-//                            Identity user = userList.get(0);
-//                            urlString  =  "http://1thefull.ml:5000/faceimages/"+user.imageName;
-
-
-                            }
-
-
-//                            Identity user1 = userList.get(0);
-//                            Log.d("CV_Info", "User info");
-//                            Log.d("CV_Info", "First name:" + user1.firstName);
-//                            Log.d("CV_Info", "Last  name:" + user1.lastName);
-//                            Log.d("CV_Info", "cv_id:" + user1.id);
-//                            Log.d("CV_Info", "company name:" + user1.companyName);
-//                            Log.d("CV_Info", "full image url: http://1thefull.ml:5000/faceimages/" + user1.imageName);
-//
-//                            textOutput.setText("Retrieved " + userList.size() + "users \n" +
-//                                    "Sample Output: User 1 \n" +
-//                                    "First Name: " + user1.firstName + "\n" +
-//                                    "Last Name: " + user1.lastName + "\n" +
-//                                    "User ID (CV_ID):" + user1.id + "\n" +
-//                                    "Company Name: " + user1.companyName + "\n" +
-//                                    "Image URL:  http://1thefull.ml:5000/faceimages/" + user1.imageName
-//                            );
-
-
-
-                    }
-                });
-
-        if (wonderfulCV.checkIfServerConnectionInitialized()) {
-            requestImagesTask.setRequestParameters(wonderfulCV.serverAddress +
-                    "/api/users/", wonderfulCV.token, 9999);
-            requestImagesTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        }
-
-    }
 
 
     private void setDetectorType(int type) {

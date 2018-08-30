@@ -59,6 +59,8 @@ public class PresenterImpl implements LoginPresenter {
                         Log.d(TAG,"success:: "+ object.toString());
 
 //                        String id = object.getAsJsonObject("data").get("email").toString();
+                        String kindergarten = object.get("kindergarten_nm").toString();
+                        mSharedPrefs.saveKindergarten(kindergarten);
                         Crypto.deleteExistingTokenFromStorage();
                         Log.d("CV_Info", wonderfulCV.serverAddress);
                         if( wonderfulCV.initiateServerConnection(mContext, "1thefull.ml", 5000,

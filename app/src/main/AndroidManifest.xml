@@ -45,7 +45,7 @@
             android:theme="@style/Actionbar" />
         <activity android:name=".DetailViewActivity" />
         <activity android:name=".PhotoActivity" />
-        <activity android:name=".FRActivity" />
+        <activity android:name=".FRActivity"/>
         <activity android:name=".CVServiceRegistration">
 
         </activity>
