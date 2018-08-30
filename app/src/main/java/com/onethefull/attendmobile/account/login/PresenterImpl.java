@@ -26,7 +26,7 @@ public class PresenterImpl implements LoginPresenter {
     private LoginView mLoginView;
     private ApiService service;
     private SharedPrefManager mSharedPrefs;
-    public WonderfulCV wonderfulCV = new WonderfulCV();
+    public WonderfulCV wonderfulCV;
 
     public PresenterImpl(LoginView loginView, Context context) {
         this.mLoginView = loginView;
@@ -57,19 +57,20 @@ public class PresenterImpl implements LoginPresenter {
                     JsonObject object = response.body();
                     if (object != null){
                         Log.d(TAG,"success:: "+ object.toString());
-
-//                        String id = object.getAsJsonObject("data").get("email").toString();
                         String kindergarten = object.get("kindergarten_nm").toString();
                         mSharedPrefs.saveKindergarten(kindergarten);
-                        Crypto.deleteExistingTokenFromStorage();
+
+
                         Log.d("CV_Info", wonderfulCV.serverAddress);
+
                         if( wonderfulCV.initiateServerConnection(mContext, "1thefull.ml", 5000,
                                 id, pwd)) {
-                            Log.d("CV_Info",  wonderfulCV.token);
+                            mSharedPrefs.saveLoginData(id.trim());
+                            mSharedPrefs.saveAuthToken(wonderfulCV.token);
+                            Log.d("CV_Info", wonderfulCV.token+"~~~~token~~~~");
+                            mLoginView.loginSuccess();
                         }
-                        mSharedPrefs.saveLoginData(id.trim());
-                        mSharedPrefs.saveAuthToken(wonderfulCV.token);
-                        mLoginView.loginSuccess();
+
                     }
                 }else {
 

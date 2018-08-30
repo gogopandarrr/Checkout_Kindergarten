@@ -37,6 +37,7 @@ import com.onethefull.attendmobile.getlist.GetListPresenterImpl;
 import com.onethefull.attendmobile.getlist.GetListView;
 import com.onethefull.attendmobile.lists.Lists_Student;
 import com.onethefull.attendmobile.lists.Lists_downInfo;
+import com.onethefull.wonderful_cv_library.CV_Package.Crypto;
 import com.onethefull.wonderful_cv_library.CV_Package.Identity;
 import com.onethefull.wonderful_cv_library.CV_Package.RequestUserImagesAsyncTask;
 import com.onethefull.wonderful_cv_library.CV_Package.WonderfulCV;
@@ -68,6 +69,7 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
     private ChangeNMPresenterImpl changeNMPresenter;
     private Handler handler;
     private Runnable runnable;
+    private SharedPreferences userInfo;
     TinyDB tinyDB;
     ArrayList<Object> stp;
     int mode;
@@ -110,9 +112,7 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
         //유치원명 가져오기
         kindergarten = mSharedPrefs.getKindergarten();
         kindergarten = kindergarten.replace("\"","");
-        Log.e(TAG, kindergarten+"<------");
         tv_kindergarten.setText(kindergarten);
-
 
         //리스트 가져오기
         getListPresenter = new GetListPresenterImpl(PeopleListActivity.this, getApplicationContext());
@@ -344,10 +344,34 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
 
         checkNolist();
 
+
+
         //cv서버 유저리스트 받아오기
+        userInfo = getSharedPreferences("autoUser", MODE_PRIVATE);
+        String loginEmail = userInfo.getString("user_email","");
+        String loginPwd = userInfo.getString("user_pwd","");
+
+
         wonderfulCV.getFullServerAddress("1thefull.ml", 5000);
         wonderfulCV.initiateServerConnection(getApplicationContext(), "1thefull.ml", 5000,
-                "panda@1thefull.com", "zkfmak85");
+                loginEmail, loginPwd);
+
+        Boolean loginSucess = wonderfulCV.initiateServerConnection(this,
+                "1thefull.ml", 5000,
+                loginEmail, loginPwd);
+
+        if (loginSucess) {
+            //Login Success
+
+        } else {
+            //Login Fail
+            Toast.makeText(this, "Login Failed! \nCheck email/password and internet connection", Toast.LENGTH_SHORT).show();
+        }
+
+
+
+
+
 
 
         RequestUserImagesAsyncTask requestUserImagesAsyncTask = new RequestUserImagesAsyncTask(new RequestUserImagesAsyncTask.AsyncResponse() {
@@ -363,18 +387,22 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
                     }
                     tinyDB.putListObject("userList", stp);
 
+
+
+                    userList.clear();
+                    for (int i = 0; i < arrayList.size(); i++){
+                        userList.add(arrayList.get(i));
+                    }
+                }
+
                 }
 
 
-                userList.clear();
-                for (int i = 0; i < arrayList.size(); i++){
-                    userList.add(arrayList.get(i));
-                }
-            }
+
         });
 
 
-        if (wonderfulCV.checkIfServerConnectionInitialized()) {
+        if (wonderfulCV.checkIfServerConnectionInitialized() && wonderfulCV.token != null) {
             requestUserImagesAsyncTask.setRequestParameters(wonderfulCV.serverAddress +
                     "/api/users/", wonderfulCV.token, 99999);
             requestUserImagesAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);

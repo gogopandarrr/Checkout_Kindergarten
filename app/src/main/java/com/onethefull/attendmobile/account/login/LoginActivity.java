@@ -1,7 +1,11 @@
 package com.onethefull.attendmobile.account.login;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -106,7 +110,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
             @Override
             public void onClick(View view) {
                 autoLoginCheck(); //자동로그인확인
-                login();
+                permission();
 
             }
         });
@@ -117,6 +121,8 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         bt_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
 
                 Intent intent= new Intent(LoginActivity.this, RegisterActivity.class);
                 int register = 1;
@@ -137,6 +143,24 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         });
 
     }//listener
+
+
+
+    private void permission(){
+
+        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.M) {
+            int permission = checkSelfPermission(Manifest.permission.CAMERA);
+            if (permission == PackageManager.PERMISSION_DENIED) {
+                String[] arr = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                requestPermissions(arr, 10);
+            }else{
+                login();
+            }
+        }
+
+
+        }//
+
 
 
     private void login(){
@@ -187,6 +211,21 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
     }
 
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+
+            case 10:
+                if (grantResults[0] == PackageManager.PERMISSION_DENIED || grantResults[1] == PackageManager.PERMISSION_DENIED) {
+
+                    Toast.makeText(this, R.string.error_permission, Toast.LENGTH_SHORT).show();
+                } else {
+                    login();
+                }
+        }
+    }//
 
 
 }//end

@@ -381,11 +381,20 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
         image = intent.getByteArrayExtra("image");
         Glide.with(this).load(image).into(iv_profile);
 
-
+        //cvid를 못받으면 종료
         if (cvid.equals("-1")){
 
             finish();
             Toast.makeText(this, R.string.error_cvid, Toast.LENGTH_SHORT).show();
+        }
+
+        //이미지를 받아오면 버튼 투명하게
+        if (image != null){
+
+//            bt_takePhoto.setVisibility(View.INVISIBLE);
+            bt_takePhoto.setAlpha((float) 0.1);
+        }else{
+            bt_takePhoto.setAlpha((float) 1.0);
         }
 
 

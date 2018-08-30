@@ -119,10 +119,7 @@ public class RegisterActivity extends AppCompatActivity implements JoinView{
 
                             mJoinPresenter.performJoin(email.trim(), password.trim(), kindergarten.trim());
                             mJoinPresenter.performJoinCVservice(email.trim(), password.trim(), kindergarten.trim());
-//                            Toast.makeText(RegisterActivity.this, getResources().getText(R.string.success_registeration), Toast.LENGTH_SHORT).show();
-//                            Intent intent =  new Intent(RegisterActivity.this, LoginActivity.class);
-//                            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                            startActivity(intent);
+
                         }
                         else{
 
@@ -132,7 +129,7 @@ public class RegisterActivity extends AppCompatActivity implements JoinView{
                        break;
 
 
-                   case 2:
+                   case 2: //비밀번호 찾기 모드
 
                        if(checkEmail(email_find)){
                            Toast.makeText(RegisterActivity.this, getResources().getText(R.string.success_find_password), Toast.LENGTH_SHORT).show();

@@ -87,7 +87,6 @@ public class JoinPresenterImpl implements JoinPresenter{
                     public void processFinish(Boolean success) {
                         if (success) {
                             Log.d("CV_Info", "New Account Creation successful");
-                            CharSequence text = "Account Created";
 
                         } else {
                             Log.d("CV_Info", "New Account Creation failed");
@@ -100,7 +99,6 @@ public class JoinPresenterImpl implements JoinPresenter{
         if (wonderfulCV.checkIfServerConnectionInitialized()) {
             registerNewAccountTask.setNewUserInfo(wonderfulCV.serverAddress + "/api/company",
                     id, name, pwd);
-
             registerNewAccountTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
 

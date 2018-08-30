@@ -3,6 +3,7 @@ package com.onethefull.attendmobile;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -62,10 +63,13 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
     @Nullable
     @BindView(R.id.activity_surface_view)
     DetectionView mDetectionView;
-    @BindView(R.id.btn_take_picture)
-    Button mBtnPicture;
+    @BindView(R.id.btn_finish)
+    ImageView btn_finish;
     @BindView((R.id.btn_start_take))
     Button btn_startFR;
+    @BindView((R.id.btn_back))
+    Button btn_back;
+
 
     private static final Scalar FACE_RECT_COLOR = new Scalar(0, 255, 0, 255);
     public static final int JAVA_DETECTOR = 0;
@@ -82,9 +86,7 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
     private Bitmap bmp;
     private String name, tel, email;
     private ImageView[] iv = new ImageView[5];
-    private TinyDB tinyDB;
-    private ArrayList<Object> stp;
-    String urlString;
+    private SharedPreferences userInfo;
     View viewOverlay;
     int mode;
     String addCVid;
@@ -145,7 +147,7 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fr);
         ButterKnife.bind(this);
-        tinyDB = new TinyDB(this);
+
 
         modeCheck();
         getDatas();
@@ -183,10 +185,10 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
 
     }
 
-    @OnClick({R.id.btn_take_picture})
+    @OnClick({R.id.btn_finish})
     public void onViewClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_take_picture:
+            case R.id.btn_finish:
 
                 cvCreateNewUser();
                 break;
@@ -227,6 +229,22 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
                 break;
 
             default:
+                break;
+        }
+
+    }
+
+    @OnClick({R.id.btn_back})
+    public void finishCamera(View view){
+        switch (view.getId()) {
+            case R.id.btn_back:
+
+                onBackPressed();
+
+                break;
+
+            default:
+
                 break;
         }
 
@@ -341,7 +359,7 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
                                     public void run() {
 
                                         viewOverlay.setVisibility(View.INVISIBLE);
-                                        mBtnPicture.setVisibility(View.VISIBLE);
+                                        btn_finish.setVisibility(View.VISIBLE);
                                     }
                                 });
 
@@ -371,15 +389,18 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
 
 
 
-    // TODO: 2018. 8. 23.  
+
     private void cvCreateNewUser() {
         wonderfulCV = new WonderfulCV();
 
+        userInfo = getSharedPreferences("autoUser", MODE_PRIVATE);
+        String loginEmail = userInfo.getString("user_email","");
+        String loginPwd = userInfo.getString("user_pwd","");
 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mBtnPicture.setVisibility(View.GONE);
+                btn_finish.setVisibility(View.GONE);
             }
         });
 
@@ -387,7 +408,7 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
         Toast.makeText(this, "등록 중 입니다. 잠시만 기다려주세요.", Toast.LENGTH_LONG).show();
         Crypto.deleteExistingTokenFromStorage();
         wonderfulCV.initiateServerConnection(getApplicationContext(), "1thefull.ml", 5000,
-                "panda@1thefull.com", "zkfmak85");
+                loginEmail, loginPwd);
 
 
 
