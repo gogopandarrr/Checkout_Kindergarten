@@ -1,79 +1,49 @@
 package com.onethefull.attendmobile;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Handler;
-import android.provider.ContactsContract;
+
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-
 import com.onethefull.attendmobile.account.changename.ChangeNMPresenterImpl;
 import com.onethefull.attendmobile.account.changename.ChangeNMView;
-import com.onethefull.attendmobile.adapter.MyAdapter_PeopleList;
 import com.onethefull.attendmobile.api.SharedPrefManager;
-import com.onethefull.attendmobile.api.TinyDB;
 import com.onethefull.attendmobile.fragment.AlertDialogFragment;
-import com.onethefull.attendmobile.getlist.GetListPresenterImpl;
-import com.onethefull.attendmobile.getlist.GetListView;
-import com.onethefull.attendmobile.lists.Lists_Student;
-import com.onethefull.attendmobile.lists.Lists_downInfo;
-import com.onethefull.wonderful_cv_library.CV_Package.Crypto;
-import com.onethefull.wonderful_cv_library.CV_Package.Identity;
-import com.onethefull.wonderful_cv_library.CV_Package.RequestUserImagesAsyncTask;
-import com.onethefull.wonderful_cv_library.CV_Package.WonderfulCV;
+import com.onethefull.attendmobile.fragment.AttendanceFragment;
+import com.onethefull.attendmobile.fragment.ChildrenListFragment;
 import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 
-import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
-public class PeopleListActivity extends AppCompatActivity implements GetListView, ChangeNMView {
+public class PeopleListActivity extends AppCompatActivity implements ChangeNMView {
 
 
     private static final String TAG = PeopleListActivity.class.getSimpleName();
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private ActionBarDrawerToggle drawerToggle;
-    private RecyclerView peopleList_recycleView;
-    private MyAdapter_PeopleList adapter_peopleList;
-    private FloatingActionButton fab_add;
-    private ArrayList<Lists_downInfo> downInfoArrayList = new ArrayList<>();
-    private ArrayList<Identity> userList = new ArrayList<>();
-    private ImageView iv_noinfo;
     private TextView tv_kindergarten;
     private Button btn_close_drawer;
     private String id, kindergarten;
     private SharedPrefManager mSharedPrefs;
-    private GetListPresenterImpl getListPresenter;
     private ChangeNMPresenterImpl changeNMPresenter;
-    private Handler handler;
-    private Runnable runnable;
-    private SharedPreferences userInfo;
-    TinyDB tinyDB;
-    ArrayList<Object> stp;
-    int mode;
-    WonderfulCV wonderfulCV = new WonderfulCV();
+    private AttendanceFragment attendanceFragment;
+    private ChildrenListFragment childrenListFragment;
+
+
 
 
     @Override
@@ -84,8 +54,7 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
         toolbar_Navi();
         initView();
         setNavigationView();
-        setListener();
-        getListPresenter.getInfo(id);
+        childrenListFragment();
 
 
 
@@ -93,15 +62,6 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
     }//oc
 
     private void initView(){
-
-        tinyDB = new TinyDB(this);
-        fab_add= findViewById(R.id.fab_add);
-        iv_noinfo = findViewById(R.id.iv_noinfo);
-        peopleList_recycleView= findViewById(R.id.people_recycleView);
-        adapter_peopleList= new MyAdapter_PeopleList(this, downInfoArrayList, userList);
-        peopleList_recycleView.setAdapter(adapter_peopleList);
-        RecyclerView.LayoutManager layoutManager= new LinearLayoutManager(this);
-        peopleList_recycleView.setLayoutManager(layoutManager);
 
 
         //저장된 id 가져오기
@@ -114,35 +74,34 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
         kindergarten = kindergarten.replace("\"","");
         tv_kindergarten.setText(kindergarten);
 
-        //리스트 가져오기
-        getListPresenter = new GetListPresenterImpl(PeopleListActivity.this, getApplicationContext());
+
 
 
 
 
     }//init
 
+    private void attendFrangment(){
 
-    private void delayReflesh(){
-
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                adapter_peopleList.notifyDataSetChanged();
-            }
-        };
-
-        handler = new Handler();
-        handler.postDelayed(runnable, 1000);
-    }
-
-    private void checkNolist(){
-        if (downInfoArrayList.size()>0){
-            iv_noinfo.setVisibility(View.GONE);
-        }else iv_noinfo.setVisibility(View.VISIBLE);
+        //프래그먼트 생성
+        attendanceFragment = new AttendanceFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(R.id.container_content, attendanceFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
 
     }//
 
+
+    private void childrenListFragment(){
+        childrenListFragment = new ChildrenListFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(R.id.container_content, childrenListFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+
+
+    }//
 
 
     private void setNavigationView(){
@@ -152,6 +111,13 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
                 switch (menuItem.getItemId()){
+
+                    case R.id.navigation_home:
+
+                        childrenListFragment();
+
+                        break;
+
 
                     case R.id.navigation_changeNM:
 
@@ -180,6 +146,13 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
                     case R.id.navigation_logout:
                         logout();
                         break;
+
+
+
+                    case R.id.navigation_attend:
+                        attendFrangment();
+
+
                 }
 
                 drawerLayout.closeDrawer(navigationView);
@@ -201,25 +174,6 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
     }//setNavi
 
 
-
-
-
-    private void setListener(){
-        fab_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-                Intent intent= new Intent(PeopleListActivity.this, DetailViewActivity.class);
-                int mode = 1; //등록 모드
-                intent.putExtra("mode", mode);
-                startActivityForResult(intent, 10);
-
-
-            }
-        });
-
-    }//listener
 
 
     private void toolbar_Navi(){
@@ -271,7 +225,7 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
             @Override
             public boolean onQueryTextChange(String s) {
 
-                adapter_peopleList.getFilter().filter(s);
+//                adapter_peopleList.getFilter().filter(s);
                 return true;
             }
         });
@@ -289,7 +243,6 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
     @Override
     protected void onResume() {
         super.onResume();
-        getListPresenter.getInfo(id);
 
     }
 
@@ -298,17 +251,17 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
-        mode = intent.getIntExtra("mode",-1);
-        getListPresenter.getInfo(id);
-
-
     }
 
 
     @Override
     public void onBackPressed() {
 
-        super.onBackPressed();
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(navigationView);
+        }else{
+            logout();
+        }
 
     }
 
@@ -331,112 +284,7 @@ public class PeopleListActivity extends AppCompatActivity implements GetListView
 
     }
 
-    @Override
-    public void success(ArrayList<Lists_downInfo> downInfoArrayList_pre) {
-
-        downInfoArrayList.clear();
-
-        for (int i = 0; i < downInfoArrayList_pre.size(); i++){
-            downInfoArrayList.add(downInfoArrayList_pre.get(i));
-
-        }
-
-
-        checkNolist();
 
 
 
-        //cv서버 유저리스트 받아오기
-        userInfo = getSharedPreferences("autoUser", MODE_PRIVATE);
-        String loginEmail = userInfo.getString("user_email","");
-        String loginPwd = userInfo.getString("user_pwd","");
-
-
-        wonderfulCV.getFullServerAddress("1thefull.ml", 5000);
-        wonderfulCV.initiateServerConnection(getApplicationContext(), "1thefull.ml", 5000,
-                loginEmail, loginPwd);
-
-        Boolean loginSucess = wonderfulCV.initiateServerConnection(this,
-                "1thefull.ml", 5000,
-                loginEmail, loginPwd);
-
-        if (loginSucess) {
-            //Login Success
-
-        } else {
-            //Login Fail
-            Toast.makeText(this, "Login Failed! \nCheck email/password and internet connection", Toast.LENGTH_SHORT).show();
-        }
-
-
-
-
-
-
-
-        RequestUserImagesAsyncTask requestUserImagesAsyncTask = new RequestUserImagesAsyncTask(new RequestUserImagesAsyncTask.AsyncResponse() {
-            @Override
-            public void processFinish(ArrayList<Identity> arrayList) {
-
-                if (arrayList.size() > 0){
-
-                    //유저리스트 내부저장소 저장
-                    stp = new ArrayList<>();
-                    for (Identity a : arrayList){
-                        stp.add(a);
-                    }
-                    tinyDB.putListObject("userList", stp);
-
-
-
-                    userList.clear();
-                    for (int i = 0; i < arrayList.size(); i++){
-                        userList.add(arrayList.get(i));
-                    }
-                }
-
-                }
-
-
-
-        });
-
-
-        if (wonderfulCV.checkIfServerConnectionInitialized() && wonderfulCV.token != null) {
-            requestUserImagesAsyncTask.setRequestParameters(wonderfulCV.serverAddress +
-                    "/api/users/", wonderfulCV.token, 99999);
-            requestUserImagesAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        }
-
-        delayReflesh();
-    }
-
-
-    @Override
-    public void error() {
-
-    }
-
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-
-        switch (requestCode){
-
-
-            case 10:
-                if(resultCode==RESULT_OK) {
-
-                    mode = data.getIntExtra("mode",-1);
-                    getListPresenter.getInfo(id);
-
-                }
-
-                break;
-
-        }
-
-        super.onActivityResult(requestCode, resultCode, data);
-    }
 }//class

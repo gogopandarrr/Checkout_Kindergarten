@@ -3,14 +3,23 @@
 
     <group android:checkableBehavior="single">
 
-    <item
-        android:id="@+id/navigation_changeNM"
-        android:icon="@drawable/pen"
-        android:title="유치원 이름 변경" />
+
+        <item
+            android:id="@+id/navigation_home"
+            android:icon="@drawable/btn_home"
+            android:title="원생 리스트" />
+
+
     <item
         android:id="@+id/navigation_attend"
         android:icon="@drawable/btn_book"
         android:title="출석부" />
+
+        <item
+            android:id="@+id/navigation_changeNM"
+            android:icon="@drawable/pen"
+            android:title="유치원 이름 변경" />
+
     <item
         android:id="@+id/navigation_logout"
         android:icon="@drawable/btn_logout"

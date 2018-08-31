@@ -39,6 +39,11 @@ public interface ApiService {
     @POST("mod_children")
     Call<JsonObject> updateChildrenResult (@Body String body);
 
+
+    @Headers("Content-Type: application/json")
+    @POST("get_attendance_list")
+    Call<JsonObject> getAttenanceListResult (@Body String body);
+
     @Headers("Content-Type: application/json")
     @HTTP(method = "DELETE", path = "/delete_children", hasBody = true)
     Call<JsonObject> deleteListResult(@Body String body);

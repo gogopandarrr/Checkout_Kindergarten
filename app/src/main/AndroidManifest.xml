@@ -45,9 +45,6 @@
             android:theme="@style/Actionbar" />
         <activity android:name=".DetailViewActivity" />
         <activity android:name=".FRActivity" android:theme="@style/softkey_transparent" android:screenOrientation="landscape"/>
-        <activity android:name=".CVServiceRegistration">
-
-        </activity>
     </application>
 
 </manifest>

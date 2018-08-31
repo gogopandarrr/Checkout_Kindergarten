@@ -54,12 +54,9 @@ public class GetListPresenterImpl implements GetListPresenter {
                     if (object != null) {
                         Log.d(TAG,"success:: " + object.toString());
 
-
-
-
                         JsonArray datas = object.getAsJsonArray("data");
 
-                        Log.e("datas_size", datas.size()+"sss");
+
 
                         for (int i = 0 ; i < datas.size(); i++){
 
@@ -86,7 +83,7 @@ public class GetListPresenterImpl implements GetListPresenter {
                             downInfoArrayList.add(new Lists_downInfo(name, tel_parent, email_parent, date_registration, cvid));
 
                         }
-                        Log.e("size_server", downInfoArrayList.size()+"");
+
                         getListView.success(downInfoArrayList);
                         downInfoArrayList.clear();
                     }
