@@ -2,8 +2,9 @@ package com.onethefull.attendmobile.lists;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
-public class Lists_Attendance implements Parcelable {
+public class Lists_Attendance implements Parcelable, Comparable<Lists_Attendance> {
 
     String name, inTime, outTime, cvid;
 
@@ -77,5 +78,11 @@ public class Lists_Attendance implements Parcelable {
         parcel.writeString(inTime);
         parcel.writeString(outTime);
         parcel.writeString(cvid);
+    }
+
+
+    @Override
+    public int compareTo(@NonNull Lists_Attendance lists_attendance) {
+        return getName().toString().compareTo(lists_attendance.getName().toString());
     }
 }//

@@ -41,7 +41,7 @@
         <activity android:name=".account.login.LoginActivity"></activity>
         <activity android:name=".account.join.RegisterActivity" />
         <activity
-            android:name=".PeopleListActivity"
+            android:name=".MainActivity"
             android:theme="@style/Actionbar" />
         <activity android:name=".DetailViewActivity" />
         <activity android:name=".FRActivity" android:theme="@style/softkey_transparent" android:screenOrientation="landscape"/>

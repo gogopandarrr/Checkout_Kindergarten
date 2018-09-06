@@ -69,6 +69,7 @@ public class GetListPresenterImpl implements GetListPresenter {
                             email_parent = email_parent.replace("\"", "");
 
 
+
                             String tel_parent = studentInfo.get("PARENT_TEL").toString();
                             tel_parent = tel_parent.replace("\"", "");
 

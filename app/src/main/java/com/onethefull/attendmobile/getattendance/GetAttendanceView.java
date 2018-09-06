@@ -8,7 +8,7 @@ public interface GetAttendanceView {
 
     void validation(String msg);
     void error();
-    void success(ArrayList<Lists_Attendance> attendanceArrayList);
+    void success(String date, ArrayList<Lists_Attendance> attendanceArrayList);
 
 
 }

@@ -405,13 +405,12 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
         });
 
 
-        Toast.makeText(this, "등록 중 입니다. 잠시만 기다려주세요.", Toast.LENGTH_LONG).show();
         Crypto.deleteExistingTokenFromStorage();
         wonderfulCV.initiateServerConnection(getApplicationContext(), "1thefull.ml", 5000,
                 loginEmail, loginPwd);
 
 
-
+        Toast.makeText(this, "등록 중 입니다. 잠시만 기다려주세요.", Toast.LENGTH_LONG).show();
         Log.d(TAG, "Registering new user with face");
         CreateNewUserAsyncTask createNewUserTask = new CreateNewUserAsyncTask(
                 new CreateNewUserAsyncTask.AsyncResponse() {
@@ -470,11 +469,13 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
 
     private void finishCamera(){
 
+
+
         Intent intent = new Intent(FRActivity.this, DetailViewActivity.class);
 
 //        bitmap을 바이트로 바꿔서 전송.
         ByteArrayOutputStream bs = new ByteArrayOutputStream();
-        facePics.get(0).compress(Bitmap.CompressFormat.JPEG, 100, bs);
+        facePics.get(0).compress(Bitmap.CompressFormat.JPEG, 75, bs);
         try {
             bs.close();
 

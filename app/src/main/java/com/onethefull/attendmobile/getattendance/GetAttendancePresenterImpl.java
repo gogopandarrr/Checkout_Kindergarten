@@ -26,6 +26,7 @@ public class GetAttendancePresenterImpl implements GetAttendancePresenter {
     private ApiService service;
     private GetAttendanceView attendanceView;
     private ArrayList<Lists_Attendance> attendanceArrayList = new ArrayList<>();
+    private String date_copy;
 
     public GetAttendancePresenterImpl(Context context, GetAttendanceView attendanceView) {
         this.context = context;
@@ -40,6 +41,8 @@ public class GetAttendancePresenterImpl implements GetAttendancePresenter {
             obj.put("USER_EMAIL", id);
             obj.put("SELECT_DATE", date);
 
+            date_copy = date;
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -51,7 +54,7 @@ public class GetAttendancePresenterImpl implements GetAttendancePresenter {
                     JsonObject object = response.body();
                     if (object != null){
 
-                        JsonArray datas = object.getAsJsonArray("data");
+                        JsonArray datas = object.getAsJsonArray("AttendanceList");
 
                         for (int i = 0; i < datas.size(); i++){
                             JsonObject attendanceInfo = (JsonObject) datas.get(i);
@@ -66,7 +69,7 @@ public class GetAttendancePresenterImpl implements GetAttendancePresenter {
 
                         }
 
-                        attendanceView.success(attendanceArrayList);
+                        attendanceView.success(date_copy, attendanceArrayList);
                         attendanceArrayList.clear();
 
                     }else{

@@ -16,7 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.onethefull.attendmobile.PeopleListActivity;
+import com.onethefull.attendmobile.MainActivity;
 import com.onethefull.attendmobile.R;
 import com.onethefull.attendmobile.account.join.RegisterActivity;
 
@@ -193,7 +193,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     @Override
     public void loginSuccess() {
         Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(getApplicationContext(), PeopleListActivity.class);
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
 

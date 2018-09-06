@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -421,7 +420,7 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
     public void updateSuccess() {
 
         Toast.makeText(this, R.string.update_info_done, Toast.LENGTH_SHORT).show();
-        Intent intent =  new Intent(DetailViewActivity.this, PeopleListActivity.class);
+        Intent intent =  new Intent(DetailViewActivity.this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
@@ -432,7 +431,7 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
 
 
         Toast.makeText(this, "등록 완료", Toast.LENGTH_SHORT).show();
-        Intent intent =  new Intent(DetailViewActivity.this, PeopleListActivity.class);
+        Intent intent =  new Intent(DetailViewActivity.this, MainActivity.class);
 
         mode = 1;
         intent.putExtra("mode", mode);
@@ -461,7 +460,7 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
     public void deleteSuccess() {
 
         Toast.makeText(this, "삭제 성공", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(DetailViewActivity.this, PeopleListActivity.class);
+        Intent intent = new Intent(DetailViewActivity.this, MainActivity.class);
         mode = 3;
         intent.putExtra("mode", 3);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);

@@ -25,7 +25,7 @@
 
     <Button
         android:onClick="reShot"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="60dp"
         android:layout_marginBottom="14dp"
         android:id="@+id/btn_reShot"
         android:layout_alignParentEnd="true"
@@ -38,7 +38,7 @@
 
     <Button
         android:onClick="finishCamera"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="60dp"
         android:layout_marginBottom="14dp"
         android:id="@+id/btn_back"
         android:layout_alignParentBottom="true"

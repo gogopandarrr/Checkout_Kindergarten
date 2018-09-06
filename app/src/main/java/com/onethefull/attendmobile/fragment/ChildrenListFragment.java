@@ -11,6 +11,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.onethefull.attendmobile.api.TinyDB;
 import com.onethefull.attendmobile.getlist.GetListPresenterImpl;
 import com.onethefull.attendmobile.getlist.GetListView;
 import com.onethefull.attendmobile.lists.Lists_downInfo;
+import com.onethefull.wonderful_cv_library.CV_Package.Crypto;
 import com.onethefull.wonderful_cv_library.CV_Package.Identity;
 import com.onethefull.wonderful_cv_library.CV_Package.RequestUserImagesAsyncTask;
 import com.onethefull.wonderful_cv_library.CV_Package.WonderfulCV;
@@ -45,6 +47,7 @@ public class ChildrenListFragment extends Fragment implements GetListView{
     private GetListPresenterImpl getListPresenter;
     private ArrayList<Object> stp;
     private String loginEmail, loginPwd;
+    private int count = 0;
     SharedPreferences userInfo;
     TinyDB tinyDB;
     WonderfulCV wonderfulCV = new WonderfulCV();
@@ -84,18 +87,36 @@ public class ChildrenListFragment extends Fragment implements GetListView{
     }//
 
 
+    public void searchFilter(String s){
+        adapter_peopleList.getFilter().filter(s);
+    }//
 
     private void delayRefresh(){
+
+        handler = new Handler();
 
         runnable = new Runnable() {
             @Override
             public void run() {
                 adapter_peopleList.notifyDataSetChanged();
+                handler.postDelayed(runnable,1000);
+                count++;
+
+                if(count == 5){
+                    handler.removeCallbacksAndMessages(null);
+                    count = 0;
+                }
+
             }
         };
 
-        handler = new Handler();
-        handler.postDelayed(runnable, 1000);
+        handler.post(runnable);
+
+
+
+
+
+
     }//
 
 
@@ -139,8 +160,10 @@ public class ChildrenListFragment extends Fragment implements GetListView{
             downInfoArrayList.add(downInfoArrayList_pre.get(i));
         }
 
+                checkNolist();
 
-        checkNolist();
+
+        Crypto.deleteExistingTokenFromStorage();
 
         //cv서버 유저리스트 받아오기
         wonderfulCV.getFullServerAddress("1thefull.ml", 5000);
@@ -169,10 +192,12 @@ public class ChildrenListFragment extends Fragment implements GetListView{
             @Override
             public void processFinish(ArrayList<Identity> arrayList) {
 
+
                 if (arrayList.size() > 0){
 
                     //유저리스트 내부저장소 저장
                     stp = new ArrayList<>();
+
                     for (Identity a : arrayList){
                         stp.add(a);
                     }
@@ -216,8 +241,18 @@ public class ChildrenListFragment extends Fragment implements GetListView{
         getListPresenter.getInfo(loginEmail);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        count = 0;
+        handler.removeCallbacksAndMessages(null);
 
+    }
 
-
-
+    @Override
+    public void onStop() {
+        super.onStop();
+        count = 0;
+        handler.removeCallbacksAndMessages(null);
+    }
 }//class

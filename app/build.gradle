@@ -84,6 +84,10 @@ dependencies {
     implementation 'com.yarolegovich:lovely-dialog:1.1.0'
     implementation 'com.otaliastudios:cameraview:1.5.1'
     implementation 'com.android.support:exifinterface:27.1.1'
-    implementation 'com.kelin.calendarlistview:library:1.0.1'
+    implementation 'com.github.sundeepk:compact-calendar-view:3.0.0'
     implementation project(':openCVLibrary300')
+
+    implementation 'com.evrencoskun.library:tableview:0.8.8'
+
+
 }

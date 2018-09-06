@@ -5,7 +5,7 @@
     android:id="@+id/layout_drawable"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.onethefull.attendmobile.PeopleListActivity">
+    tools:context="com.onethefull.attendmobile.MainActivity">
 
    <LinearLayout
        android:orientation="vertical"
@@ -34,10 +34,10 @@
                android:background="@drawable/toolbar_dropshadow"/>
 
 
-           <RelativeLayout
+           <FrameLayout
                android:id="@+id/container_content"
                android:layout_width="match_parent"
-               android:layout_height="match_parent"></RelativeLayout>
+               android:layout_height="match_parent"></FrameLayout>
 
        </FrameLayout>
 

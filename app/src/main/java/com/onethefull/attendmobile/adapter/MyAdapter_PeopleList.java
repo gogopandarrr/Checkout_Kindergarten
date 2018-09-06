@@ -79,11 +79,15 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
                 int mode = 2; // 보기모드
 
 
-                listsStudent = downInfoArrayList.get(position);
-                Intent intent = new Intent(context, DetailViewActivity.class);
-                intent.putExtra("listsStudent", listsStudent);
-                intent.putExtra("mode", mode);
-                context.startActivity(intent);
+
+                if (position >= 0){
+                    listsStudent = downInfoArrayList.get(position);
+                    Intent intent = new Intent(context, DetailViewActivity.class);
+                    intent.putExtra("listsStudent", listsStudent);
+                    intent.putExtra("mode", mode);
+                    context.startActivity(intent);
+                }
+
 
             }
         });
@@ -117,10 +121,13 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
                 if (!userList.get(i).imageName.equals("null")){
 
                     urlString =  "http://1thefull.ml:5000/faceimages/"+userList.get(i).imageName;
+
+                    Log.e("aaaa",urlString+"");
                     Glide.with(context).load(urlString).into(vh.iv_pic);
                     vh.tv_name.setText(lists_student.getName());
                     vh.iv_pic.setVisibility(View.VISIBLE);
                     vh.tv_sub.setVisibility(View.VISIBLE);
+                    vh.tv_sub.setText("어린이");
 
                 }else{
 

@@ -11,7 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,10 +27,10 @@ import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 
 
 
-public class PeopleListActivity extends AppCompatActivity implements ChangeNMView {
+public class MainActivity extends AppCompatActivity implements ChangeNMView {
 
 
-    private static final String TAG = PeopleListActivity.class.getSimpleName();
+    private static final String TAG = MainActivity.class.getSimpleName();
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private ActionBarDrawerToggle drawerToggle;
@@ -49,7 +48,7 @@ public class PeopleListActivity extends AppCompatActivity implements ChangeNMVie
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_people_list);
+        setContentView(R.layout.activity_main);
 
         toolbar_Navi();
         initView();
@@ -86,8 +85,7 @@ public class PeopleListActivity extends AppCompatActivity implements ChangeNMVie
         //프래그먼트 생성
         attendanceFragment = new AttendanceFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.container_content, attendanceFragment);
-        transaction.addToBackStack(null);
+        transaction.replace(R.id.container_content, attendanceFragment);
         transaction.commit();
 
     }//
@@ -96,8 +94,7 @@ public class PeopleListActivity extends AppCompatActivity implements ChangeNMVie
     private void childrenListFragment(){
         childrenListFragment = new ChildrenListFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.container_content, childrenListFragment);
-        transaction.addToBackStack(null);
+        transaction.replace(R.id.container_content, childrenListFragment);
         transaction.commit();
 
 
@@ -121,7 +118,7 @@ public class PeopleListActivity extends AppCompatActivity implements ChangeNMVie
 
                     case R.id.navigation_changeNM:
 
-                        new LovelyTextInputDialog(PeopleListActivity.this, R.style.EditTextTintTheme)
+                        new LovelyTextInputDialog(MainActivity.this, R.style.EditTextTintTheme)
 
                                 .setTitle(R.string.dialog_change_name)
                                 .setIcon(R.drawable.pen)
@@ -134,7 +131,7 @@ public class PeopleListActivity extends AppCompatActivity implements ChangeNMVie
                                 .setConfirmButton("변경", new LovelyTextInputDialog.OnTextInputConfirmListener() {
                                     @Override
                                     public void onTextInputConfirmed(String text) {
-                                        changeNMPresenter = new ChangeNMPresenterImpl(PeopleListActivity.this, getApplicationContext());
+                                        changeNMPresenter = new ChangeNMPresenterImpl(MainActivity.this, getApplicationContext());
                                         changeNMPresenter.changeNM(id, text);
 
                                     }
@@ -225,7 +222,9 @@ public class PeopleListActivity extends AppCompatActivity implements ChangeNMVie
             @Override
             public boolean onQueryTextChange(String s) {
 
-//                adapter_peopleList.getFilter().filter(s);
+
+                ChildrenListFragment childrenListFragment = (ChildrenListFragment) getSupportFragmentManager().findFragmentById(R.id.container_content);
+                childrenListFragment.searchFilter(s);
                 return true;
             }
         });
