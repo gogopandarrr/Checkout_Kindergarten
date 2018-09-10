@@ -65,6 +65,7 @@ public class MyAdapter_TableView extends AbstractTableAdapter<ColumnHeader, RowH
         MyCellViewHolder viewHolder = (MyCellViewHolder) holder;
 
 
+
         viewHolder.tv_cell.setText(String.valueOf((cell.getData())));
         viewHolder.container_cell.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
         viewHolder.tv_cell.requestLayout();

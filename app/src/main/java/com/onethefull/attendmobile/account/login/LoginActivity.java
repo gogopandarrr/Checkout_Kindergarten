@@ -120,7 +120,6 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
                 autoLoginCheck(); //자동로그인확인
                 permission();
 
-//                loginSuccess();
             }
         });
 
@@ -165,6 +164,8 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
             }else{
                 login();
             }
+        }else{
+            login();
         }
 
 

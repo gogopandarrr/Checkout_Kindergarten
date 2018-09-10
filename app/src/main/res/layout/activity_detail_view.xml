@@ -26,40 +26,11 @@
             android:layout_width="match_parent"
             android:layout_height="350dp">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_profile"
-                android:layout_centerHorizontal="true"
-                android:elevation="2dp"
-                android:src="@drawable/defalt_b"
-                android:layout_width="122dp"
-                android:layout_height="122dp" />
 
-            <ImageView
-                android:visibility="visible"
-                android:alpha="0.9"
-                android:id="@+id/bt_takePhoto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:elevation="20dp"
-                android:layout_alignBottom="@+id/iv_profile"
-                android:layout_alignEnd="@+id/iv_profile"
-                android:src="@drawable/noimage" />
-
-
-
-
-            <ImageView
-                android:id="@+id/btn_delete"
-                android:elevation="11dp"
-                android:src="@drawable/btn_delete"
-                android:layout_marginTop="45dp"
-                android:layout_marginEnd="18dp"
-                android:layout_alignParentEnd="true"
-                android:layout_width="40dp"
-                android:layout_height="40dp" />
 
 
             <LinearLayout
+                android:id="@+id/layout_dv"
                 android:orientation="horizontal"
                 android:background="@drawable/profile_board"
                 android:layout_marginTop="48dp"
@@ -130,6 +101,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPersonName"
+                        android:privateImeOptions="defaultInputmode=korean"
                         android:singleLine="true"/>
 
                     <EditText
@@ -140,7 +112,6 @@
                         android:id="@+id/et_stuTel"
                         android:textSize="13sp"
                         android:hint="보호자 휴대폰 번호 (필수)"
-
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="number"
@@ -184,6 +155,38 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_profile"
+                android:layout_centerHorizontal="true"
+                android:elevation="6dp"
+                android:src="@drawable/defalt_b"
+                android:layout_width="122dp"
+                android:layout_height="122dp" />
+
+            <ImageView
+                android:visibility="visible"
+                android:alpha="0.9"
+                android:id="@+id/bt_takePhoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="20dp"
+                android:layout_alignBottom="@+id/iv_profile"
+                android:layout_alignEnd="@+id/iv_profile"
+                android:src="@drawable/noimage" />
+
+
+
+
+            <ImageView
+                android:id="@+id/btn_delete"
+                android:elevation="11dp"
+                android:src="@drawable/btn_delete"
+                android:layout_marginTop="45dp"
+                android:layout_marginEnd="18dp"
+                android:layout_alignParentEnd="true"
+                android:layout_width="40dp"
+                android:layout_height="40dp" />
 
         </RelativeLayout>
 

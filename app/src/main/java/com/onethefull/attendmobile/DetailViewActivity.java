@@ -55,6 +55,7 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
     private SharedPrefManager mSharedPrefs;
     private ArrayList<Object> stp;
     private ArrayList<Identity> userList = new ArrayList<>();
+
     WonderfulCV wonderfulCV = new WonderfulCV();
 
     String id, cvid;
@@ -95,6 +96,8 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
         layout_edit = findViewById(R.id.layout_profile_edit);
         layout_text = findViewById(R.id.layout_profile);
         bt_takePhoto = findViewById(R.id.bt_takePhoto);
+
+
 
         tinyDB = new TinyDB(this);
 

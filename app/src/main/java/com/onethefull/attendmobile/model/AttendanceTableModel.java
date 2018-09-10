@@ -1,5 +1,6 @@
 package com.onethefull.attendmobile.model;
 
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.onethefull.attendmobile.lists.Lists_Attendance;
@@ -37,6 +38,9 @@ private static final int COLUMN_SIZE = 5;
 
             Lists_Attendance lists_attendance = attendanceArrayList.get(i);
             List<Cell> list = new ArrayList<>();
+
+
+
 
             list.add(new Cell("1-"+ i,lists_attendance.getName()));
 
