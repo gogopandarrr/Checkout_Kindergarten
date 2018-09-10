@@ -2,17 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="16dp"
-    android:background="@color/bg_list"
+    android:background="@color/bg_line"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 
+
+
         <ImageView
-            android:visibility="invisible"
-            android:src="@drawable/noinfo"
+            android:layout_centerInParent="true"
+            android:visibility="visible"
+            android:src="@drawable/loading"
             android:id="@+id/iv_noinfo"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/people_recycleView"
@@ -30,6 +33,7 @@
             android:layout_centerInParent="true"
             android:src="@drawable/ic_registration"
             app:fabSize="normal" />
+
 
 
 </RelativeLayout>

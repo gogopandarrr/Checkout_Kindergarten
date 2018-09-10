@@ -2,6 +2,7 @@ package com.onethefull.attendmobile.fragment;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +35,9 @@ import com.onethefull.wonderful_cv_library.CV_Package.WonderfulCV;
 
 import java.util.ArrayList;
 
+import fr.castorflex.android.circularprogressbar.CircularProgressBar;
+import fr.castorflex.android.circularprogressbar.CircularProgressDrawable;
+
 import static android.content.Context.MODE_PRIVATE;
 
 public class ChildrenListFragment extends Fragment implements GetListView{
@@ -51,6 +56,7 @@ public class ChildrenListFragment extends Fragment implements GetListView{
     private String id, pwd;
     private int count = 0;
     private SharedPrefManager mSharedPrefs;
+
     TinyDB tinyDB;
     WonderfulCV wonderfulCV = new WonderfulCV();
 
@@ -67,6 +73,7 @@ public class ChildrenListFragment extends Fragment implements GetListView{
 
         tinyDB = new TinyDB(getActivity());
         fab_add = view.findViewById(R.id.fab_add);
+
         iv_noinfo = view.findViewById(R.id.iv_noinfo);
         peopleList_recycleView = view.findViewById(R.id.people_recycleView);
         adapter_peopleList= new MyAdapter_PeopleList(getActivity(), downInfoArrayList, userList);
@@ -129,7 +136,7 @@ public class ChildrenListFragment extends Fragment implements GetListView{
     private void checkNolist(){
         if (downInfoArrayList.size()>0){
             iv_noinfo.setVisibility(View.GONE);
-        }else iv_noinfo.setVisibility(View.VISIBLE);
+        }else iv_noinfo.setImageResource(R.drawable.noinfo);
 
     }//
 
@@ -261,4 +268,8 @@ public class ChildrenListFragment extends Fragment implements GetListView{
         count = 0;
         handler.removeCallbacksAndMessages(null);
     }
+
+
+
+
 }//class

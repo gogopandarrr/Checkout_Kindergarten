@@ -256,7 +256,10 @@ public class MainActivity extends AppCompatActivity implements ChangeNMView {
 
     @Override
     public void onBackPressed() {
+
+
         super.onBackPressed();
+
     }
 
     @Override
