@@ -24,22 +24,22 @@
 
 
 
-       <FrameLayout
-           android:layout_width="match_parent"
-           android:layout_height="match_parent">
+       <!--<FrameLayout-->
+           <!--android:layout_width="match_parent"-->
+           <!--android:layout_height="match_parent">-->
 
 
-           <View android:layout_width="match_parent"
-               android:layout_height="5dp"
-               android:background="@drawable/toolbar_dropshadow"/>
+           <!--<View android:layout_width="match_parent"-->
+               <!--android:layout_height="5dp"-->
+               <!--android:background="@drawable/toolbar_dropshadow"/>-->
 
+       <!--</FrameLayout>-->
 
            <FrameLayout
                android:id="@+id/container_content"
                android:layout_width="match_parent"
                android:layout_height="match_parent"></FrameLayout>
 
-       </FrameLayout>
 
 
 

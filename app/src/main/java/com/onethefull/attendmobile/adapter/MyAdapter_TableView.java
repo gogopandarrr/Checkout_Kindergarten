@@ -7,20 +7,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.evrencoskun.tableview.ITableView;
 import com.evrencoskun.tableview.adapter.AbstractTableAdapter;
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder;
-import com.google.android.gms.vision.text.Line;
 import com.onethefull.attendmobile.R;
+import com.onethefull.attendmobile.adapter.holder.MyCellViewHolder;
+import com.onethefull.attendmobile.adapter.holder.MyColumnHeaderViewHolder;
 import com.onethefull.attendmobile.lists.Lists_Attendance;
 import com.onethefull.attendmobile.model.AttendanceTableModel;
 import com.onethefull.attendmobile.model.Cell;
 import com.onethefull.attendmobile.model.ColumnHeader;
 import com.onethefull.attendmobile.model.RowHeader;
-
 import java.util.ArrayList;
-import java.util.List;
+
 
 
 public class MyAdapter_TableView extends AbstractTableAdapter<ColumnHeader, RowHeader, Cell> {
@@ -53,19 +51,6 @@ public class MyAdapter_TableView extends AbstractTableAdapter<ColumnHeader, RowH
 
 
 
-    /////////
-    class MyCellViewHolder extends AbstractViewHolder{
-
-        public final TextView tv_cell;
-        public LinearLayout container_cell;
-
-        public MyCellViewHolder(View itemView) {
-            super(itemView);
-            container_cell = itemView.findViewById(R.id.cell_container);
-            tv_cell = itemView.findViewById(R.id.cell_data);
-        }
-    }
-
     @Override
     public AbstractViewHolder onCreateCellViewHolder(ViewGroup parent, int viewType) {
         View layout = LayoutInflater.from(mContext).inflate(R.layout.table_cell, parent, false);
@@ -81,29 +66,12 @@ public class MyAdapter_TableView extends AbstractTableAdapter<ColumnHeader, RowH
 
 
         viewHolder.tv_cell.setText(String.valueOf((cell.getData())));
-
-
-
         viewHolder.container_cell.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
         viewHolder.tv_cell.requestLayout();
     }
 
 
 
-    ////////
-    class MyColumnHeaderViewHolder extends AbstractViewHolder{
-
-        public final TextView tv_column_header;
-        LinearLayout container_column_header;
-        ITableView iTableView;
-
-        public MyColumnHeaderViewHolder(View itemView, ITableView pTableView) {
-            super(itemView);
-            iTableView = pTableView;
-            tv_column_header = itemView.findViewById(R.id.column_header_tv);
-            container_column_header = itemView.findViewById(R.id.column_header_container);
-        }
-    }
 
 
     @Override
@@ -119,12 +87,7 @@ public class MyAdapter_TableView extends AbstractTableAdapter<ColumnHeader, RowH
         ColumnHeader columnHeader = (ColumnHeader) columnHeaderItemModel;
         MyColumnHeaderViewHolder headerViewHolder = (MyColumnHeaderViewHolder) holder;
         headerViewHolder.tv_column_header.setText(columnHeader.getData());
-
-
-        headerViewHolder.container_column_header.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
         headerViewHolder.tv_column_header.requestLayout();
-
-
     }
 
 
@@ -170,9 +133,19 @@ public class MyAdapter_TableView extends AbstractTableAdapter<ColumnHeader, RowH
 
     public void setTableModel(ArrayList<Lists_Attendance> attendanceList){
 
+
+
         tableModel.generateListForTableView(attendanceList);
 
-        setAllItems(tableModel.getColumnHeaderList(), tableModel.getRowHeaderList(), tableModel.getCellList());
+
+
+        if (attendanceList.size()>0){
+            setAllItems(tableModel.getColumnHeaderList(), tableModel.getRowHeaderList(), tableModel.getCellList());
+        }else{
+            setAllItems(tableModel.getColumnHeaderList(), tableModel.getEmptyRowHeaderList(), tableModel.getEmptyCellList());
+        }
+
+
 
 
     }//

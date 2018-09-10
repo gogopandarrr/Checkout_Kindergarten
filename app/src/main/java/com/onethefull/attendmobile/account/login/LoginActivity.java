@@ -4,21 +4,24 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.onethefull.attendmobile.MainActivity;
 import com.onethefull.attendmobile.R;
 import com.onethefull.attendmobile.account.join.RegisterActivity;
+import fr.castorflex.android.circularprogressbar.CircularProgressBar;
+import fr.castorflex.android.circularprogressbar.CircularProgressDrawable;
 
 
 public class LoginActivity extends AppCompatActivity implements LoginView {
@@ -26,6 +29,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     private EditText et_email, et_password;
     private Button bt_go;
     private TextView bt_forgot, bt_register;
+    private CircularProgressBar circularProgressBar;
     CheckBox autoCheck;
 
     private LoginPresenter mLoginPresenter;
@@ -61,6 +65,10 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         bt_go = findViewById(R.id.bt_go);
         bt_register = findViewById(R.id.bt_register);
         bt_forgot = findViewById(R.id.bt_forgot);
+        circularProgressBar = findViewById(R.id.progress_circular);
+
+        updateValues();
+
 
 
     }
@@ -112,6 +120,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
                 autoLoginCheck(); //자동로그인확인
                 permission();
 
+//                loginSuccess();
             }
         });
 
@@ -164,6 +173,11 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
 
     private void login(){
+
+        et_email.setEnabled(false);
+        et_password.setEnabled(false);
+        circularProgressBar.setVisibility(View.VISIBLE);
+
         final String id = et_email.getText().toString();
         String pwd = et_password.getText().toString();
         mLoginPresenter.performLogin(id, pwd);
@@ -171,6 +185,13 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
 
 
+    private void setBacktoNormal(){
+
+        et_email.setEnabled(true);
+        et_password.setEnabled(true);
+        bt_go.setEnabled(true);
+        circularProgressBar.setVisibility(View.GONE);
+    }
 
 
     @Override
@@ -188,6 +209,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     @Override
     public void loginValidations(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        setBacktoNormal();
     }
 
     @Override
@@ -204,6 +226,8 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     @Override
     public void loginError() {
         Toast.makeText(this, "로그인 실패", Toast.LENGTH_SHORT).show();
+        setBacktoNormal();
+
     }
 
     @Override
@@ -227,5 +251,24 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         }
     }//
 
+
+    private void updateValues(){
+        CircularProgressDrawable.Builder b = new CircularProgressDrawable.Builder(this)
+                .colors(getResources().getIntArray(R.array.gplus_colors))
+                .sweepSpeed(2f)
+                .rotationSpeed(1f)
+                .strokeWidth(dpToPx(10))
+                .style(CircularProgressDrawable.STYLE_ROUNDED);
+
+        circularProgressBar.setIndeterminateDrawable(b.build());
+
+
+    }
+
+    public int dpToPx(int dp){
+        Resources r = getResources();
+        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
+        return px;
+    }
 
 }//end

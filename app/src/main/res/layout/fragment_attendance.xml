@@ -4,38 +4,45 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
-        android:weightSum="10"
+    <RelativeLayout
+        android:background="@color/attend_bg1"
         android:id="@+id/layout_upper"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <Button
-            android:layout_weight="2"
-            android:text="이전"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+            android:id="@+id/btn_calendar"
+            android:layout_margin="12dp"
+            android:background="@drawable/calendar_g"
+            android:layout_width="24dp"
+            android:layout_height="24dp" />
+
+        <Button
+            android:layout_marginEnd="32dp"
+            android:layout_toStartOf="@+id/tv_currentDay"
+            android:layout_centerVertical="true"
+            android:id="@+id/btn_calendar_prev"
+            android:background="@drawable/prev"
+            android:layout_width="24dp"
+            android:layout_height="24dp" />
         <TextView
+            android:layout_centerInParent="true"
+            android:textSize="16sp"
             android:gravity="center"
-            android:layout_weight="5"
             android:text="2018년 10월 3일"
             android:id="@+id/tv_currentDay"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
-            android:layout_weight="2"
-            android:text="다음"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
-        <Button
-            android:layout_weight="1"
-            android:id="@+id/btn_switch_attend"
-            android:background="@drawable/btn_book"
-            android:layout_width="0dp"
-            android:layout_height="30dp" />
+            android:layout_marginStart="32dp"
+            android:layout_toEndOf="@+id/tv_currentDay"
+            android:layout_centerVertical="true"
+            android:id="@+id/btn_calendar_next"
+            android:background="@drawable/next"
+            android:layout_width="24dp"
+            android:layout_height="24dp" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <com.github.sundeepk.compactcalendarview.CompactCalendarView
         android:layout_below="@+id/layout_upper"
@@ -48,7 +55,9 @@
         app:compactCalendarBackgroundColor="@color/main_blue"
         app:compactCalendarTextColor="@color/white"
         app:compactCalendarCurrentSelectedDayBackgroundColor="#fff04e"
-        app:compactCalendarCurrentDayBackgroundColor="#B71C1C"
+        app:compactCalendarCurrentSelectedDayTextColor="@color/main_blue"
+        app:compactCalendarCurrentDayBackgroundColor="@color/white"
+        app:compactCalendarCurrentDayTextColor="@color/main_blue"
         app:compactCalendarMultiEventIndicatorColor="#fff"
         />
 

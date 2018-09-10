@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.net.Uri;
@@ -15,6 +16,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +57,8 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import fr.castorflex.android.circularprogressbar.CircularProgressBar;
+import fr.castorflex.android.circularprogressbar.CircularProgressDrawable;
 
 public class FRActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
     private static final String TAG = FRActivity.class.getSimpleName();
@@ -65,10 +69,12 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
     DetectionView mDetectionView;
     @BindView(R.id.btn_finish)
     ImageView btn_finish;
-    @BindView((R.id.btn_start_take))
+    @BindView(R.id.btn_start_take)
     Button btn_startFR;
-    @BindView((R.id.btn_back))
+    @BindView(R.id.btn_back)
     Button btn_back;
+    @BindView(R.id.progress_circular_fr)
+    CircularProgressBar circularProgressBar;
 
 
     private static final Scalar FACE_RECT_COLOR = new Scalar(0, 255, 0, 255);
@@ -147,6 +153,7 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fr);
         ButterKnife.bind(this);
+        updateValues();
 
 
         modeCheck();
@@ -391,6 +398,12 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
 
 
     private void cvCreateNewUser() {
+
+
+        circularProgressBar.setVisibility(View.VISIBLE);
+        btn_finish.setVisibility(View.GONE);
+
+
         wonderfulCV = new WonderfulCV();
 
         userInfo = getSharedPreferences("autoUser", MODE_PRIVATE);
@@ -542,5 +555,25 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
 
                 }
         }
+    }
+
+
+    //프로그레시브바 설정
+    private void updateValues(){
+        CircularProgressDrawable.Builder b = new CircularProgressDrawable.Builder(this)
+                .colors(getResources().getIntArray(R.array.gplus_colors))
+                .sweepSpeed(2f)
+                .rotationSpeed(1f)
+                .strokeWidth(dpToPx(8))
+                .style(CircularProgressDrawable.STYLE_ROUNDED);
+
+        circularProgressBar.setIndeterminateDrawable(b.build());
+
+    }
+
+    public int dpToPx(int dp){
+        Resources r = getResources();
+        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
+        return px;
     }
 }//class

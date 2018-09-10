@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/column_header_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/cell_background_color"
+    android:background="@color/attend_bg1"
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="@dimen/cell_height">
@@ -23,7 +23,7 @@
             <TextView
                 android:text="Header Data"
                 android:textSize="@dimen/text_size"
-                android:textColor="@color/table_view_default_text_color"
+                android:textColor="@color/text_color"
                 android:gravity="center"
                 android:layout_weight="4"
                 android:layout_gravity="center"
@@ -38,17 +38,22 @@
                 android:background="@android:color/transparent"
                 android:paddingRight="-5dp"
                 android:scaleType="fitXY"
-                android:visibility="gone"
-                android:src="@drawable/pen"
+                android:visibility="visible"
+                app:srcCompat="@drawable/sort_down"
                 android:layout_width="15dp"
                 android:layout_height="15dp" />
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_gravity="top"
+            android:background="@color/text_color"/>
 
         <View
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_gravity="bottom"
-            android:background="@color/header_line_color"/>
+            android:background="@color/text_color"/>
     </FrameLayout>
 
 

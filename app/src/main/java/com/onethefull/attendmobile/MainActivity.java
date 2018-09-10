@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements ChangeNMView {
         attendanceFragment = new AttendanceFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container_content, attendanceFragment);
+        transaction.addToBackStack(null);
         transaction.commit();
 
     }//
@@ -95,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements ChangeNMView {
         childrenListFragment = new ChildrenListFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container_content, childrenListFragment);
+        transaction.addToBackStack(null);
         transaction.commit();
 
 
@@ -177,7 +179,6 @@ public class MainActivity extends AppCompatActivity implements ChangeNMView {
 
         android.support.v7.widget.Toolbar toolbar= findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("원생목록");
         drawerLayout = findViewById(R.id.layout_drawable);
         navigationView= findViewById(R.id.navi);
         navigationView.setItemIconTintList(null);
@@ -255,15 +256,8 @@ public class MainActivity extends AppCompatActivity implements ChangeNMView {
 
     @Override
     public void onBackPressed() {
-
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)){
-            drawerLayout.closeDrawer(navigationView);
-        }else{
-            logout();
-        }
-
+        super.onBackPressed();
     }
-
 
     @Override
     public void validation(String msg) {

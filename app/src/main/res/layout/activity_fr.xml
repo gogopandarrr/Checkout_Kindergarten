@@ -101,4 +101,14 @@
             android:layout_height="100dp" />
     </LinearLayout>
 
+
+    <fr.castorflex.android.circularprogressbar.CircularProgressBar
+        android:id="@+id/progress_circular_fr"
+        android:visibility="gone"
+        android:indeterminate="true"
+        android:layout_centerInParent="true"
+        android:indeterminateOnly="false"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+
 </RelativeLayout>

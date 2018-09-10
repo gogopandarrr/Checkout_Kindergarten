@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     android:id="@+id/root"
-    android:background="@color/cell_background_color"
+    android:background="@color/attend_bg1"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="@dimen/row_header_width"
     android:layout_height="@dimen/cell_height">
@@ -16,7 +16,7 @@
         <TextView
             android:text="Row Data"
             android:textSize="@dimen/text_size"
-            android:textColor="@color/table_view_default_text_color"
+            android:textColor="@color/text_color"
             android:maxLines="1"
             android:gravity="center"
             android:ellipsize="end"
@@ -30,6 +30,6 @@
         android:layout_width="1px"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
-        android:background="@color/header_line_color"/>
+        android:background="@color/gray_bbbbbb"/>
 
 </RelativeLayout>

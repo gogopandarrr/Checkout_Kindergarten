@@ -63,9 +63,9 @@ public class GetAttendancePresenterImpl implements GetAttendancePresenter {
                             String inTime = attendanceInfo.get("ATTENDANCE_TIME").toString().replace("\"","");
                             String outTime = attendanceInfo.get("GOHOME_TIME").toString().replace("\"","");
                             String cvid = attendanceInfo.get("CHILDREN_CVID").toString().replace("\"","");
+                            String tel = attendanceInfo.get("PARENT_TEL").toString().replace("\"","");
 
-
-                            attendanceArrayList.add(new Lists_Attendance(name, inTime, outTime, cvid));
+                            attendanceArrayList.add(new Lists_Attendance(name, inTime, outTime, cvid, tel));
 
                         }
 

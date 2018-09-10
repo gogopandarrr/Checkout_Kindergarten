@@ -27,6 +27,7 @@ public class PresenterImpl implements LoginPresenter {
     private ApiService service;
     private SharedPrefManager mSharedPrefs;
     public WonderfulCV wonderfulCV;
+    String mId, mPwd;
 
     public PresenterImpl(LoginView loginView, Context context) {
         this.mLoginView = loginView;
@@ -37,7 +38,7 @@ public class PresenterImpl implements LoginPresenter {
     }
 
     @Override
-    public void performLogin(final String id,final String pwd) {
+    public void performLogin(String id, String pwd) {
 
         service = ApiUtils.getService();
         final JSONObject obj = new JSONObject();
@@ -45,6 +46,8 @@ public class PresenterImpl implements LoginPresenter {
         try {
             obj.put("email", id);
             obj.put("pwd", pwd);
+            mId = id;
+            mPwd = pwd;
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -64,8 +67,9 @@ public class PresenterImpl implements LoginPresenter {
                         Log.d("CV_Info", wonderfulCV.serverAddress);
 
                         if( wonderfulCV.initiateServerConnection(mContext, "1thefull.ml", 5000,
-                                id, pwd)) {
-                            mSharedPrefs.saveLoginData(id.trim());
+                                mId, mPwd)) {
+                            mSharedPrefs.saveLoginData(mId.trim());
+                            mSharedPrefs.savePdw(mPwd.trim());
                             mSharedPrefs.saveAuthToken(wonderfulCV.token);
                             Log.d("CV_Info", wonderfulCV.token+"~~~~token~~~~");
                             mLoginView.loginSuccess();

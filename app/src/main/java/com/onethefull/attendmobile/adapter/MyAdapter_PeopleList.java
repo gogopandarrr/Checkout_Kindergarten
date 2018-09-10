@@ -122,7 +122,6 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
 
                     urlString =  "http://1thefull.ml:5000/faceimages/"+userList.get(i).imageName;
 
-                    Log.e("aaaa",urlString+"");
                     Glide.with(context).load(urlString).into(vh.iv_pic);
                     vh.tv_name.setText(lists_student.getName());
                     vh.iv_pic.setVisibility(View.VISIBLE);
@@ -130,8 +129,7 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
                     vh.tv_sub.setText("어린이");
 
                 }else{
-
-
+                    //등록은 되었으나 cv서버에 사진등록이 안된 경우..
                     vh.tv_name.setText(R.string.error_userPic);
                     vh.iv_pic.setVisibility(View.GONE);
                     vh.tv_sub.setVisibility(View.GONE);

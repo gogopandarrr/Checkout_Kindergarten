@@ -16,7 +16,7 @@
         android:layout_marginStart="10dp"
         android:gravity="center"
         android:maxLines="1"
-        android:textColor="@color/table_view_default_text_color"
+        android:textColor="@color/text_color"
         android:textSize="@dimen/text_size"
         android:visibility="visible"
         android:text="Cell Data"

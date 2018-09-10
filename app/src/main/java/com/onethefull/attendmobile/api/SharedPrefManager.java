@@ -41,6 +41,13 @@ public class SharedPrefManager {
         mEditor.commit();
 
     }
+
+    public void savePdw(String pdw) {
+        mEditor.putBoolean(Base.KEY_SAVE_LOGIN_DATA, true);
+        mEditor.putString(Base.KEY_SAVE_LOGIN_PWD, pdw);
+        mEditor.commit();
+    }
+
     public void saveAuthToken(String authToken) {
         mEditor.putBoolean(Base.KEY_SAVE_LOGIN_DATA, true);
         mEditor.putString(Base.KEY_SAVE_LOGIN_AUTHTOKEN, authToken);
@@ -53,6 +60,11 @@ public class SharedPrefManager {
     public String getLoginId(){
         String id = "";
         return mSharedPrefs.getString(Base.KEY_SAVE_LOGIN_ID, id);
+    }
+
+    public String getLoginPwd(){
+        String pwd = "";
+        return mSharedPrefs.getString(Base.KEY_SAVE_LOGIN_PWD, pwd);
     }
 
     public String getAuthToken(){

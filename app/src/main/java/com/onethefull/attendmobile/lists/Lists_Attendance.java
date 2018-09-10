@@ -6,13 +6,14 @@ import android.support.annotation.NonNull;
 
 public class Lists_Attendance implements Parcelable, Comparable<Lists_Attendance> {
 
-    String name, inTime, outTime, cvid;
+    String name, inTime, outTime, cvid, tel;
 
-    public Lists_Attendance(String name, String inTime, String outTime, String cvid) {
+    public Lists_Attendance(String name, String inTime, String outTime, String cvid, String tel) {
         this.name = name;
         this.inTime = inTime;
         this.outTime = outTime;
         this.cvid = cvid;
+        this.tel = tel;
     }//
 
 
@@ -21,6 +22,7 @@ public class Lists_Attendance implements Parcelable, Comparable<Lists_Attendance
         inTime = in.readString();
         outTime = in.readString();
         cvid = in.readString();
+        tel = in.readString();
     }
 
     public static final Creator<Lists_Attendance> CREATOR = new Creator<Lists_Attendance>() {
@@ -67,6 +69,14 @@ public class Lists_Attendance implements Parcelable, Comparable<Lists_Attendance
         this.cvid = cvid;
     }
 
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -78,6 +88,7 @@ public class Lists_Attendance implements Parcelable, Comparable<Lists_Attendance
         parcel.writeString(inTime);
         parcel.writeString(outTime);
         parcel.writeString(cvid);
+        parcel.writeString(tel);
     }
 
 

@@ -18,8 +18,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 import com.onethefull.attendmobile.DetailViewActivity;
+import com.onethefull.attendmobile.MainActivity;
 import com.onethefull.attendmobile.R;
 import com.onethefull.attendmobile.adapter.MyAdapter_PeopleList;
+import com.onethefull.attendmobile.api.SharedPrefManager;
 import com.onethefull.attendmobile.api.TinyDB;
 import com.onethefull.attendmobile.getlist.GetListPresenterImpl;
 import com.onethefull.attendmobile.getlist.GetListView;
@@ -46,11 +48,12 @@ public class ChildrenListFragment extends Fragment implements GetListView{
     private Runnable runnable;
     private GetListPresenterImpl getListPresenter;
     private ArrayList<Object> stp;
-    private String loginEmail, loginPwd;
+    private String id, pwd;
     private int count = 0;
-    SharedPreferences userInfo;
+    private SharedPrefManager mSharedPrefs;
     TinyDB tinyDB;
     WonderfulCV wonderfulCV = new WonderfulCV();
+
 
 
 
@@ -60,6 +63,8 @@ public class ChildrenListFragment extends Fragment implements GetListView{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.frangment_student_list, container, false);
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle("원생 목록");
+
         tinyDB = new TinyDB(getActivity());
         fab_add = view.findViewById(R.id.fab_add);
         iv_noinfo = view.findViewById(R.id.iv_noinfo);
@@ -69,15 +74,15 @@ public class ChildrenListFragment extends Fragment implements GetListView{
         RecyclerView.LayoutManager layoutManager= new LinearLayoutManager(getActivity());
         peopleList_recycleView.setLayoutManager(layoutManager);
 
-        //아이디, 비번 가져오기
-        userInfo = getActivity().getSharedPreferences("autoUser", MODE_PRIVATE);
-        loginEmail = userInfo.getString("user_email","");
-        loginPwd = userInfo.getString("user_pwd","");
+        //저장된 id/비번 가져오기
+        mSharedPrefs = SharedPrefManager.getInstance(getActivity());
+        id = mSharedPrefs.getLoginId();
+        pwd = mSharedPrefs.getLoginPwd();
 
 
         //리스트 가져오기
         getListPresenter = new GetListPresenterImpl(ChildrenListFragment.this, getActivity());
-        getListPresenter.getInfo(loginEmail);
+        getListPresenter.getInfo(id);
 
         setListener();
 
@@ -92,6 +97,7 @@ public class ChildrenListFragment extends Fragment implements GetListView{
     }//
 
     private void delayRefresh(){
+
 
         handler = new Handler();
 
@@ -160,19 +166,19 @@ public class ChildrenListFragment extends Fragment implements GetListView{
             downInfoArrayList.add(downInfoArrayList_pre.get(i));
         }
 
-                checkNolist();
 
+        checkNolist();
 
         Crypto.deleteExistingTokenFromStorage();
 
         //cv서버 유저리스트 받아오기
         wonderfulCV.getFullServerAddress("1thefull.ml", 5000);
         wonderfulCV.initiateServerConnection(getActivity(), "1thefull.ml", 5000,
-                loginEmail, loginPwd);
+                id, pwd);
 
         Boolean loginSucess = wonderfulCV.initiateServerConnection(getActivity(),
                 "1thefull.ml", 5000,
-                loginEmail, loginPwd);
+                id, pwd);
 
         if (loginSucess) {
             //Login Success
@@ -238,7 +244,7 @@ public class ChildrenListFragment extends Fragment implements GetListView{
     @Override
     public void onResume() {
         super.onResume();
-        getListPresenter.getInfo(loginEmail);
+        getListPresenter.getInfo(id);
     }
 
     @Override
