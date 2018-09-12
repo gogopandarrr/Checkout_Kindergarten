@@ -15,17 +15,12 @@
         android:icon="@drawable/btn_book"
         android:title="출석부" />
 
-        <item
-            android:id="@+id/navigation_changeNM"
-            android:icon="@drawable/pen"
-            android:title="유치원 이름 변경" />
-
     <item
         android:id="@+id/navigation_logout"
         android:icon="@drawable/btn_logout"
         android:title="로그아웃" />
         <item
-            android:id="@+id/navigation_Setting"
+            android:id="@+id/navigation_setting"
             android:icon="@drawable/btn_setting"
             android:title="환경설정" />
 

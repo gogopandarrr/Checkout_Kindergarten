@@ -21,6 +21,12 @@ public interface ApiService {
     @POST("login")
     Call<JsonObject> getLoginResult(@Body String body);
 
+
+    @Headers("Content-Type: application/json")
+    @POST("requestResetPassword")
+    Call<JsonObject> getrequestResetPwdResult(@Body String body);
+
+
     @Headers("Content-Type: application/json")
     @POST("set_children")
     Call<JsonObject> getChildrenResult (@Body String body);
@@ -43,6 +49,18 @@ public interface ApiService {
     @Headers("Content-Type: application/json")
     @POST("get_attendance_list")
     Call<JsonObject> getAttenanceListResult (@Body String body);
+
+    @Headers("Content-Type: application/json")
+    @POST("go_home_time")
+    Call<JsonObject> getSettingTimeResult(@Body String body);
+
+    @Headers("Content-Type: application/json")
+    @POST("get_go_home_time")
+    Call<JsonObject> getGoBackTimeResult(@Body String body);
+
+    @Headers("Content-Type: application/json")
+    @POST("set_class")
+    Call<JsonObject> getSettingClassResult(@Body String body);
 
     @Headers("Content-Type: application/json")
     @HTTP(method = "DELETE", path = "/delete_children", hasBody = true)

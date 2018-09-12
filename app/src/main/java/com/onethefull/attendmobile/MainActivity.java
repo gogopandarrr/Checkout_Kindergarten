@@ -23,24 +23,27 @@ import com.onethefull.attendmobile.api.SharedPrefManager;
 import com.onethefull.attendmobile.fragment.AlertDialogFragment;
 import com.onethefull.attendmobile.fragment.AttendanceFragment;
 import com.onethefull.attendmobile.fragment.ChildrenListFragment;
+import com.onethefull.attendmobile.fragment.SettingFragment;
 import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 
 
 
-public class MainActivity extends AppCompatActivity implements ChangeNMView {
+public class MainActivity extends AppCompatActivity {
 
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private ActionBarDrawerToggle drawerToggle;
-    private TextView tv_kindergarten;
+    public TextView tv_kindergarten;
     private Button btn_close_drawer;
     private String id, kindergarten;
     private SharedPrefManager mSharedPrefs;
-    private ChangeNMPresenterImpl changeNMPresenter;
     private AttendanceFragment attendanceFragment;
     private ChildrenListFragment childrenListFragment;
+    private SettingFragment settingFragment;
+
+
 
 
 
@@ -66,17 +69,8 @@ public class MainActivity extends AppCompatActivity implements ChangeNMView {
         //저장된 id 가져오기
         mSharedPrefs = SharedPrefManager.getInstance(getApplicationContext());
         id = mSharedPrefs.getLoginId();
-        id = id.replace("\"", "");
-
         //유치원명 가져오기
-        kindergarten = mSharedPrefs.getKindergarten();
-        kindergarten = kindergarten.replace("\"","");
-        tv_kindergarten.setText(kindergarten);
-
-
-
-
-
+        tv_kindergarten.setText(mSharedPrefs.getKindergarten());
 
     }//init
 
@@ -86,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements ChangeNMView {
         attendanceFragment = new AttendanceFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container_content, attendanceFragment);
-        transaction.addToBackStack(null);
         transaction.commit();
 
     }//
@@ -96,7 +89,15 @@ public class MainActivity extends AppCompatActivity implements ChangeNMView {
         childrenListFragment = new ChildrenListFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container_content, childrenListFragment);
-        transaction.addToBackStack(null);
+        transaction.commit();
+
+
+    }//
+
+    private void settingFragment(){
+        settingFragment = new SettingFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container_content, settingFragment);
         transaction.commit();
 
 
@@ -118,38 +119,20 @@ public class MainActivity extends AppCompatActivity implements ChangeNMView {
                         break;
 
 
-                    case R.id.navigation_changeNM:
-
-                        new LovelyTextInputDialog(MainActivity.this, R.style.EditTextTintTheme)
-
-                                .setTitle(R.string.dialog_change_name)
-                                .setIcon(R.drawable.pen)
-                                .setNegativeButton("취소", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-
-                                    }
-                                })
-                                .setConfirmButton("변경", new LovelyTextInputDialog.OnTextInputConfirmListener() {
-                                    @Override
-                                    public void onTextInputConfirmed(String text) {
-                                        changeNMPresenter = new ChangeNMPresenterImpl(MainActivity.this, getApplicationContext());
-                                        changeNMPresenter.changeNM(id, text);
-
-                                    }
-                                }).show();
-
-                        break;
-
-
                     case R.id.navigation_logout:
                         logout();
                         break;
 
 
-
                     case R.id.navigation_attend:
                         attendFrangment();
+                        break;
+
+
+                    case R.id.navigation_setting:
+                        settingFragment();
+                        break;
+
 
 
                 }
@@ -195,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements ChangeNMView {
     }//
 
 
-    private void logout(){
+    public void logout(){
         AlertDialogFragment dialogFragment = AlertDialogFragment.newInstance("로그아웃 하시겠습니까?");
         dialogFragment.show(getSupportFragmentManager(),"dialog");
     }//
@@ -257,28 +240,14 @@ public class MainActivity extends AppCompatActivity implements ChangeNMView {
     @Override
     public void onBackPressed() {
 
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-        super.onBackPressed();
-
-    }
-
-    @Override
-    public void validation(String msg) {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) drawerLayout.closeDrawer(GravityCompat.START);
+        else if (transaction.isEmpty()) logout();
+        else  super.onBackPressed();
 
     }
 
-    @Override
-    public void changeSuccess(String name) {
-
-        tv_kindergarten.setText(name);
-        Toast.makeText(this, R.string.changeNM_done, Toast.LENGTH_SHORT).show();
-
-    }
-
-    @Override
-    public void Error() {
-
-    }
 
 
 

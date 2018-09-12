@@ -63,7 +63,15 @@ public class GetAttendancePresenterImpl implements GetAttendancePresenter {
                             String inTime = attendanceInfo.get("ATTENDANCE_TIME").toString().replace("\"","");
                             String outTime = attendanceInfo.get("GOHOME_TIME").toString().replace("\"","");
                             String cvid = attendanceInfo.get("CHILDREN_CVID").toString().replace("\"","");
-                            String tel = attendanceInfo.get("PARENT_TEL").toString().replace("\"","");
+
+                            String tel;
+                            if (attendanceInfo.get("PARENT_TEL") != null){
+                                tel = attendanceInfo.get("PARENT_TEL").toString().replace("\"","");
+                            }else{
+                                tel = "삭제된 원생";
+                            }
+
+
 
                             attendanceArrayList.add(new Lists_Attendance(name, inTime, outTime, cvid, tel));
 

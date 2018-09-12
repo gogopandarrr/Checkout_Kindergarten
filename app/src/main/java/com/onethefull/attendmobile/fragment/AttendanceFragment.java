@@ -1,8 +1,7 @@
 package com.onethefull.attendmobile.fragment;
 
-import android.content.SharedPreferences;
-import android.os.Bundle;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -172,6 +171,7 @@ public class AttendanceFragment extends Fragment implements GetAttendanceView{
 
                 compactCalendarView.setCurrentDate(Calendar.getInstance(Locale.getDefault()).getTime());
                 tv_date.setText(DAY_FORMAT.format(Calendar.getInstance(Locale.getDefault()).getTime()));
+                attendancePresenter.getAttendanceList(id, SELECT_DATE.format(Calendar.getInstance(Locale.getDefault()).getTime()));
 
             }
         });
@@ -199,15 +199,7 @@ public class AttendanceFragment extends Fragment implements GetAttendanceView{
 
         for (int i = 0; i < attendanceArrayList_pre.size(); i++){
             attendanceArrayList.add(attendanceArrayList_pre.get(i));
-//            if (!compactCalendarView.isAnimating()){
-//                if (shouldShow){
-//                    compactCalendarView.clearAnimation();
-//                    compactCalendarView.showCalendar();
-//                }else {
-//                    compactCalendarView.hideCalendar();
-//                }
-//                shouldShow = !shouldShow;
-//            }
+
         }
 
 
@@ -240,10 +232,13 @@ public class AttendanceFragment extends Fragment implements GetAttendanceView{
 
         switch (item.getItemId()){
 
-
         }
 
-
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }//class

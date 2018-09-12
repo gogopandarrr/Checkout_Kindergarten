@@ -14,16 +14,20 @@ import android.widget.Toast;
 
 import com.onethefull.attendmobile.account.login.LoginActivity;
 import com.onethefull.attendmobile.R;
+import com.onethefull.attendmobile.account.resetpwd.ResetPwdPresenter;
+import com.onethefull.attendmobile.account.resetpwd.ResetPwdPresenterImpl;
+import com.onethefull.attendmobile.account.resetpwd.ResetPwdView;
 
 import java.util.regex.Pattern;
 
-public class RegisterActivity extends AppCompatActivity implements JoinView{
+public class RegisterActivity extends AppCompatActivity implements JoinView, ResetPwdView{
 
     private LinearLayout layout_register, layout_forgot;
     private TextView tv_title, tv_forgot;
     private EditText et_email, et_password, et_password_confirm, et_kindergarten, et_email_find;
     private Button bt_signUp, bt_close;
-    JoinPresenter mJoinPresenter;
+    private JoinPresenter mJoinPresenter;
+    private ResetPwdPresenter resetPwdPresenter;
     int mode;
 
 
@@ -60,7 +64,7 @@ public class RegisterActivity extends AppCompatActivity implements JoinView{
 
 
         mJoinPresenter = new JoinPresenterImpl(RegisterActivity.this, getApplicationContext());
-
+        resetPwdPresenter = new ResetPwdPresenterImpl(RegisterActivity.this, getApplicationContext());
 
     }//init
 
@@ -132,10 +136,10 @@ public class RegisterActivity extends AppCompatActivity implements JoinView{
                    case 2: //비밀번호 찾기 모드
 
                        if(checkEmail(email_find)){
-                           Toast.makeText(RegisterActivity.this, getResources().getText(R.string.success_find_password), Toast.LENGTH_SHORT).show();
-                           Intent intent =  new Intent(RegisterActivity.this, LoginActivity.class);
-                           intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                           startActivity(intent);
+
+                           String findEmail = et_email_find.getText().toString();
+                           resetPwdPresenter.performResetPwd(findEmail);
+
                        }
                        else{
                            tv_forgot.setText(R.string.error_email);
@@ -228,6 +232,12 @@ public class RegisterActivity extends AppCompatActivity implements JoinView{
     @Override
     public void validation(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void resetSuccess() {
+        Toast.makeText(this, R.string.reset_success, Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     @Override

@@ -8,6 +8,7 @@ public class Cell implements ISortableModel, IFilterableModel {
     private String id;
     private Object data;
     private String filterKeyword;
+    private int mBackground = -1;
 
 
    public  Cell(String id, Object data){
@@ -39,6 +40,9 @@ public class Cell implements ISortableModel, IFilterableModel {
 
     public void setData(String data1) {data = data1;}
 
+    public void setBackgroundColor(int color) {mBackground = color;}
+
+    public int getBackgroundColor(){return mBackground;}
 
     public void setFilterKeyword(String filterKeyword) {
         this.filterKeyword = filterKeyword;

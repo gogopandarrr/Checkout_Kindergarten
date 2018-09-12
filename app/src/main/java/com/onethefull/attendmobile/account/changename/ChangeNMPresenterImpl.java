@@ -58,7 +58,7 @@ public class ChangeNMPresenterImpl implements ChangeNMPresenter {
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
-
+                    changeNMView.error();
             }
         });
     }//

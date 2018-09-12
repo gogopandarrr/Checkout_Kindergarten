@@ -10,6 +10,7 @@
     <color name="main_blue">#00b0ff</color>
     <color name="bg_list">#f0fafe</color>
     <color name="text_color">#707070</color>
+    <color name="text_color_light">#acacac</color>
     <color name="attend_bg1">#F5F5F5</color>
     <color name="attend_bg2">#FCFCFC</color>
     <color name="gray_eeeeee">#eeeeee</color>
@@ -18,12 +19,14 @@
     <color name="red_ff725f">#ff725f</color>
     <color name="calendar_week_bg_color">#F2F2F2</color>
     <color name="black_80000000">#80000000</color>
+    <color name="loading_bg">#666666</color>
 
 
     <color name="bg_line">#E7E7E7</color>
     <color name="bg_color">#FF99DCD7</color>
 
-    <color name="cell_background_color">#ffffff</color>
+    <color name="cell_background_color1">#FCFCFC</color>
+    <color name="cell_background_color2">#F5F5F5</color>
     <color name="cell_text_color">#1f1f1f</color>
     <color name="header_line_color">@android:color/holo_red_light</color>
 

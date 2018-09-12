@@ -1,6 +1,7 @@
 package com.onethefull.attendmobile.adapter;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,10 +66,12 @@ public class MyAdapter_TableView extends AbstractTableAdapter<ColumnHeader, RowH
         MyCellViewHolder viewHolder = (MyCellViewHolder) holder;
 
 
+        int bgColor = rowPosition % 2 == 0 ? ContextCompat.getColor(mContext, R.color.cell_background_color1) : ContextCompat.getColor(mContext, R.color.cell_background_color2);
 
-        viewHolder.tv_cell.setText(String.valueOf((cell.getData())));
-        viewHolder.container_cell.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-        viewHolder.tv_cell.requestLayout();
+        cell.setBackgroundColor(bgColor);
+
+        viewHolder.setCell(cell);
+
     }
 
 

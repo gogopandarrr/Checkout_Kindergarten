@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.onethefull.attendmobile.fragment.SettingFragment"
+    >
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:background="@drawable/layoutclickbutton"
+            android:clickable="true"
+            android:id="@+id/layout_comeTime"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+
+            <View android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/toolbar_dropshadow"/>
+
+            <TextView
+                android:layout_marginStart="16dp"
+                android:layout_centerVertical="true"
+                android:textSize="15sp"
+                android:text="등원 시간 설정"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/icon_arrow1"
+                android:layout_marginEnd="7dp"
+                android:textColor="@color/text_color_light"
+                android:textSize="15sp"
+                android:text="개발중"
+                android:id="@+id/tv_currentComeTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+            <ImageView
+                android:layout_marginEnd="16dp"
+                android:layout_centerVertical="true"
+                android:id="@+id/icon_arrow1"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ico"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <View android:layout_width="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_height="1dp"
+                android:background="@drawable/toolbar_dropshadow"/>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/layoutclickbutton"
+            android:clickable="true"
+            android:id="@+id/layout_goTime"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+
+            <TextView
+                android:layout_marginStart="16dp"
+                android:layout_centerVertical="true"
+                android:textSize="15sp"
+                android:text="하원 시간 설정"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/icon_arrow"
+                android:layout_marginEnd="7dp"
+                android:textColor="@color/text_color_light"
+                android:textSize="15sp"
+                android:text="00:00"
+                android:id="@+id/tv_currentGoTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+            <ImageView
+                android:layout_marginEnd="16dp"
+                android:layout_centerVertical="true"
+                android:id="@+id/icon_arrow"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ico"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <View android:layout_width="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_height="1dp"
+                android:background="@drawable/toolbar_dropshadow"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/layoutclickbutton"
+            android:clickable="true"
+            android:id="@+id/layout_changeName"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+
+
+            <TextView
+                android:layout_marginStart="16dp"
+                android:layout_centerVertical="true"
+                android:textSize="15sp"
+                android:text="유치원 정보 수정"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/icon_arrow2"
+                android:layout_marginEnd="7dp"
+                android:textColor="@color/text_color_light"
+                android:textSize="15sp"
+                android:text="원더풀 유치원"
+                android:id="@+id/tv_currentKindergarten_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+            <ImageView
+                android:layout_marginEnd="16dp"
+                android:layout_centerVertical="true"
+                android:id="@+id/icon_arrow2"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ico"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <View android:layout_width="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_height="1dp"
+                android:background="@drawable/toolbar_dropshadow"/>
+
+        </RelativeLayout>
+
+
+
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

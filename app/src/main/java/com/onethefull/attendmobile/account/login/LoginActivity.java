@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Build;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,8 +28,8 @@ import fr.castorflex.android.circularprogressbar.CircularProgressDrawable;
 public class LoginActivity extends AppCompatActivity implements LoginView {
 
     private EditText et_email, et_password;
-    private Button bt_go;
-    private TextView bt_forgot, bt_register;
+    private Button bt_go, bt_register;
+    private TextView bt_forgot;
     private CircularProgressBar circularProgressBar;
     CheckBox autoCheck;
 
@@ -157,9 +158,23 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     private void permission(){
 
         if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.M) {
-            int permission = checkSelfPermission(Manifest.permission.CAMERA);
-            if (permission == PackageManager.PERMISSION_DENIED) {
-                String[] arr = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
+            int[] permission = new int[3];
+            permission[0] = checkSelfPermission(Manifest.permission.CAMERA);
+            permission[1] = checkSelfPermission(Manifest.permission.CALL_PHONE);
+            permission[2] = checkSelfPermission(Manifest.permission.SEND_SMS);
+
+            boolean rejected = false;
+
+            for (int i = 0; i < permission.length; i++){
+
+                rejected = permission[i] == PackageManager.PERMISSION_DENIED;
+                if (rejected) break;
+            }
+
+
+            if (rejected) {
+                String[] arr = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CALL_PHONE, Manifest.permission.SEND_SMS};
                 requestPermissions(arr, 10);
             }else{
                 login();
@@ -243,8 +258,14 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         switch (requestCode) {
 
             case 10:
-                if (grantResults[0] == PackageManager.PERMISSION_DENIED || grantResults[1] == PackageManager.PERMISSION_DENIED) {
+                boolean rejected = false;
+                for(int i = 0; i < grantResults.length; i++){
+                 rejected = grantResults[i] == PackageManager.PERMISSION_DENIED;
+                if (rejected) break;
+            }
 
+
+                if (rejected) {
                     Toast.makeText(this, R.string.error_permission, Toast.LENGTH_SHORT).show();
                 } else {
                     login();

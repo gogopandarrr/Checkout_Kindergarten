@@ -59,12 +59,12 @@ public class SharedPrefManager {
 
     public String getLoginId(){
         String id = "";
-        return mSharedPrefs.getString(Base.KEY_SAVE_LOGIN_ID, id);
+        return mSharedPrefs.getString(Base.KEY_SAVE_LOGIN_ID, id).replace("\"","");
     }
 
     public String getLoginPwd(){
         String pwd = "";
-        return mSharedPrefs.getString(Base.KEY_SAVE_LOGIN_PWD, pwd);
+        return mSharedPrefs.getString(Base.KEY_SAVE_LOGIN_PWD, pwd).replace("\"","");
     }
 
     public String getAuthToken(){
@@ -81,7 +81,17 @@ public class SharedPrefManager {
 
     public String getKindergarten(){
         String kindergarten = "";
-        return mSharedPrefs.getString("name_kindergarten", kindergarten);
+        return mSharedPrefs.getString("name_kindergarten", kindergarten).replace("\"","");
+    }
+
+    public void setGoHomeTime(String time) {
+        mEditor.putString(Base.KEY_SAVE_GO_HOME_TIME, time);
+        mEditor.commit();
+    }
+
+    public String getGoHomeTime(){
+        String time ="";
+        return mSharedPrefs.getString(Base.KEY_SAVE_GO_HOME_TIME, time);
     }
 
 }
