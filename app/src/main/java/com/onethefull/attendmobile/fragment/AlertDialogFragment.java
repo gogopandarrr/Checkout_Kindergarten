@@ -11,7 +11,7 @@ import android.support.v4.app.DialogFragment;
 import android.util.Log;
 
 import com.onethefull.attendmobile.R;
-import com.onethefull.attendmobile.account.login.LoginActivity;
+import com.onethefull.attendmobile.LoginActivity;
 import com.onethefull.attendmobile.api.SharedPrefManager;
 
 
@@ -37,7 +37,7 @@ public class AlertDialogFragment extends DialogFragment {
             return new AlertDialog.Builder(getActivity())
                     .setIcon(R.drawable.btn_logout)
                     .setTitle(title)
-                    .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             mSharedPrefs = SharedPrefManager.getInstance(getContext());
@@ -57,7 +57,7 @@ public class AlertDialogFragment extends DialogFragment {
                             startActivity(intent);
                         }
                     })
-                    .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();

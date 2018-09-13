@@ -1,4 +1,4 @@
-package com.onethefull.attendmobile.account;
+package com.onethefull.attendmobile;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,9 +6,6 @@ import android.os.Bundle;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-
-import com.onethefull.attendmobile.account.login.LoginActivity;
-import com.onethefull.attendmobile.R;
 
 import java.util.Timer;
 import java.util.TimerTask;

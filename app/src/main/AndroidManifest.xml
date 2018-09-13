@@ -28,15 +28,15 @@
         android:roundIcon="@drawable/appicon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".account.IntroActivity">
+        <activity android:name=".IntroActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".account.login.LoginActivity"></activity>
-        <activity android:name=".account.join.RegisterActivity" />
+        <activity android:name=".LoginActivity"></activity>
+        <activity android:name=".RegisterActivity" />
         <activity
             android:name=".MainActivity"
             android:theme="@style/Actionbar" />

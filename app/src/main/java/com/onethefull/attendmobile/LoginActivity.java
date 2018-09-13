@@ -1,4 +1,4 @@
-package com.onethefull.attendmobile.account.login;
+package com.onethefull.attendmobile;
 
 import android.Manifest;
 import android.content.Intent;
@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Build;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,9 +17,11 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.onethefull.attendmobile.MainActivity;
-import com.onethefull.attendmobile.R;
-import com.onethefull.attendmobile.account.join.RegisterActivity;
+
+import com.onethefull.attendmobile.account.login.LoginPresenter;
+import com.onethefull.attendmobile.account.login.LoginView;
+import com.onethefull.attendmobile.account.login.PresenterImpl;
+
 import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 import fr.castorflex.android.circularprogressbar.CircularProgressDrawable;
 
@@ -230,7 +231,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
     @Override
     public void loginSuccess() {
-        Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getResources().getString(R.string.success_login), Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
@@ -241,7 +242,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
     @Override
     public void loginError() {
-        Toast.makeText(this, "로그인 실패", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getResources().getString(R.string.fail_login), Toast.LENGTH_SHORT).show();
         setBacktoNormal();
 
     }

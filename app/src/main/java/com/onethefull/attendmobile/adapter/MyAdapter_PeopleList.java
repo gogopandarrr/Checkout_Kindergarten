@@ -126,7 +126,7 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
                     vh.tv_name.setText(lists_student.getName());
                     vh.iv_pic.setVisibility(View.VISIBLE);
                     vh.tv_sub.setVisibility(View.VISIBLE);
-                    vh.tv_sub.setText("어린이");
+                    vh.tv_sub.setText(context.getResources().getString(R.string.children));
 
                 }else{
                     //등록은 되었으나 cv서버에 사진등록이 안된 경우..

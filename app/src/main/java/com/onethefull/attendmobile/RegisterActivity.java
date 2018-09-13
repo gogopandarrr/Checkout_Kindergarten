@@ -1,4 +1,4 @@
-package com.onethefull.attendmobile.account.join;
+package com.onethefull.attendmobile;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -12,8 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.onethefull.attendmobile.account.login.LoginActivity;
-import com.onethefull.attendmobile.R;
+import com.onethefull.attendmobile.account.join.JoinPresenter;
+import com.onethefull.attendmobile.account.join.JoinPresenterImpl;
+import com.onethefull.attendmobile.account.join.JoinView;
 import com.onethefull.attendmobile.account.resetpwd.ResetPwdPresenter;
 import com.onethefull.attendmobile.account.resetpwd.ResetPwdPresenterImpl;
 import com.onethefull.attendmobile.account.resetpwd.ResetPwdView;
@@ -36,6 +37,7 @@ public class RegisterActivity extends AppCompatActivity implements JoinView, Res
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
 
         initView();
         modeCheck();
@@ -77,7 +79,7 @@ public class RegisterActivity extends AppCompatActivity implements JoinView, Res
         switch (mode){
 
             case 1:
-                tv_title.setText("회원가입");
+                tv_title.setText(getResources().getString(R.string.join_user));
                 layout_register.setVisibility(View.VISIBLE);
                 layout_forgot.setVisibility(View.GONE);
                 break;
@@ -85,7 +87,7 @@ public class RegisterActivity extends AppCompatActivity implements JoinView, Res
 
             case 2:
 
-                tv_title.setText("비밀번호 찾기");
+                tv_title.setText(getResources().getString(R.string.find_title));
                 layout_register.setVisibility(View.GONE);
                 layout_forgot.setVisibility(View.VISIBLE);
 
@@ -245,13 +247,13 @@ public class RegisterActivity extends AppCompatActivity implements JoinView, Res
 
     @Override
     public void success() {
-        Toast.makeText(this, "회원가입 성공", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getResources().getString(R.string.success_join), Toast.LENGTH_SHORT).show();
         launch(LoginActivity.class);
     }
 
     @Override
     public void error() {
-        Toast.makeText(this, "회원가입 실패", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getResources().getString(R.string.fail_join), Toast.LENGTH_SHORT).show();
     }
 
     @Override
