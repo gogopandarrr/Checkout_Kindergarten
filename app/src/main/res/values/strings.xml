@@ -45,7 +45,7 @@
     <string name="success_find_password">비밀번호를 전송하였습니다. 메일을 확인해주세요.</string>
     <string name="list_attendance">출석부</string>
     <string name="no_camera_permission">퍼미션을 받지 못했으므로 종료하겠습니다.</string>
-    <string name="message_to_parents"> 보호자님 안녕하세요.</string>
+    <string name="message_to_parents">&#160;보호자님 안녕하세요.</string>
     <string name="call_to_parent"> 보호자님에게 전화 거시겠습니까?</string>
 
     <string name="parents_email">보호자 이메일</string>

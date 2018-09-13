@@ -36,71 +36,93 @@ import com.onethefull.wonderful_cv_library.CV_Package.WonderfulCV;
 
 import java.util.ArrayList;
 
+import butterknife.BindString;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DetailViewActivity extends AppCompatActivity implements SetChildrenView, DeleteListView, UpdateChildrenView{
 
     private static final String TAG = DetailViewActivity.class.getSimpleName();
-    private Toolbar toolbar;
-    private CircleImageView iv_profile;
-    private ImageView bt_takePhoto, bt_delete;
-    private Button bt_edit, bt_finish;
-    private TextView tv_name, tv_tel, tv_email;
-    private EditText et_name, et_tel, et_email;
-    private LinearLayout layout_text, layout_edit;
+
+
+
+
     private Lists_downInfo listsDownInfo;
+
     private SetChildrenPresenter childrenPresenter;
     private DeleteListPresenter deleteListPresenter;
     private UpdatePresenter updatePresenter;
-    private SharedPrefManager mSharedPrefs;
+
     private ArrayList<Object> stp;
     private ArrayList<Identity> userList = new ArrayList<>();
+    private String id, cvid;
+    private byte[] image;
+    private int mode;
 
-    WonderfulCV wonderfulCV = new WonderfulCV();
-
-    String id, cvid;
-    byte[] image;
-    int mode;
-
-    TinyDB tinyDB;
-
+    private WonderfulCV wonderfulCV = new WonderfulCV();
+    private TinyDB tinyDB;
+    private SharedPrefManager mSharedPrefs;
 
 
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.iv_profile) CircleImageView iv_profile;
+    @BindView(R.id.bt_takePhoto) ImageView bt_takePhoto;
+    @BindView(R.id.btn_delete) Button bt_delete;
+    @BindView(R.id.btn_edit) Button bt_edit;
+    @BindView(R.id.btn_finish) Button bt_finish;
+    @BindView(R.id.tv_stuName) TextView tv_name;
+    @BindView(R.id.tv_stuTel) TextView tv_tel;
+    @BindView(R.id.tv_stuEmail) TextView tv_email;
+    @BindView(R.id.et_stuName) EditText et_name;
+    @BindView(R.id.et_stuTel) EditText et_tel;
+    @BindView(R.id.et_stuEmail) EditText et_email;
+    @BindView(R.id.layout_profile_edit) LinearLayout layout_edit;
+    @BindView(R.id.layout_profile) LinearLayout layout_text;
+
+    @BindString(R.string.app_name) String appname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_view);
+        ButterKnife.bind(this);
 
         initView();
-        setListener();
         modeCheck();
 
 
 
     }//oc
 
+
+    @OnClick({R.id.btn_finish, R.id.btn_edit, R.id.bt_takePhoto, R.id.btn_delete})
+    public void onViewClick(View view){
+        switch (view.getId()){
+            case R.id.btn_finish:
+                done();
+                break;
+            case R.id.btn_edit:
+                editMode();
+                break;
+            case R.id.bt_takePhoto:
+                takePhoto();
+                break;
+            case R.id.btn_delete:
+                deleteStudent();
+                break;
+            default:
+                break;
+        }
+    }//
+
+
+
     private void initView(){
 
-        toolbar = findViewById(R.id.toolbar);
-        iv_profile = findViewById(R.id.iv_profile);
-        tv_name = findViewById(R.id.tv_stuName);
-        tv_tel = findViewById(R.id.tv_stuTel);
-        tv_email = findViewById(R.id.tv_stuEmail);
-        et_name = findViewById(R.id.et_stuName);
-        et_tel = findViewById(R.id.et_stuTel);
-        et_email = findViewById(R.id.et_stuEmail);
-        bt_edit = findViewById(R.id.btn_edit);
-        bt_finish = findViewById(R.id.btn_finish);
-        bt_delete = findViewById(R.id.btn_delete);
-        layout_edit = findViewById(R.id.layout_profile_edit);
-        layout_text = findViewById(R.id.layout_profile);
-        bt_takePhoto = findViewById(R.id.bt_takePhoto);
-
-
-
         tinyDB = new TinyDB(this);
-
+        mSharedPrefs = SharedPrefManager.getInstance(getApplicationContext());
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("원생정보");
@@ -112,19 +134,96 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
       //업데이트 준비
         updatePresenter = new UpdateChildrenPresenterImp(DetailViewActivity.this, getApplicationContext());
 
-     //cv서버 연결
+        //cv서버 연결
         wonderfulCV.getFullServerAddress("1thefull.ml", 5000);
         //토큰 받기
         wonderfulCV.retrieveTokenFromStorage();
-
-
-
         //저장된 id 가져오기
-        mSharedPrefs = SharedPrefManager.getInstance(getApplicationContext());
         id = mSharedPrefs.getLoginId();
-        id = id.replace("\"", "");
 
     }//init
+
+
+    private void done(){
+        String name = et_name.getText().toString();
+        String tel = et_tel.getText().toString();
+        String email = et_email.getText().toString();
+
+        switch (mode){
+
+            case 1 :
+
+                if (validateForm(name, tel) && image != null){
+                    //원생등록
+                    childrenPresenter.performJoin(id, name, cvid, tel, email);
+
+                }else{
+                    Toast.makeText(DetailViewActivity.this, R.string.error_formFill, Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            case 2 : //보기-편집 모드
+
+                updatePresenter.updateChildrenInfo(id, cvid, name, tel, email);
+                break;
+        }
+    }//
+
+
+    private void editMode(){
+
+        layout_text.setVisibility(View.GONE);
+        bt_edit.setVisibility(View.GONE);
+        layout_edit.setVisibility(View.VISIBLE);
+        bt_finish.setVisibility(View.VISIBLE);
+        bt_takePhoto.setVisibility(View.GONE);
+        bt_delete.setVisibility(View.VISIBLE);
+        et_name.setText(listsDownInfo.getName());
+        et_tel.setText(listsDownInfo.getTel());
+        et_email.setText(listsDownInfo.getEmail());
+    }
+
+
+    private void takePhoto(){
+
+        if (validateForm(et_name.getText().toString(), et_tel.getText().toString())){
+
+            Intent intent = new Intent(DetailViewActivity.this, FRActivity.class);
+            intent.putExtra("name",et_name.getText().toString());
+            intent.putExtra("tel",et_tel.getText().toString());
+            intent.putExtra("email",et_email.getText().toString());
+            startActivity(intent);
+
+        }else{
+            Toast.makeText(DetailViewActivity.this, R.string.error_formFill2, Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private void deleteStudent(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(DetailViewActivity.this);
+        builder.setTitle(R.string.delete_sutudent);
+        builder.setPositiveButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                deleteListPresenter.deleteList(id, cvid);
+                Integer userId = Integer.parseInt(cvid);
+                CVServiceConnectionManager.deleteUser(wonderfulCV.serverAddress, wonderfulCV.token, userId);
+            }
+        });
+
+        builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
 
 
     private void modeCheck(){
@@ -191,141 +290,8 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
             }
 
 
-
     }//
 
-
-
-
-    private void setListener(){
-        bt_finish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                String name = et_name.getText().toString();
-                String tel = et_tel.getText().toString();
-                String email = et_email.getText().toString();
-
-                switch (mode){
-
-                    case 1 :
-
-                        if (validateForm(name, tel) && image != null){
-                            //원생등록
-                            childrenPresenter.performJoin(id, name, cvid, tel, email);
-
-                        }else{
-                            Toast.makeText(DetailViewActivity.this, R.string.error_formFill, Toast.LENGTH_SHORT).show();
-                        }
-
-                        break;
-
-                    case 2 : //보기-편집 모드
-
-
-                        updatePresenter.updateChildrenInfo(id, cvid, name, tel, email);
-
-
-                        break;
-
-
-
-                }
-
-
-
-
-
-
-                }
-
-
-        });
-
-
-        bt_edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                layout_text.setVisibility(View.GONE);
-                bt_edit.setVisibility(View.GONE);
-                layout_edit.setVisibility(View.VISIBLE);
-                bt_finish.setVisibility(View.VISIBLE);
-                bt_takePhoto.setVisibility(View.GONE);
-                bt_delete.setVisibility(View.VISIBLE);
-                et_name.setText(listsDownInfo.getName());
-                et_tel.setText(listsDownInfo.getTel());
-                et_email.setText(listsDownInfo.getEmail());
-
-
-            }
-        });
-
-
-        bt_takePhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-                if (validateForm(et_name.getText().toString(), et_tel.getText().toString())){
-
-                    Intent intent = new Intent(DetailViewActivity.this, FRActivity.class);
-                    intent.putExtra("name",et_name.getText().toString());
-                    intent.putExtra("tel",et_tel.getText().toString());
-                    intent.putExtra("email",et_email.getText().toString());
-                    startActivity(intent);
-
-                }else{
-                    Toast.makeText(DetailViewActivity.this, R.string.error_formFill2, Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
-
-
-
-        bt_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(DetailViewActivity.this);
-
-                builder.setTitle(R.string.delete_sutudent);
-
-                builder.setPositiveButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-
-                        deleteListPresenter.deleteList(id, cvid);
-
-
-                        Integer userId = Integer.parseInt(cvid);
-                        CVServiceConnectionManager.deleteUser(wonderfulCV.serverAddress, wonderfulCV.token, userId);
-
-
-
-                    }
-                });
-
-                builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                });
-
-                AlertDialog dialog = builder.create();
-                dialog.setCanceledOnTouchOutside(false);
-                dialog.show();
-
-            }
-        });
-
-
-
-    }//
 
 
 

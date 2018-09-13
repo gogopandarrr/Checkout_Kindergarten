@@ -10,10 +10,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.onethefull.attendmobile.DetailViewActivity;
 
@@ -28,6 +30,10 @@ import com.onethefull.wonderful_cv_library.CV_Package.WonderfulCV;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnItemClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filterable {
@@ -37,7 +43,6 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
     ArrayList<Lists_downInfo> downInfoArrayList;
     ArrayList<Lists_downInfo> filtered;
     ArrayList<Identity> userList;
-    ArrayList<Object> stp;
     Lists_downInfo listsStudent;
     TinyDB tinyDB;
     String urlString;
@@ -50,16 +55,15 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
         this.downInfoArrayList = downInfoArrayList;
         this.userList = userList;
         this.filtered = downInfoArrayList;
-
     }
+
+
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
 
         LayoutInflater inflater = LayoutInflater.from(context);
-
-
         tinyDB = new TinyDB(context);
 
         View itemView;
@@ -67,30 +71,27 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
 
         final VH holder = new VH(itemView);
 
-
-
-
-        //클릭시 보기 모드
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                int position = holder.getAdapterPosition();
-                int mode = 2; // 보기모드
-
-
-
-                if (position >= 0){
-                    listsStudent = downInfoArrayList.get(position);
-                    Intent intent = new Intent(context, DetailViewActivity.class);
-                    intent.putExtra("listsStudent", listsStudent);
-                    intent.putExtra("mode", mode);
-                    context.startActivity(intent);
-                }
-
-
-            }
-        });
+//        //클릭시 보기 모드
+//        holder.cardView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                int position = holder.getAdapterPosition();
+//                int mode = 2; // 보기모드
+//
+//
+//
+//                if (position >= 0){
+//                    listsStudent = downInfoArrayList.get(position);
+//                    Intent intent = new Intent(context, DetailViewActivity.class);
+//                    intent.putExtra("listsStudent", listsStudent);
+//                    intent.putExtra("mode", mode);
+//                    context.startActivity(intent);
+//                }
+//
+//
+//            }
+//        });
 
 
 
@@ -105,10 +106,7 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
 
         Lists_downInfo lists_student = filtered.get(position);
 
-
         String cvid = lists_student.getCvid();
-
-
 
 
         //유저 리스트 cvid로 이미지 주소 찾기
@@ -191,29 +189,49 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
     }
 
 
-    private class VH extends RecyclerView.ViewHolder{
+    public class VH extends RecyclerView.ViewHolder{
 
-        CardView cardView;
-        CheckBox checkBox;
-        CircleImageView iv_pic;
-        TextView tv_name, tv_sub;
-
+        @BindView(R.id.cardView_people) CardView cardView;
+        @BindView(R.id.iv_pic) CircleImageView iv_pic;
+        @BindView(R.id.tv_name) TextView tv_name;
+        @BindView(R.id.tv_sub) TextView tv_sub;
 
         public VH(@NonNull final View itemView) {
             super(itemView);
-
-            checkBox = itemView.findViewById(R.id.checkbox_list);
-            cardView = itemView.findViewById(R.id.cardView_people);
-            iv_pic = itemView.findViewById(R.id.iv_pic);
-            tv_name = itemView.findViewById(R.id.tv_name);
-            tv_sub = itemView.findViewById(R.id.tv_sub);
-
+            ButterKnife.bind(this,itemView);
 
         }
 
+        @OnClick(R.id.cardView_people)
+        public void OnCardViewClick(View view){
 
 
-    }
+            switch (view.getId()){
+
+                case R.id.cardView_people:
+
+                    int position = getAdapterPosition();
+                    int mode = 2; // 보기모드
+
+                    if (position >= 0){
+                        listsStudent = downInfoArrayList.get(position);
+                        Intent intent = new Intent(context, DetailViewActivity.class);
+                        intent.putExtra("listsStudent", listsStudent);
+                        intent.putExtra("mode", mode);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        context.startActivity(intent);
+                    }
+
+                    break;
+
+                 default:
+                    break;
+            }
+        }//
+
+
+
+    }//vh
 
 
 

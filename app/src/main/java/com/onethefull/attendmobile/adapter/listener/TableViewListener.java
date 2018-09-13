@@ -56,45 +56,12 @@ public class TableViewListener implements ITableViewListener {
             switch (position) {
 
                 case 0:
-
-                    new LovelyStandardDialog(mContext, LovelyStandardDialog.ButtonLayout.HORIZONTAL)
-                            .setButtonsColorRes(R.color.main_blue)
-                            .setIcon(R.drawable.ic_calling)
-
-                            .setMessage(name+mContext.getResources().getString(R.string.call_to_parent))
-                            .setPositiveButton(mContext.getResources().getString(R.string.call), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    //전화걸기
-                                    Intent intent = new Intent(Intent.ACTION_CALL);
-                                    intent.setData(Uri.parse("tel:" + tel));
-                                    //권한확인
-                                    if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                                        Toast.makeText(mContext, R.string.error_permission, Toast.LENGTH_SHORT).show();
-                                        return;
-                                    }else{
-                                        mContext.startActivity(intent);
-                                    }
-
-                                }
-                            })
-                            .setNegativeButton(mContext.getResources().getString(R.string.cancel), null).show();
-
-
+                    callDialog();
                    break;
 
 
                case 1:
-
-
-                   if (!tel.equals(mContext.getResources().getString(R.string.deleted_student))){
-                       Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"+tel));
-                       intent.putExtra("sms_body", name+mContext.getResources().getString(R.string.message_to_parents));
-                       mContext.startActivity(intent);
-                   }else {
-                       Toast.makeText(mContext, mContext.getResources().getString(R.string.deleted_student_toast), Toast.LENGTH_SHORT).show();
-                   }
-
+                   sendSMS();
                    break;
 
 
@@ -136,8 +103,6 @@ public class TableViewListener implements ITableViewListener {
     public void onColumnHeaderLongPressed(@NonNull RecyclerView.ViewHolder columnHeaderView, int column) {
             if (columnHeaderView != null && columnHeaderView instanceof MyColumnHeaderViewHolder){
                 ColumnHeaderLongPressPopup popup = new ColumnHeaderLongPressPopup((MyColumnHeaderViewHolder)columnHeaderView, tableView);
-
-
                 popup.show();
             }
 
@@ -153,4 +118,42 @@ public class TableViewListener implements ITableViewListener {
     public void onRowHeaderLongPressed(@NonNull RecyclerView.ViewHolder rowHeaderView, int row) {
 
     }
+
+
+    private void callDialog(){
+
+        new LovelyStandardDialog(mContext, LovelyStandardDialog.ButtonLayout.HORIZONTAL)
+                .setButtonsColorRes(R.color.main_blue)
+                .setIcon(R.drawable.ic_calling)
+
+                .setMessage(name+mContext.getResources().getString(R.string.call_to_parent))
+                .setPositiveButton(mContext.getResources().getString(R.string.call), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //전화걸기
+                        Intent intent = new Intent(Intent.ACTION_CALL);
+                        intent.setData(Uri.parse("tel:" + tel));
+                        //권한확인
+                        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                            Toast.makeText(mContext, R.string.error_permission, Toast.LENGTH_SHORT).show();
+                            return;
+                        }else{
+                            mContext.startActivity(intent);
+                        }
+
+                    }
+                })
+                .setNegativeButton(mContext.getResources().getString(R.string.cancel), null).show();
+    }//
+
+
+    private void sendSMS(){
+        if (!tel.equals(mContext.getResources().getString(R.string.deleted_student))){
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"+tel));
+            intent.putExtra("sms_body", name+mContext.getResources().getString(R.string.message_to_parents));
+            mContext.startActivity(intent);
+        }else {
+            Toast.makeText(mContext, mContext.getResources().getString(R.string.deleted_student_toast), Toast.LENGTH_SHORT).show();
+        }
+    }//
 }

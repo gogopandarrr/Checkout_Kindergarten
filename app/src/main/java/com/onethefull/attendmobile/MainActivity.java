@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.layout_drawable);
         navigationView= findViewById(R.id.navi);
         navigationView.setItemIconTintList(null);
-        drawerToggle= new ActionBarDrawerToggle(this, drawerLayout, toolbar,R.string.people_list, R.string.people_list);
+        drawerToggle= new ActionBarDrawerToggle(this, drawerLayout, toolbar,R.string.list_attendance, R.string.list_attendance);
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
