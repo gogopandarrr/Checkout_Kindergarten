@@ -418,9 +418,10 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
         });
 
 
+        String pw = "1thefull";
         Crypto.deleteExistingTokenFromStorage();
         wonderfulCV.initiateServerConnection(getApplicationContext(), "1thefull.ml", 5000,
-                loginEmail, loginPwd);
+                loginEmail, pw);
 
 
         Toast.makeText(this, "등록 중 입니다. 잠시만 기다려주세요.", Toast.LENGTH_LONG).show();

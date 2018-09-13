@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -60,8 +61,8 @@ public class TableViewListener implements ITableViewListener {
                             .setButtonsColorRes(R.color.main_blue)
                             .setIcon(R.drawable.ic_calling)
 
-                            .setMessage(name+" 보호자님에게 전화 거시겠습니까?")
-                            .setPositiveButton("call", new View.OnClickListener() {
+                            .setMessage(name+mContext.getResources().getString(R.string.call_to_parent))
+                            .setPositiveButton(mContext.getResources().getString(R.string.call), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     //전화걸기
@@ -77,7 +78,7 @@ public class TableViewListener implements ITableViewListener {
 
                                 }
                             })
-                            .setNegativeButton("cancel", null).show();
+                            .setNegativeButton(mContext.getResources().getString(R.string.cancel), null).show();
 
 
                    break;
@@ -85,6 +86,14 @@ public class TableViewListener implements ITableViewListener {
 
                case 1:
 
+
+                   if (!tel.equals(mContext.getResources().getString(R.string.deleted_student))){
+                       Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"+tel));
+                       intent.putExtra("sms_body", name+mContext.getResources().getString(R.string.message_to_parents));
+                       mContext.startActivity(intent);
+                   }else {
+                       Toast.makeText(mContext, mContext.getResources().getString(R.string.deleted_student_toast), Toast.LENGTH_SHORT).show();
+                   }
 
                    break;
 

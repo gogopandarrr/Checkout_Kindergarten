@@ -51,6 +51,7 @@ public class ChildrenListFragment extends Fragment implements GetListView{
     private SharedPrefManager mSharedPrefs;
     private RelativeLayout layout_childList;
     private TextView tv_total;
+    private String pw = "1thefull";
 
     TinyDB tinyDB;
     WonderfulCV wonderfulCV = new WonderfulCV();
@@ -64,7 +65,7 @@ public class ChildrenListFragment extends Fragment implements GetListView{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_student_list, container, false);
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle("원생 목록");
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.list_students));
 
         tinyDB = new TinyDB(getActivity());
         fab_add = view.findViewById(R.id.fab_add);
@@ -174,7 +175,7 @@ public class ChildrenListFragment extends Fragment implements GetListView{
         }
 
 
-            tv_total.setText("등록된 원생 총 "+downInfoArrayList.size()+"명");
+            tv_total.setText(getResources().getString(R.string.total_students)+downInfoArrayList.size()+getResources().getString(R.string.unit_people));
 
 
         checkNolist();
@@ -183,11 +184,11 @@ public class ChildrenListFragment extends Fragment implements GetListView{
         //cv서버 유저리스트 받아오기
         wonderfulCV.getFullServerAddress("1thefull.ml", 5000);
         wonderfulCV.initiateServerConnection(getActivity(), "1thefull.ml", 5000,
-                id, pwd);
+                id, pw);
 
         Boolean loginSucess = wonderfulCV.initiateServerConnection(getActivity(),
                 "1thefull.ml", 5000,
-                id, pwd);
+                id, pw);
 
         if (loginSucess) {
             //Login Success

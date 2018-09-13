@@ -293,7 +293,7 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
 
                 builder.setTitle(R.string.delete_sutudent);
 
-                builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -309,7 +309,7 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
                     }
                 });
 
-                builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -433,7 +433,7 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
     public void success() {
 
 
-        Toast.makeText(this, "등록 완료", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getResources().getString(R.string.register_success), Toast.LENGTH_SHORT).show();
         Intent intent =  new Intent(DetailViewActivity.this, MainActivity.class);
 
         mode = 1;
@@ -446,7 +446,7 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
 
     @Override
     public void error() {
-        Toast.makeText(this, "등록 실패", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getResources().getString(R.string.register_fail), Toast.LENGTH_SHORT).show();
     }
 
 
@@ -462,7 +462,7 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
     @Override
     public void deleteSuccess() {
 
-        Toast.makeText(this, "삭제 성공", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getResources().getString(R.string.delete_success), Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(DetailViewActivity.this, MainActivity.class);
         mode = 3;
         intent.putExtra("mode", 3);
@@ -474,7 +474,7 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
     @Override
     public void deleteError() {
 
-        Toast.makeText(this, "삭제 실패", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getResources().getString(R.string.delete_fail), Toast.LENGTH_SHORT).show();
     }
 }//class
 

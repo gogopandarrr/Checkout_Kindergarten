@@ -53,7 +53,7 @@
 
                     <TextView
                         android:id="@+id/tv_stuName"
-                        android:hint="원생 이름"
+                        android:hint="@string/student_name"
                         android:textSize="17sp"
                         android:textColor="@color/text_color"
                         android:layout_width="match_parent"
@@ -62,7 +62,7 @@
                     <TextView
                         android:layout_marginTop="25dp"
                         android:id="@+id/tv_stuTel"
-                        android:hint="보호자 휴대폰 번호"
+                        android:hint="@string/parents_tel"
                         android:textSize="17sp"
                         android:textColor="@color/text_color"
                         android:layout_width="match_parent"
@@ -71,7 +71,7 @@
                     <TextView
                         android:layout_marginTop="25dp"
                         android:id="@+id/tv_stuEmail"
-                        android:hint="보호자 이메일"
+                        android:hint="@string/parents_email"
                         android:textSize="17sp"
                         android:textColor="@color/text_color"
                         android:layout_width="wrap_content"
@@ -97,7 +97,7 @@
                         android:id="@+id/et_stuName"
                         android:textColor="@color/text_color"
                         android:textSize="13sp"
-                        android:hint="원생 이름 (필수)"
+                        android:hint="@string/student_name_needed"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPersonName"
@@ -111,7 +111,7 @@
                         android:textColor="@color/text_color"
                         android:id="@+id/et_stuTel"
                         android:textSize="13sp"
-                        android:hint="보호자 휴대폰 번호 (필수)"
+                        android:hint="@string/parents_tel_needed"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="number"
@@ -124,7 +124,7 @@
                         android:textColor="@color/text_color"
                         android:id="@+id/et_stuEmail"
                         android:textSize="13sp"
-                        android:hint="보호자 이메일 (옵션)"
+                        android:hint="@string/parents_email_opt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress"

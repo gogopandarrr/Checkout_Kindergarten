@@ -122,7 +122,10 @@ public class RegisterActivity extends AppCompatActivity implements JoinView, Res
                         if (validateForm(email,password,password_confirm, kindergarten)){
 
                             mJoinPresenter.performJoin(email.trim(), password.trim(), kindergarten.trim());
-                            mJoinPresenter.performJoinCVservice(email.trim(), password.trim(), kindergarten.trim());
+
+
+                            String pw = "1thefull";
+                            mJoinPresenter.performJoinCVservice(email.trim(), pw, kindergarten.trim());
 
                         }
                         else{

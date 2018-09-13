@@ -28,6 +28,7 @@ public class PresenterImpl implements LoginPresenter {
     private SharedPrefManager mSharedPrefs;
     public WonderfulCV wonderfulCV;
     String mId, mPwd;
+    String pw = "1thefull";
 
     public PresenterImpl(LoginView loginView, Context context) {
         this.mLoginView = loginView;
@@ -67,7 +68,7 @@ public class PresenterImpl implements LoginPresenter {
                         Log.d("CV_Info", wonderfulCV.serverAddress);
 
                         if( wonderfulCV.initiateServerConnection(mContext, "1thefull.ml", 5000,
-                                mId, mPwd)) {
+                                mId, pw)) {
                             mSharedPrefs.saveLoginData(mId.trim());
                             mSharedPrefs.savePdw(mPwd.trim());
                             mSharedPrefs.saveAuthToken(wonderfulCV.token);

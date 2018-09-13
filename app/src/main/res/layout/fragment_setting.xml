@@ -13,6 +13,7 @@
         android:layout_height="match_parent">
 
         <RelativeLayout
+            android:visibility="gone"
             android:background="@drawable/layoutclickbutton"
             android:clickable="true"
             android:id="@+id/layout_comeTime"
@@ -28,7 +29,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_centerVertical="true"
                 android:textSize="15sp"
-                android:text="등원 시간 설정"
+                android:text="@string/setting_come_time"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -39,7 +40,7 @@
                 android:layout_marginEnd="7dp"
                 android:textColor="@color/text_color_light"
                 android:textSize="15sp"
-                android:text="개발중"
+                android:text="00:00"
                 android:id="@+id/tv_currentComeTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -74,7 +75,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_centerVertical="true"
                 android:textSize="15sp"
-                android:text="하원 시간 설정"
+                android:text="@string/setting_go_time"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -120,7 +121,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_centerVertical="true"
                 android:textSize="15sp"
-                android:text="유치원 정보 수정"
+                android:text="@string/edit_kindergarten"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -131,7 +132,7 @@
                 android:layout_marginEnd="7dp"
                 android:textColor="@color/text_color_light"
                 android:textSize="15sp"
-                android:text="원더풀 유치원"
+                android:text="@string/basic_kindergarten"
                 android:id="@+id/tv_currentKindergarten_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -152,6 +153,55 @@
                 android:background="@drawable/toolbar_dropshadow"/>
 
         </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_switch_make_class"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:visibility="gone"
+                android:background="@drawable/layoutclickbutton"
+                android:clickable="true"
+                android:id="@+id/layout_makeClass"
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <TextView
+                    android:layout_marginStart="16dp"
+                    android:layout_centerVertical="true"
+                    android:textSize="15sp"
+                    android:text="유치원 반 설정"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:rotation="-90"
+                    android:layout_marginEnd="16dp"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/icon_arrowOpen"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ico"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <View android:layout_width="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:layout_height="1dp"
+                    android:background="@drawable/toolbar_dropshadow"/>
+
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:visibility="gone"
+                android:id="@+id/recycler_class"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
+
+
+        </LinearLayout>
 
 
 

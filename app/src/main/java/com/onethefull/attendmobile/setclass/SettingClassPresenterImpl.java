@@ -50,7 +50,7 @@ public class SettingClassPresenterImpl implements SettingClassPresenter {
                     JsonObject object = response.body();
                     if (object != null) {
                         Log.d(TAG, "success:: " + object.toString());
-                        settingClassView.success();
+                        settingClassView.setClassSuccess();
                     }
                 } else {
                     try {

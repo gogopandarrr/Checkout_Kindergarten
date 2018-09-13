@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void logout(){
-        AlertDialogFragment dialogFragment = AlertDialogFragment.newInstance("로그아웃 하시겠습니까?");
+        AlertDialogFragment dialogFragment = AlertDialogFragment.newInstance(getResources().getString(R.string.wanna_logout));
         dialogFragment.show(getSupportFragmentManager(),"dialog");
     }//
 

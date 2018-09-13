@@ -80,7 +80,7 @@ public class AttendanceFragment extends Fragment implements GetAttendanceView{
 
 
         //메뉴바 타이틀설정
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle("출석부");
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.list_attendance));
         setHasOptionsMenu(true);
 
 

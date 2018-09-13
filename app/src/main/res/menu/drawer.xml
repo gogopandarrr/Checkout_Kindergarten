@@ -7,22 +7,22 @@
         <item
             android:id="@+id/navigation_home"
             android:icon="@drawable/btn_home"
-            android:title="원생 리스트" />
+            android:title="@string/list_students" />
 
 
     <item
         android:id="@+id/navigation_attend"
         android:icon="@drawable/btn_book"
-        android:title="출석부" />
+        android:title="@string/list_attendance" />
 
     <item
         android:id="@+id/navigation_logout"
         android:icon="@drawable/btn_logout"
-        android:title="로그아웃" />
+        android:title="@string/logout" />
         <item
             android:id="@+id/navigation_setting"
             android:icon="@drawable/btn_setting"
-            android:title="환경설정" />
+            android:title="@string/setting" />
 
 </group>
 

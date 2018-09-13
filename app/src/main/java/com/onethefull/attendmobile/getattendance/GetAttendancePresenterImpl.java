@@ -1,10 +1,13 @@
 package com.onethefull.attendmobile.getattendance;
 
 import android.content.Context;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.onethefull.attendmobile.R;
 import com.onethefull.attendmobile.api.ApiService;
 import com.onethefull.attendmobile.api.ApiUtils;
 import com.onethefull.attendmobile.lists.Lists_Attendance;
@@ -68,7 +71,8 @@ public class GetAttendancePresenterImpl implements GetAttendancePresenter {
                             if (attendanceInfo.get("PARENT_TEL") != null){
                                 tel = attendanceInfo.get("PARENT_TEL").toString().replace("\"","");
                             }else{
-                                tel = "삭제된 원생";
+                                tel = context.getResources().getString(R.string.deleted_student);
+
                             }
 
 

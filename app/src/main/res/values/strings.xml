@@ -1,7 +1,10 @@
 <resources>
-    <string name="app_name">원더풀키즈 출석관리</string>
+    <string name="app_name">원더풀키즈 : 유치원 출결관리</string>
+    <string name="app_name_short">원더풀 키즈</string>
     <string name="login_title">로그인</string>
+    <string name="logout">로그아웃</string>
     <string name="register_title">사용자 등록</string>
+    <string name="join_user">회원가입</string>
     <string name="find_title">비밀번호 찾기</string>
     <string name="forgot_password">비밀번호 찾기</string>
     <string name="login_button">로그인</string>
@@ -18,22 +21,71 @@
     <string name="error_cvid">오류가 발생했습니다. 다시 등록해주세요.</string>
     <string name="error_permission">권한을 설정하셔야 이용하실 수 있습니다.</string>
     <string name="reset_success">초기화 요청 url을 메일로 보냈습니다. 메일을 확인해주세요.</string>
+    <string name="deleted_student">삭제된 원생</string>
+    <string name="deleted_student_toast">삭제된 원생입니다.</string>
+
+    <string name="write_email">이메일 주소를 입력해주세요.</string>
+    <string name="write_pwd">비밀번호를 입력해주세요.</string>
+    <string name="write_pwd_again">비밀번호를 한번 더 입력해주세요.</string>
+    <string name="write_kindergarten">유치원 이름을 입력해주세요.</string>
+
+
+    <string name="wanna_logout">로그아웃하시겠습니까?</string>
 
     <string name="update_info_done">정보를 변경 했습니다.</string>
+    <string name="edit_kindergarten">유치원 정보 수정</string>
     <string name="changeNM_done">유치원 이름을 변경하였습니다.</string>
+    <string name="add_class">추가하실 반 이름을 적어주세요.</string>
+    <string name="add_class_short">반 추가하기</string>
     <string name="dialog_change_name">새로운 유치원 이름을 적어주세요.</string>
     <string name="delete_sutudent">원생 정보를 삭제하시겠습니까?</string>
-    <string name="ok">OK</string>
+    <string name="ok">확인</string>
     <string name="success_registeration">성공적으로 가입하였습니다.</string>
     <string name="finding_email">가입하신 이메일 주소를 입력하시면 해당 계정으로 비밀번호 재설정 링크를 보내드립니다.</string>
     <string name="success_find_password">비밀번호를 전송하였습니다. 메일을 확인해주세요.</string>
-    <string name="people_list">출석 리스트</string>
+    <string name="list_attendance">출석부</string>
     <string name="no_camera_permission">퍼미션을 받지 못했으므로 종료하겠습니다.</string>
+    <string name="message_to_parents"> 보호자님 안녕하세요.</string>
+    <string name="call_to_parent"> 보호자님에게 전화 거시겠습니까?</string>
+
+    <string name="parents_email">보호자 이메일</string>
+    <string name="parents_email_opt">보호자 이메일 (옵션)</string>
+    <string name="parents_tel_needed">보호자 휴대폰 번호 (필수)</string>
+    <string name="parents_tel">보호자 휴대폰 번호</string>
+    <string name="student_name">원생 이름</string>
+    <string name="student_name_needed">원생 이름 (필수)</string>
+
+    <string name="list_students">원생 목록</string>
+    <string name="total_students">등록된 원생 총 </string>
+
+
+    <string name="setting_come_time">등원 시간 설정</string>
+    <string name="setting_go_time">하원 시간 설정</string>
+    <string name="success_change_time">시간 변경 성공</string>
+    <string name="fail_change_name">시간 변경 실패</string>
+
+    <string name="call">걸기</string>
+    <string name="cancel">취소</string>
+    <string name="change">변경</string>
+    <string name="delete">삭제</string>
+    <string name="setting">설정</string>
+    <string name="none">없음</string>
+    <string name="hour">시</string>
+    <string name="min">분</string>
+    <string name="unit_people">명</string>
+
+
+    <string name="register_fail">등록 실패</string>
+    <string name="register_success">등록 완료</string>
+    <string name="delete_fail">삭제 실패</string>
+    <string name="delete_success">삭제 성공</string>
+
+    <string name="basic_kindergarten">원더풀 유치원</string>
+
+
 
     <string name="calendar_item_new_count">%d명</string>
     <string name="pulldown_refreshing">새로고침 중</string>
-    <string name="pulldown_pull">加载上一月</string>
-    <string name="pulldown_release">释放加载</string>
     <string name="today">오늘</string>
     <string-array name="week">
         <item>일요일</item>
