@@ -6,7 +6,6 @@
     <TextView
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:textColor="@color/text_color_light"
         android:textSize="15sp"
         android:text="원더풀 유치원"
         android:id="@+id/tv_class_name"

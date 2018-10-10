@@ -6,6 +6,7 @@ import android.content.Context;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -25,6 +26,7 @@ import com.onethefull.attendmobile.adapter.holder.MyCellViewHolder;
 import com.onethefull.attendmobile.adapter.holder.MyColumnHeaderViewHolder;
 import com.onethefull.attendmobile.adapter.popup.ColumnHeaderLongPressPopup;
 import com.onethefull.attendmobile.adapter.popup.PowerMenuUtils;
+import com.onethefull.attendmobile.dialog.CustomTwoBtnDialog;
 import com.onethefull.attendmobile.model.Cell;
 
 import com.skydoves.powermenu.OnMenuItemClickListener;
@@ -37,9 +39,11 @@ public class TableViewListener implements ITableViewListener {
 
     private static final String TAG = TableViewListener.class.getSimpleName();
     private ITableView tableView;
-    private Context mContext;
-    private String tel, name;
+    private static Context mContext;
+    private static String tel;
+    private static String name;
     private PowerMenu cellMenu;
+    private CustomTwoBtnDialog customTwoBtnDialog;
 
     public TableViewListener(ITableView tableView, Context context) {
         this.tableView = tableView;
@@ -55,13 +59,21 @@ public class TableViewListener implements ITableViewListener {
 
             switch (position) {
 
-                case 0:
-                    callDialog();
+                case 0: //전화
+                    customTwoBtnDialog = new CustomTwoBtnDialog(mContext, name+mContext.getResources().getString(R.string.call_to_parent), "call", tel);
+                    customTwoBtnDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                    customTwoBtnDialog.setCancelable(false);
+                    customTwoBtnDialog.show();
+
                    break;
 
 
-               case 1:
-                   sendSMS();
+               case 1: //문자
+                   customTwoBtnDialog = new CustomTwoBtnDialog(mContext, name+mContext.getResources().getString(R.string.wanna_send_sms), "sms", null);
+                   customTwoBtnDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                   customTwoBtnDialog.setCancelable(false);
+                   customTwoBtnDialog.show();
+
                    break;
 
 
@@ -120,34 +132,32 @@ public class TableViewListener implements ITableViewListener {
     }
 
 
-    private void callDialog(){
 
-        new LovelyStandardDialog(mContext, LovelyStandardDialog.ButtonLayout.HORIZONTAL)
-                .setButtonsColorRes(R.color.main_blue)
-                .setIcon(R.drawable.ic_calling)
+    static public void call(){
 
-                .setMessage(name+mContext.getResources().getString(R.string.call_to_parent))
-                .setPositiveButton(mContext.getResources().getString(R.string.call), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        //전화걸기
-                        Intent intent = new Intent(Intent.ACTION_CALL);
-                        intent.setData(Uri.parse("tel:" + tel));
-                        //권한확인
-                        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                            Toast.makeText(mContext, R.string.error_permission, Toast.LENGTH_SHORT).show();
-                            return;
-                        }else{
-                            mContext.startActivity(intent);
-                        }
 
-                    }
-                })
-                .setNegativeButton(mContext.getResources().getString(R.string.cancel), null).show();
+        if (!tel.equals(mContext.getResources().getString(R.string.deleted_student))){
+            //전화걸기
+            Intent intent = new Intent(Intent.ACTION_CALL);
+            intent.setData(Uri.parse("tel:" + tel));
+            //권한확인
+            if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(mContext, R.string.error_permission, Toast.LENGTH_SHORT).show();
+                return;
+            }else{
+                mContext.startActivity(intent);
+            }
+        }else {
+            Toast.makeText(mContext, mContext.getResources().getString(R.string.deleted_student_toast), Toast.LENGTH_SHORT).show();
+        }
+
+
+
+
     }//
 
 
-    private void sendSMS(){
+    static public void sendSMS(){
         if (!tel.equals(mContext.getResources().getString(R.string.deleted_student))){
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"+tel));
             intent.putExtra("sms_body", name+mContext.getResources().getString(R.string.message_to_parents));

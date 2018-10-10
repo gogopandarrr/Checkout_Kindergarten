@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +35,9 @@ import com.onethefull.attendmobile.account.changename.ChangeNMPresenterImpl;
 import com.onethefull.attendmobile.account.changename.ChangeNMView;
 import com.onethefull.attendmobile.adapter.MyAdapter_ClassList;
 import com.onethefull.attendmobile.api.SharedPrefManager;
+import com.onethefull.attendmobile.callclasslist.CallClassListPresenter;
+import com.onethefull.attendmobile.callclasslist.CallClassListPresenterImpl;
+import com.onethefull.attendmobile.callclasslist.CallClassListView;
 import com.onethefull.attendmobile.getgotime.GetGoTimePresenter;
 import com.onethefull.attendmobile.getgotime.GetGoTimePresenterImpl;
 import com.onethefull.attendmobile.getgotime.GetGoTimeView;
@@ -49,7 +53,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class SettingFragment extends android.support.v4.app.Fragment implements ChangeNMView, SettingTimeView, GetGoTimeView, View.OnClickListener {
+public class SettingFragment extends android.support.v4.app.Fragment implements CallClassListView, ChangeNMView, SettingTimeView, GetGoTimeView, View.OnClickListener {
     private static final String TAG = SettingFragment.class.getSimpleName();
 
     private RelativeLayout layout_goTime, layout_comeTime, layout_changeName, layout_makeClass;
@@ -58,6 +62,7 @@ public class SettingFragment extends android.support.v4.app.Fragment implements 
     private SettingTimePresenter settingTimePresenter;
     private GetGoTimePresenter getGoTimePresenter;
     private ChangeNMPresenter changeNMPresenter;
+    private CallClassListPresenter callClassListPresenter;
     private SharedPrefManager mSharedPrefs;
     private String id = "";
     private TimePickerDialog picker_time;
@@ -80,6 +85,7 @@ public class SettingFragment extends android.support.v4.app.Fragment implements 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.setting));
         setHasOptionsMenu(true);
 
+        callClassListPresenter = new CallClassListPresenterImpl(SettingFragment.this, getActivity());
         settingTimePresenter = new SettingTimePresenterImpl(SettingFragment.this, getActivity());
         getGoTimePresenter = new GetGoTimePresenterImpl(SettingFragment.this, getActivity());
         changeNMPresenter = new ChangeNMPresenterImpl(SettingFragment.this, getActivity());
@@ -105,6 +111,8 @@ public class SettingFragment extends android.support.v4.app.Fragment implements 
         //설정된 하원시간 불러오기
         id = mSharedPrefs.getLoginId();
         getGoTimePresenter.performGetGoTime(id);
+        //반리스트 불러오기
+//        callClassListPresenter.callClassList(id);
 
         //유치원명 가져오기
         tv_currentName.setText(mSharedPrefs.getKindergarten());
@@ -114,8 +122,6 @@ public class SettingFragment extends android.support.v4.app.Fragment implements 
         layout_goTime.setOnClickListener(this);
         layout_comeTime.setOnClickListener(this);
         layout_makeClass.setOnClickListener(this);
-
-
 
 
 
@@ -131,6 +137,12 @@ public class SettingFragment extends android.support.v4.app.Fragment implements 
     }
 
 
+    public void refreshList(){
+        adapter_classList.notifyDataSetChanged();
+
+    }
+
+
     @Override
     public void validation(String msg) {
 
@@ -141,6 +153,7 @@ public class SettingFragment extends android.support.v4.app.Fragment implements 
 
         tv_currentName.setText(name);
         ((MainActivity) getActivity()).tv_kindergarten.setText(name);
+        mSharedPrefs.saveKindergarten(name);
 
     }
 
@@ -154,6 +167,12 @@ public class SettingFragment extends android.support.v4.app.Fragment implements 
     public void success() {
         Toast.makeText(getActivity(), getResources().getString(R.string.success_change_time), Toast.LENGTH_SHORT).show();
         getGoTimePresenter.performGetGoTime(id);
+    }
+
+    @Override
+    public void callClassSuccess() {
+
+        adapter_classList.notifyDataSetChanged();
     }
 
     @Override
@@ -228,13 +247,8 @@ public class SettingFragment extends android.support.v4.app.Fragment implements 
             case R.id.layout_changeName:
                 new LovelyTextInputDialog(getActivity(), R.style.EditTextTintTheme)
                         .setTitle(R.string.dialog_change_name)
-                        .setIcon(R.drawable.pen)
-                        .setNegativeButton(getResources().getString(R.string.cancel), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-
-                            }
-                        })
+                        .setTitleGravity(Gravity.CENTER)
+                        .setNegativeButton(getResources().getString(R.string.cancel), null)
                         .setConfirmButton(getResources().getString(R.string.change), new LovelyTextInputDialog.OnTextInputConfirmListener() {
                             @Override
                             public void onTextInputConfirmed(String text) {
@@ -273,10 +287,6 @@ public class SettingFragment extends android.support.v4.app.Fragment implements 
                             });
                     iv_arrow_class.setRotation(-90);
                 }
-
-
-
-
                 break;
 
         }

@@ -63,6 +63,22 @@ public interface ApiService {
     Call<JsonObject> getSettingClassResult(@Body String body);
 
     @Headers("Content-Type: application/json")
+    @POST("get_class")
+    Call<JsonObject> callClassListResult(@Body String body);
+
+    @Headers("Content-Type: application/json")
+    @POST("mod_class")
+    Call<JsonObject> modifyClassResult(@Body String body);
+
+    @Headers("Content-Type: application/json")
     @HTTP(method = "DELETE", path = "/delete_children", hasBody = true)
     Call<JsonObject> deleteListResult(@Body String body);
+
+    @Headers("Content-Type: application/json")
+    @HTTP(method = "DELETE", path = "/delete_class", hasBody = true)
+    Call<JsonObject> deleteClassResult(@Body String body);
+
+
+
+
 }

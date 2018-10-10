@@ -1,4 +1,4 @@
-package com.onethefull.attendmobile.deletelist;
+package com.onethefull.attendmobile.callclasslist;
 
 import android.content.Context;
 import android.util.Log;
@@ -6,7 +6,6 @@ import android.util.Log;
 import com.google.gson.JsonObject;
 import com.onethefull.attendmobile.api.ApiService;
 import com.onethefull.attendmobile.api.ApiUtils;
-import com.onethefull.attendmobile.lists.Lists_downInfo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,74 +16,62 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DeletePresenterImpl implements DeleteListPresenter {
+public class CallClassListPresenterImpl implements CallClassListPresenter{
 
-    private static final String TAG = DeletePresenterImpl.class.getSimpleName();
+    private static final String TAG = CallClassListPresenterImpl.class.getSimpleName();
     private Context context;
     private ApiService service;
-    private DeleteListView deleteListView;
+    private CallClassListView callClassListView;
 
-    public DeletePresenterImpl(DeleteListView deleteListView, Context context) {
-        this.deleteListView = deleteListView;
+
+    public CallClassListPresenterImpl(CallClassListView callClassListView, Context context) {
         this.context = context;
-
+        this.callClassListView = callClassListView;
     }
 
-
     @Override
-    public void deleteList(String id, String cvid) {
+    public void callClassList(String id) {
 
         service = ApiUtils.getService();
         final JSONObject obj = new JSONObject();
 
         try {
             obj.put("USER_EMAIL", id);
-            obj.put("CHILDREN_CVID", cvid);
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        Log.d(TAG, obj+"");
-        service.deleteListResult(obj.toString()).enqueue(new Callback<JsonObject>() {
+
+        service.callClassListResult(obj.toString()).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-
                 if (response.isSuccessful()){
+
                     JsonObject object = response.body();
                     if (object != null){
-                        Log.d(TAG,"success:: "+ object.toString());
-                        deleteListView.deleteSuccess();
+                        Log.d(TAG, "success:: " + object.toString());
+                        callClassListView.callClassSuccess();
                     }
                 }else {
-
                     try {
                         JSONObject errorObj = new JSONObject(response.errorBody().string());
-                        Log.d(TAG,"error:: " + errorObj.toString());
+                        Log.d(TAG, "error:: " + errorObj.toString());
                         String msg = errorObj.getString("message");
-                        deleteListView.validation(msg);
-                    }catch (JSONException e){
+                        callClassListView.validation(msg);
+
+                    } catch (IOException e) {
                         e.printStackTrace();
-                    }catch (IOException e){
+                    } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
-
             }
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
-                Log.d(TAG,"onFailure!!" );
-                deleteListView.deleteError();
-
+                Log.d(TAG, "onFailure!!");
+                callClassListView.error();
             }
         });
-
-
-
-
-
     }
-
-
 }

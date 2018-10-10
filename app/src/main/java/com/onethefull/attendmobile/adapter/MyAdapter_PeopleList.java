@@ -2,38 +2,33 @@ package com.onethefull.attendmobile.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
+
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.CheckBox;
+
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import com.onethefull.attendmobile.DetailViewActivity;
 
 import com.onethefull.attendmobile.R;
 import com.onethefull.attendmobile.api.TinyDB;
-import com.onethefull.attendmobile.lists.Lists_Student;
+
 import com.bumptech.glide.Glide;
 import com.onethefull.attendmobile.lists.Lists_downInfo;
 import com.onethefull.wonderful_cv_library.CV_Package.Identity;
-import com.onethefull.wonderful_cv_library.CV_Package.RequestUserImagesAsyncTask;
-import com.onethefull.wonderful_cv_library.CV_Package.WonderfulCV;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnItemClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filterable {
@@ -70,31 +65,6 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
         itemView= inflater.inflate(R.layout.list_people, viewGroup, false);
 
         final VH holder = new VH(itemView);
-
-//        //클릭시 보기 모드
-//        holder.cardView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                int position = holder.getAdapterPosition();
-//                int mode = 2; // 보기모드
-//
-//
-//
-//                if (position >= 0){
-//                    listsStudent = downInfoArrayList.get(position);
-//                    Intent intent = new Intent(context, DetailViewActivity.class);
-//                    intent.putExtra("listsStudent", listsStudent);
-//                    intent.putExtra("mode", mode);
-//                    context.startActivity(intent);
-//                }
-//
-//
-//            }
-//        });
-
-
-
         return holder;
     }
 
@@ -210,7 +180,7 @@ public class MyAdapter_PeopleList extends RecyclerView.Adapter implements Filter
 
                 case R.id.cardView_people:
 
-                    int position = getAdapterPosition();
+                    int position = getAdapterPosition()-1;
                     int mode = 2; // 보기모드
 
                     if (position >= 0){

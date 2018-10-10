@@ -424,7 +424,7 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
                 loginEmail, pw);
 
 
-        Toast.makeText(this, "등록 중 입니다. 잠시만 기다려주세요.", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.camera_loading, Toast.LENGTH_LONG).show();
         Log.d(TAG, "Registering new user with face");
         CreateNewUserAsyncTask createNewUserTask = new CreateNewUserAsyncTask(
                 new CreateNewUserAsyncTask.AsyncResponse() {
@@ -439,7 +439,7 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
                             finishCamera();
                         }else{
                             Toast.makeText(getApplicationContext(),
-                                    "다시 찍으세요.", Toast.LENGTH_SHORT).show();
+                                    R.string.take_again, Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -550,7 +550,7 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
             case 10:
                 if (grantResults[0] == PackageManager.PERMISSION_DENIED|| grantResults[1] == PackageManager.PERMISSION_DENIED) {
 
-                    Toast.makeText(this, "카메라 사용불가", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.camera_error, Toast.LENGTH_SHORT).show();
                 }
                 else{
 

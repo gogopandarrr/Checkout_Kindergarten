@@ -1,6 +1,9 @@
 package com.onethefull.attendmobile;
 
+
 import android.content.Intent;
+
+import android.graphics.drawable.ColorDrawable;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -11,20 +14,20 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
 import android.widget.Button;
+
 import android.widget.TextView;
-import android.widget.Toast;
-import com.onethefull.attendmobile.account.changename.ChangeNMPresenterImpl;
-import com.onethefull.attendmobile.account.changename.ChangeNMView;
 import com.onethefull.attendmobile.api.SharedPrefManager;
-import com.onethefull.attendmobile.fragment.AlertDialogFragment;
+import com.onethefull.attendmobile.dialog.CustomTwoBtnDialog;
+
 import com.onethefull.attendmobile.fragment.AttendanceFragment;
 import com.onethefull.attendmobile.fragment.ChildrenListFragment;
 import com.onethefull.attendmobile.fragment.SettingFragment;
-import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 
 
 
@@ -42,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private AttendanceFragment attendanceFragment;
     private ChildrenListFragment childrenListFragment;
     private SettingFragment settingFragment;
+    private CustomTwoBtnDialog customTwoBtnDialog;
 
 
 
@@ -179,8 +183,15 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void logout(){
-        AlertDialogFragment dialogFragment = AlertDialogFragment.newInstance(getResources().getString(R.string.wanna_logout));
-        dialogFragment.show(getSupportFragmentManager(),"dialog");
+
+        customTwoBtnDialog = new CustomTwoBtnDialog(this, getResources().getString(R.string.wanna_logout), "logout", null);
+        customTwoBtnDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        customTwoBtnDialog.setCancelable(false);
+        customTwoBtnDialog.show();
+
+
+//        AlertDialogFragment dialogFragment = AlertDialogFragment.newInstance(getResources().getString(R.string.wanna_logout));
+//        dialogFragment.show(getSupportFragmentManager(),"dialog");
     }//
 
 

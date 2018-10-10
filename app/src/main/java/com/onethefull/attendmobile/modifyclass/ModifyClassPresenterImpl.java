@@ -1,4 +1,4 @@
-package com.onethefull.attendmobile.setclass;
+package com.onethefull.attendmobile.modifyclass;
 
 import android.content.Context;
 import android.util.Log;
@@ -17,64 +17,70 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SettingClassPresenterImpl implements SettingClassPresenter {
+public class ModifyClassPresenterImpl implements ModifyClassPresenter{
 
-    private static final String TAG = SettingClassPresenter.class.getSimpleName();
+    private static final String TAG = ModifyClassPresenterImpl.class.getSimpleName();
     private Context context;
-    private SettingClassView settingClassView;
     private ApiService service;
     private SharedPrefManager mSharedPrefs;
+    private ModifyClassView modifyClassView;
 
-    public SettingClassPresenterImpl(SettingClassView settingClassView, Context context) {
+
+    public ModifyClassPresenterImpl(ModifyClassView modifyClassView, Context context) {
         this.context = context;
-        this.settingClassView = settingClassView;
+        this.modifyClassView = modifyClassView;
         mSharedPrefs = SharedPrefManager.getInstance(context);
     }
 
     @Override
-    public void performSettingClass(String id, String className) {
+    public void performModifyClass(String id, String code, String name) {
+
         service = ApiUtils.getService();
-        final JSONObject obj = new JSONObject();
+        JSONObject obj = new JSONObject();
 
         try {
             obj.put("USER_EMAIL", id);
-            obj.put("KINDERGARTEN_CLASSNAME", className);
+            obj.put("KINDERGARTEN_CLASSCODE", code);
+            obj.put("KINDERGARTEN_CLASSNAME", name);
             Log.d(TAG, obj.toString());
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        service.getSettingTimeResult(obj.toString()).enqueue(new Callback<JsonObject>() {
+
+        service.modifyClassResult(obj.toString()).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                if (response.isSuccessful()) {
+                if (response.isSuccessful()){
                     JsonObject object = response.body();
-                    if (object != null) {
-
-                        String code = object.get("CLASS_CODE").toString();
+                    if (object != null){
                         Log.d(TAG, "success:: " + object.toString());
-                        settingClassView.setClassSuccess(code);
+                        modifyClassView.modifySuccess();
                     }
-                } else {
+
+                }else{
+
                     try {
                         JSONObject errorObj = new JSONObject(response.errorBody().string());
                         Log.d(TAG, "error:: " + errorObj.toString());
                         String msg = errorObj.getString("message");
-                        settingClassView.validation(msg);
+                        modifyClassView.validation(msg);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+
+
                 }
             }
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.d(TAG, "onFailure!!");
-                settingClassView.error();
+                modifyClassView.error();
             }
-
         });
 
-        }//
+    }
 }

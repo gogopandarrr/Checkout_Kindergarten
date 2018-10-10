@@ -2,26 +2,26 @@ package com.onethefull.attendmobile.lists;
 
 public class Lists_Class {
 
-    String name_kinder, code_kinder;
+    String name_class, code_class;
 
-    public Lists_Class(String name_kinder, String code_kinder) {
-        this.name_kinder = name_kinder;
-        this.code_kinder = code_kinder;
+    public Lists_Class(String name_class, String code_class) {
+        this.name_class = name_class;
+        this.code_class = code_class;
     }
 
-    public String getName_kinder() {
-        return name_kinder;
+    public String getName_class() {
+        return name_class;
     }
 
-    public void setName_kinder(String name_kinder) {
-        this.name_kinder = name_kinder;
+    public void setName_class(String name_kinder) {
+        this.name_class = name_kinder;
     }
 
-    public String getCode_kinder() {
-        return code_kinder;
+    public String getCode_class() {
+        return code_class;
     }
 
-    public void setCode_kinder(String code_kinder) {
-        this.code_kinder = code_kinder;
+    public void setCode_class(String code_kinder) {
+        this.code_class = code_kinder;
     }
 }//

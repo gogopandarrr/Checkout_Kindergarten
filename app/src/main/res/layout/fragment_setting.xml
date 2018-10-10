@@ -13,7 +13,7 @@
         android:layout_height="match_parent">
 
         <RelativeLayout
-            android:visibility="gone"
+            android:visibility="visible"
             android:background="@drawable/layoutclickbutton"
             android:clickable="true"
             android:id="@+id/layout_comeTime"
@@ -160,7 +160,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <RelativeLayout
-                android:visibility="gone"
+                android:visibility="visible"
                 android:background="@drawable/layoutclickbutton"
                 android:clickable="true"
                 android:id="@+id/layout_makeClass"

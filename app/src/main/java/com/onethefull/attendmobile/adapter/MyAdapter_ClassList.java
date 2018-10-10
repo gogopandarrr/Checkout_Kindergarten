@@ -2,27 +2,43 @@ package com.onethefull.attendmobile.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.onethefull.attendmobile.R;
 import com.onethefull.attendmobile.account.changename.ChangeNMPresenterImpl;
 import com.onethefull.attendmobile.api.SharedPrefManager;
+import com.onethefull.attendmobile.deleteclass.DeleteClassPresenter;
+import com.onethefull.attendmobile.deleteclass.DeleteClassPresenterImpl;
+import com.onethefull.attendmobile.deleteclass.DeleteClassView;
 import com.onethefull.attendmobile.fragment.SettingFragment;
 import com.onethefull.attendmobile.lists.Lists_Class;
+import com.onethefull.attendmobile.modifyclass.ModifyClassPresenter;
+import com.onethefull.attendmobile.modifyclass.ModifyClassPresenterImpl;
+import com.onethefull.attendmobile.modifyclass.ModifyClassView;
 import com.onethefull.attendmobile.setclass.SettingClassPresenter;
 import com.onethefull.attendmobile.setclass.SettingClassPresenterImpl;
 import com.onethefull.attendmobile.setclass.SettingClassView;
+import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 
 import java.util.List;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
-public class MyAdapter_ClassList extends RecyclerView.Adapter implements View.OnClickListener, SettingClassView {
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Optional;
+
+public class MyAdapter_ClassList extends RecyclerView.Adapter implements SettingClassView, ModifyClassView, DeleteClassView {
 
     private Context context;
     private List<Lists_Class> classArrayList;
@@ -30,7 +46,12 @@ public class MyAdapter_ClassList extends RecyclerView.Adapter implements View.On
     private boolean headerFlag = false;
     private SharedPrefManager mSharedPrefs;
     private SettingClassPresenter settingClassPresenter;
-    private String id;
+    private ModifyClassPresenter modifyClassPresenter;
+    private DeleteClassPresenter deleteClassPresenter;
+    private String id, classname, modifiedClassName;
+    private int modifiedPosition, deletingPosition;
+    private  VH vh;
+
 
 
     public MyAdapter_ClassList(Context context, List<Lists_Class> classArrayList) {
@@ -38,6 +59,8 @@ public class MyAdapter_ClassList extends RecyclerView.Adapter implements View.On
         this.classArrayList = classArrayList;
 
         settingClassPresenter = new SettingClassPresenterImpl(this, context);
+        modifyClassPresenter = new ModifyClassPresenterImpl(this, context);
+        deleteClassPresenter = new DeleteClassPresenterImpl(this, context);
         mSharedPrefs = SharedPrefManager.getInstance(context);
         id = mSharedPrefs.getLoginId();
 
@@ -67,22 +90,18 @@ public class MyAdapter_ClassList extends RecyclerView.Adapter implements View.On
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
 
-        VH vh = (VH) viewHolder;
+        vh = (VH) viewHolder;
 
 
         //헤더가 아닐 경우
         if (!vh.isHeader){
 
-
-            vh.btn_modify.setOnClickListener(this);
-            vh.btn_delete.setOnClickListener(this);
-
-            listsClass = classArrayList.get(position);
-            vh.tv_className.setText(listsClass.getName_kinder());
+            listsClass = classArrayList.get(position-1);
+            vh.tv_className.setText(listsClass.getName_class());
 
             //헤더일 경우
         }else{
-           vh.header_add.setOnClickListener(this);
+
         }
 
     }//
@@ -98,47 +117,7 @@ public class MyAdapter_ClassList extends RecyclerView.Adapter implements View.On
     }
 
 
-    //리스너
-    @Override
-    public void onClick(View view) {
 
-        switch (view.getId()){
-
-            case R.id.recycler_class_header:
-
-                new LovelyTextInputDialog(context, R.style.EditTextTintTheme)
-                        .setTitle(R.string.add_class)
-                        .setNegativeButton(context.getResources().getString(R.string.cancel), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-
-                            }
-                        })
-                        .setConfirmButton(context.getResources().getString(R.string.change), new LovelyTextInputDialog.OnTextInputConfirmListener() {
-                            @Override
-                            public void onTextInputConfirmed(String text) {
-                                settingClassPresenter.performSettingClass(id, text.trim());
-
-                            }
-                        }).show();
-
-                break;
-
-
-            case R.id.btn_modify_class:
-
-
-                break;
-
-            case R.id.btn_delete_class:
-
-
-                break;
-
-        }
-
-
-    }//
 
     @Override
     public void validation(String msg) {
@@ -146,7 +125,51 @@ public class MyAdapter_ClassList extends RecyclerView.Adapter implements View.On
     }
 
     @Override
-    public void setClassSuccess() {
+    public void modifySuccess() {
+
+        listsClass = classArrayList.get(modifiedPosition-1);
+        listsClass.setName_class(modifiedClassName);
+
+        Toast.makeText(context, R.string.done_chageClass, Toast.LENGTH_SHORT).show();
+
+        new android.os.Handler().post((new Runnable() {
+            @Override
+            public void run() {
+                notifyDataSetChanged();
+            }
+        }));
+
+
+
+    }
+
+    @Override
+    public void setClassSuccess(String code) {
+
+        classArrayList.add(new Lists_Class(classname, code));
+        Toast.makeText(context, R.string.done_add_class, Toast.LENGTH_SHORT).show();
+
+        new android.os.Handler().post((new Runnable() {
+            @Override
+            public void run() {
+                notifyDataSetChanged();
+            }
+        }));
+
+
+    }
+
+    @Override
+    public void deleteSuccess() {
+
+        classArrayList.remove(deletingPosition-1);
+        Toast.makeText(context, R.string.done_delete_class, Toast.LENGTH_SHORT).show();
+        new android.os.Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                notifyDataSetChanged();
+            }
+        });
 
     }
 
@@ -156,7 +179,7 @@ public class MyAdapter_ClassList extends RecyclerView.Adapter implements View.On
     }
 
 
-    private class VH extends RecyclerView.ViewHolder{
+    public class VH extends RecyclerView.ViewHolder{
 
         boolean isHeader = headerFlag;
         TextView tv_className;
@@ -166,9 +189,12 @@ public class MyAdapter_ClassList extends RecyclerView.Adapter implements View.On
 
         public VH(@NonNull View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
 
             if (!isHeader) init(itemView);
             else  headerInit(itemView);
+
+
 
         }
 
@@ -185,6 +211,97 @@ public class MyAdapter_ClassList extends RecyclerView.Adapter implements View.On
             btn_modify = itemView.findViewById(R.id.btn_modify_class);
         }
 
+
+
+
+        //리스너
+        @Optional
+        @OnClick({R.id.recycler_class_header, R.id.btn_modify_class, R.id.btn_delete_class})
+        public void onClick(View view) {
+
+            switch (view.getId()){
+
+                case R.id.recycler_class_header:
+
+                    new LovelyTextInputDialog(context, R.style.EditTextTintTheme)
+                            .setTitle(R.string.add_class)
+                            .setTitleGravity(Gravity.CENTER)
+                            .setNegativeButton(context.getResources().getString(R.string.cancel), null)
+                            .setConfirmButton(context.getResources().getString(R.string.add), new LovelyTextInputDialog.OnTextInputConfirmListener() {
+                                @Override
+                                public void onTextInputConfirmed(String text) {
+//                                settingClassPresenter.performSettingClass(id, text.trim());
+                                    classname = text.trim();
+                                    setClassSuccess("temp");
+
+                                }
+                            }).show();
+
+                    break;
+
+                case R.id.btn_modify_class:
+
+                    modifiedPosition = getAdapterPosition();
+
+                    if (modifiedPosition > -1){
+
+                        listsClass = classArrayList.get(modifiedPosition-1);
+
+                        final String code = listsClass.getCode_class();
+
+                        new LovelyTextInputDialog(context, R.style.EditTextTintTheme)
+                                .setMessageGravity(Gravity.CENTER)
+                                .setMessage(R.string.modify_class)
+                                .setNegativeButton(R.string.cancel, null)
+                                .setConfirmButton(R.string.change, new LovelyTextInputDialog.OnTextInputConfirmListener() {
+                                    @Override
+                                    public void onTextInputConfirmed(String name) {
+
+//                                        modifyClassPresenter.performModifyClass(id, code, name.trim());
+                                        modifiedClassName = name.trim();
+                                        modifySuccess();
+
+                                    }
+                                }).show();
+
+                    }
+
+                    break;
+
+                case R.id.btn_delete_class:
+
+                deletingPosition = getAdapterPosition();
+
+                    if (deletingPosition > -1){
+
+                        listsClass = classArrayList.get(deletingPosition-1);
+
+                        final String code = listsClass.getCode_class();
+                        String name = listsClass.getName_class();
+
+                        new LovelyStandardDialog(context, LovelyStandardDialog.ButtonLayout.HORIZONTAL)
+                                .setButtonsColorRes(R.color.main_blue)
+                                .setMessageGravity(Gravity.CENTER)
+                                .setTitleGravity(Gravity.CENTER)
+                                .setMessage(" ")
+                                .setTitle(name+context.getResources().getString(R.string.delete_class))
+                                .setPositiveButton(R.string.delete, new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+//                                    deleteClassPresenter.deleteClass(id, code);
+                                        deleteSuccess();
+                                    }
+                                })
+                                .setNegativeButton(R.string.cancel, null).show();
+
+                    }
+
+                    break;
+
+            }
+
+
+        }//
 
 
     }//

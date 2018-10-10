@@ -6,4 +6,5 @@ public class Base {
     public static final String KEY_SAVE_LOGIN_AUTHTOKEN  = "PWD";
     public static final String KEY_SAVE_LOGIN_PWD  = "PASSWORD";
     public static final String KEY_SAVE_GO_HOME_TIME ="GO_HOME_TIME";
+    public static final String KEY_CLASS_NAME ="CLASS_NAME";
 }

@@ -193,6 +193,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
         et_email.setEnabled(false);
         et_password.setEnabled(false);
+        bt_go.setEnabled(false);
         circularProgressBar.setVisibility(View.VISIBLE);
 
         final String id = et_email.getText().toString();

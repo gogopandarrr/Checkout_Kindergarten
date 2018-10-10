@@ -93,7 +93,7 @@ dependencies {
     implementation project(':openCVLibrary300')
 
     implementation 'com.evrencoskun.library:tableview:0.8.8'
-    implementation 'com.jude:easyrecyclerview:4.4.2'
+    implementation 'com.jcodecraeer:xrecyclerview:1.5.9'
 
 
 }

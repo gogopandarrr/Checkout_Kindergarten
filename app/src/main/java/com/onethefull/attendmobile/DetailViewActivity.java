@@ -2,12 +2,15 @@ package com.onethefull.attendmobile;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -26,6 +29,7 @@ import com.onethefull.attendmobile.deletelist.DeleteListPresenter;
 import com.onethefull.attendmobile.deletelist.DeleteListView;
 import com.onethefull.attendmobile.deletelist.DeletePresenterImpl;
 import com.bumptech.glide.Glide;
+import com.onethefull.attendmobile.dialog.CustomTwoBtnDialog;
 import com.onethefull.attendmobile.lists.Lists_downInfo;
 import com.onethefull.attendmobile.updatelist.UpdateChildrenPresenterImp;
 import com.onethefull.attendmobile.updatelist.UpdateChildrenView;
@@ -33,6 +37,7 @@ import com.onethefull.attendmobile.updatelist.UpdatePresenter;
 import com.onethefull.wonderful_cv_library.CV_Package.CVServiceConnectionManager;
 import com.onethefull.wonderful_cv_library.CV_Package.Identity;
 import com.onethefull.wonderful_cv_library.CV_Package.WonderfulCV;
+import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import java.util.ArrayList;
 
@@ -45,25 +50,25 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class DetailViewActivity extends AppCompatActivity implements SetChildrenView, DeleteListView, UpdateChildrenView{
 
     private static final String TAG = DetailViewActivity.class.getSimpleName();
-
-
+    private static DeleteListPresenter deleteListPresenter;
 
 
     private Lists_downInfo listsDownInfo;
 
     private SetChildrenPresenter childrenPresenter;
-    private DeleteListPresenter deleteListPresenter;
     private UpdatePresenter updatePresenter;
 
     private ArrayList<Object> stp;
     private ArrayList<Identity> userList = new ArrayList<>();
-    private String id, cvid;
+    public static String id;
+    public static String cvid;
     private byte[] image;
     private int mode;
 
-    private WonderfulCV wonderfulCV = new WonderfulCV();
+    private static WonderfulCV wonderfulCV = new WonderfulCV();
     private TinyDB tinyDB;
     private SharedPrefManager mSharedPrefs;
+    private CustomTwoBtnDialog customTwoBtnDialog;
 
 
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -110,7 +115,7 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
                 takePhoto();
                 break;
             case R.id.btn_delete:
-                deleteStudent();
+                deleteDialog();
                 break;
             default:
                 break;
@@ -125,7 +130,7 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
         mSharedPrefs = SharedPrefManager.getInstance(getApplicationContext());
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("원생정보");
+        getSupportActionBar().setTitle(R.string.info_student);
 
       //원생등록 준비
         childrenPresenter = new SetChildrenPresenterImpl(DetailViewActivity.this, getApplicationContext());
@@ -200,29 +205,24 @@ public class DetailViewActivity extends AppCompatActivity implements SetChildren
 
     }
 
-    private void deleteStudent(){
+    private void deleteDialog(){
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(DetailViewActivity.this);
-        builder.setTitle(R.string.delete_sutudent);
-        builder.setPositiveButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+        customTwoBtnDialog = new CustomTwoBtnDialog(this, getResources().getString(R.string.delete_sutudent), "delete_student", null);
+        customTwoBtnDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        customTwoBtnDialog.setCancelable(false);
+        customTwoBtnDialog.show();
 
-                deleteListPresenter.deleteList(id, cvid);
-                Integer userId = Integer.parseInt(cvid);
-                CVServiceConnectionManager.deleteUser(wonderfulCV.serverAddress, wonderfulCV.token, userId);
-            }
-        });
 
-        builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-            }
-        });
+    }
 
-        AlertDialog dialog = builder.create();
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
+
+    static public void executeDelete(){
+
+        Log.e(TAG, id+"   "+cvid+"실행");
+        deleteListPresenter.deleteList(id, cvid);
+        Integer userId = Integer.parseInt(cvid);
+        CVServiceConnectionManager.deleteUser(wonderfulCV.serverAddress, wonderfulCV.token, userId);
+
     }
 
 
