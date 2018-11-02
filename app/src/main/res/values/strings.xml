@@ -21,7 +21,7 @@
     <string name="error_formFill">사진과 필수 정보를 입력해주세요.</string>
     <string name="error_userPic">삭제 후 다시 등록해주세요.</string>
     <string name="error_registration">양식에 맞게 작성해주세요.</string>
-    <string name="error_cvid">오류가 발생했습니다. 다시 등록해주세요.</string>
+    <string name="error_cvid">얼굴인식에 실패했습니다. 다시 등록해주세요.</string>
     <string name="error_permission">권한을 설정하셔야 이용하실 수 있습니다.</string>
     <string name="reset_success">초기화 요청 url을 메일로 보냈습니다. 메일을 확인해주세요.</string>
     <string name="deleted_student">삭제된 원생</string>

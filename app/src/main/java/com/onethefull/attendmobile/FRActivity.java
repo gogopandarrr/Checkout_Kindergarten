@@ -344,7 +344,7 @@ public class FRActivity extends AppCompatActivity implements CameraBridgeViewBas
                         if (mRgba.cols() > 0) {
                             bmp = Bitmap.createBitmap(mRgba.cols(), mRgba.rows(), Bitmap.Config.ARGB_8888);
                             Utils.matToBitmap(mRgba, bmp);
-                            if (facePics.size() < 5) {
+                            if (facePics.size() < 1) {
                                 Log.d(TAG, "Bitmap Size: " + bmp.getByteCount());
 
                                 facePics.add(RotateBitmap(bmp,0));

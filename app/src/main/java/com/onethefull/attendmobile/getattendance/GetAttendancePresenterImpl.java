@@ -24,7 +24,7 @@ import retrofit2.Response;
 
 public class GetAttendancePresenterImpl implements GetAttendancePresenter {
 
-    private static final String TAG = GetAttendanceView.class.getSimpleName();
+    private static final String TAG = GetAttendancePresenterImpl.class.getSimpleName();
     private Context context;
     private ApiService service;
     private GetAttendanceView attendanceView;

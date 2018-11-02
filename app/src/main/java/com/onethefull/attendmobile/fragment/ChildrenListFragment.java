@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -117,7 +118,8 @@ public class ChildrenListFragment extends Fragment implements GetListView{
             public void onLoadMore() {
                 times++;
                 Toast.makeText(getActivity(), "loading "+times, Toast.LENGTH_SHORT).show();
-                if (times*downInfoArrayList.size() < templist.size()){
+
+                if (times*itemLimit < templist.size()){
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -228,9 +230,7 @@ public class ChildrenListFragment extends Fragment implements GetListView{
 
         templist.clear();
 
-        for (int i = 0; i < downInfoArrayList_pre.size(); i++){
-            templist.add(downInfoArrayList_pre.get(i));
-        }
+        templist.addAll(downInfoArrayList_pre);
 
 
             tv_total.setText(getResources().getString(R.string.total_students)+templist.size()+getResources().getString(R.string.unit_people));
@@ -238,9 +238,15 @@ public class ChildrenListFragment extends Fragment implements GetListView{
 
         if (times == 0){
             downInfoArrayList.clear();
-            for (int i = 0; i < itemLimit ; i++){
-                downInfoArrayList.add(templist.get(i));
+
+            if (templist.size() <  itemLimit){
+                downInfoArrayList.addAll(templist);
+            }else{
+                for (int i = 0; i < itemLimit ; i++){
+                    downInfoArrayList.add(templist.get(i));
+                }
             }
+
 
 
 
